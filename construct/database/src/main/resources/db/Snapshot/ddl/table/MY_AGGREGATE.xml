@@ -1,0 +1,40 @@
+<databaseChangeLog 
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	logicalFilePath="/com/onbelay/OBCORE/table/MY_AGGREGATE.xml">
+	
+  <changeSet author="lefeuvrem" id="1.0" objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+  
+     <createSequence
+   		incrementBy="1"
+   		sequenceName="MY_AGGREGATE_SEQ"
+   		startValue="1"	
+   />
+  
+  
+    <createTable tableName="MY_AGGREGATE" tablespace="${tblspace_data}">
+      <column name="ENTITY_ID" defaultValueSequenceNext="MY_AGGREGATE_SEQ" remarks="Primary key for the MY_AGGREGATE table." type="java.sql.Types.NUMERIC(10, 0)">
+        <constraints primaryKey="true" primaryKeyName="MY_AGGREGATE_PK" nullable="false" />
+      </column>
+      <column name="AGGREGATE_TYPE_CODE" remarks="Example of an enum" type="java.sql.Types.VARCHAR(10)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="NAME_TXT" remarks="Name of aggregate" type="java.sql.Types.VARCHAR(20)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="START_DATE" remarks="Example of a date" type="java.sql.Types.TIMESTAMP"/>
+      <column name="MY_QUANTITY" remarks="Example of a BigDecimal" type="java.sql.Types.NUMERIC(8, 3)"/>
+      <column name="MY_TOTAL" remarks="Example of an Integer" type="java.sql.Types.NUMERIC(8, 0)"/>
+      <column name="LOCATION_ID" remarks="Foreign key to a LOCATION table." type="java.sql.Types.NUMERIC(10, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="OPTIMISTIC_LOCK_NO" remarks="Version number." defaultValueNumeric="0" type="java.sql.Types.NUMERIC(10, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="IS_DELETED" remarks="logical delete Y or N" type="java.sql.Types.CHAR(1)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+</databaseChangeLog>

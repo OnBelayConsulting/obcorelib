@@ -1,0 +1,45 @@
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	logicalFilePath="/com/onbelay/dbSpecificDataTypes.xml"
+>
+	<!--
+		Defines varchar variants  for various databases.
+	-->
+	<property
+		dbms="oracle"
+		name="varcharDataType"
+		value="java.sql.Types.VARCHAR"
+	/>
+	<property
+		dbms="postgresql"
+		name="varcharDataType"
+		value="java.sql.Types.VARCHAR"
+	/>
+	<property
+		dbms="mssql"
+		name="varcharDataType"
+		value="java.sql.Types.NVARCHAR"
+	/>
+
+	<!--
+		Defines date and time variants for various databases.
+	-->
+	<property
+		dbms="oracle"
+		name="datetimeDataType"
+		value="java.sql.Types.TIMESTAMP"
+	/>
+	<property
+		dbms="postgresql"
+		name="datetimeDataType"
+		value="java.sql.Types.TIMESTAMP"
+	/>
+	<property
+		dbms="mssql"
+		name="datetimeDataType"
+		value="datetime2"
+	/>
+</databaseChangeLog>

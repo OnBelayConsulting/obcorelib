@@ -1,0 +1,140 @@
+/*
+ Copyright 2019, OnBelay Consulting Ltd.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.  
+*/
+package com.onbelay.core.entity.snapshot;
+
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.onbelay.core.entity.enums.EntityIdStatus;
+
+/**
+ * Encapsulates an EntityId that may be:
+ * 
+ *   <ul>
+ *   <li> VALID - has a valid id
+ *   <li> IS_NULL - the business key is set to null signifying that the midtier should set the corresponding reference to null
+ *   <li> IS_INVALID - the business key is set to invalid. In other words a serializer has determined that the passed in reference was
+ *   invalid. An invalid business key may have an additional component that contains the initial invalid reference.
+ *   </ul>
+ *                  
+ *
+ */
+public class EntityId implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
+    private Long id;
+    
+    private EntityIdStatus status = EntityIdStatus.VALID;
+    
+    public EntityId() { }
+    
+    
+    public EntityId(Long id) {
+    	this.id = id;
+    }
+
+
+    @JsonIgnore
+    public boolean isSet() {
+        return status == EntityIdStatus.VALID;
+    }
+    
+    @JsonIgnore
+    public void setToNull() {
+       status = EntityIdStatus.IS_NULL;
+    }
+    
+    @JsonIgnore
+    public boolean isNotNull() {
+        return status != EntityIdStatus.IS_NULL;
+    }
+    
+    @JsonIgnore
+    public boolean isNull() {
+        return status == EntityIdStatus.IS_NULL;
+    }
+    
+    public void makeInvalid() {
+        status = EntityIdStatus.INVALID;
+    }
+    
+    @JsonIgnore
+    public boolean isInvalid() {
+        return status != EntityIdStatus.VALID;
+    }
+    
+    public Long getId() {
+    	return id;
+    }
+    
+    public void setId(Long id) {
+    	this.id = id;
+    }
+    
+    public EntityIdStatus getStatus() {
+		return status;
+	}
+    
+    public void setStatus(EntityIdStatus status) {
+    	this.status = status;
+    }
+
+	/**
+     * Create a key using an existing key
+     * @param key
+     */
+    public EntityId(EntityId key) {
+        this.id = key.id;
+        this.status = key.status; 
+    }
+
+    
+    public String toString() {
+        return id.toString();
+    }
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EntityId other = (EntityId) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (status != other.status)
+			return false;
+		return true;
+	}
+
+
+}
