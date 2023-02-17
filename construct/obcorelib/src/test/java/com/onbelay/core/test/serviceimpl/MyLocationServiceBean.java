@@ -18,6 +18,8 @@ package com.onbelay.core.test.serviceimpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.onbelay.core.entity.snapshot.EntityListItem;
+import com.onbelay.core.entity.snapshot.EntityListItemCollection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,7 @@ import com.onbelay.core.entity.enums.EntityState;
 import com.onbelay.core.entity.snapshot.EntityId;
 import com.onbelay.core.entity.snapshot.TransactionResult;
 import com.onbelay.core.enums.CoreErrorCode;
-import com.onbelay.core.exception.JSRuntimeException;
+import com.onbelay.core.exception.OBRuntimeException;
 import com.onbelay.core.query.parsing.DefinedQueryBuilder;
 import com.onbelay.core.query.snapshot.DefinedOrderExpression;
 import com.onbelay.core.query.snapshot.DefinedQuery;
@@ -52,7 +54,7 @@ public class MyLocationServiceBean extends CoreTestServiceBean implements MyLoca
 	@Override
 	public MyLocationSnapshotCollection find(
 			String queryText,
-			long start,
+			int start,
 			int limit) {
 
 		initializeSession();
@@ -77,19 +79,22 @@ public class MyLocationServiceBean extends CoreTestServiceBean implements MyLoca
 		
 		logger.debug("DefinedQuery: {}", definedQuery.toString());
 		
-		List<Long> totalIds = myLocationRepository.findMyLocationIds(definedQuery);
+		List<Integer> totalIds = myLocationRepository.findMyLocationIds(definedQuery);
 		
-		long toIndex =  start + limit;
+		int toIndex =  start + limit;
 		
 		if (toIndex > totalIds.size())
 			toIndex = totalIds.size();
 		
-		long fromIndex = start;
+		int fromIndex = start;
 		
 		if (fromIndex > toIndex)
-			return new MyLocationSnapshotCollection(totalIds.size());
+			return new MyLocationSnapshotCollection(
+					start,
+					limit,
+					totalIds.size());
 
-		List<Long> selectedIds =  totalIds.subList((int)fromIndex, (int)toIndex);
+		List<Integer> selectedIds =  totalIds.subList((int)fromIndex, (int)toIndex);
 		
 		QuerySelectedPage querySelectedPage = new QuerySelectedPage(
 				selectedIds,
@@ -102,14 +107,77 @@ public class MyLocationServiceBean extends CoreTestServiceBean implements MyLoca
 		
 		List<MyLocationSnapshot> snapshots = assembler.assemble(myLocations);
 		
-		return new MyLocationSnapshotCollection(snapshots, totalIds.size());
+		return new MyLocationSnapshotCollection(
+				start,
+				limit,
+				totalIds.size(),
+				snapshots);
 		
 	}
-	
-	
-	
+
 	@Override
-	public TransactionResult createOrUpdateMyLocations(List<MyLocationSnapshot> snapshots) {
+	public EntityListItemCollection findList(
+			String queryText,
+			int start,
+			int limit) {
+
+		initializeSession();
+
+		DefinedQuery definedQuery;
+
+		if (queryText.equals("default")) {
+			definedQuery = new DefinedQuery("MyLocation");
+			definedQuery.getOrderByClause()
+					.addOrderExpression(
+							new DefinedOrderExpression("name"));
+		} else {
+			DefinedQueryBuilder builder = new DefinedQueryBuilder("MyLocation", queryText);
+			definedQuery = builder.build();
+
+			if (definedQuery.getOrderByClause().hasExpressions() == false) {
+				definedQuery.getOrderByClause()
+						.addOrderExpression(
+								new DefinedOrderExpression("name"));
+			}
+		}
+
+		logger.debug("DefinedQuery: {}", definedQuery.toString());
+
+		List<Integer> totalIds = myLocationRepository.findMyLocationIds(definedQuery);
+
+		int toIndex =  start + limit;
+
+		if (toIndex > totalIds.size())
+			toIndex = totalIds.size();
+
+		int fromIndex = start;
+
+		if (fromIndex > toIndex)
+			return new EntityListItemCollection(
+					start,
+					limit,
+					totalIds.size());
+
+		List<Integer> selectedIds =  totalIds.subList((int)fromIndex, (int)toIndex);
+
+		QuerySelectedPage querySelectedPage = new QuerySelectedPage(
+				selectedIds,
+				definedQuery.getOrderByClause());
+
+
+		List<EntityListItem> items = myLocationRepository.fetchLocationListByIds(querySelectedPage);
+
+		return new EntityListItemCollection(
+				start,
+				limit,
+				totalIds.size(),
+				items);
+	}
+
+
+
+	@Override
+	public TransactionResult save(List<MyLocationSnapshot> snapshots) {
 		initializeSession();
 
 		ArrayList<EntityId> ids = new ArrayList<EntityId>();
@@ -124,7 +192,7 @@ public class MyLocationServiceBean extends CoreTestServiceBean implements MyLoca
 				 myLocation = myLocationRepository.load(snapshot.getEntityId());
 				 if (myLocation == null) {
 					 logger.error( "MyLocation id: {} is missing", snapshot.getEntityId());
-					 throw new JSRuntimeException(CoreErrorCode.MISSING_MY_LOCATION.getCode());
+					 throw new OBRuntimeException(CoreErrorCode.MISSING_MY_LOCATION.getCode());
 				 }
 				 logger.debug( "Update myLocation # ", myLocation.getDetail().getName());
 				 myLocation.updateWith(snapshot);
@@ -138,7 +206,7 @@ public class MyLocationServiceBean extends CoreTestServiceBean implements MyLoca
 
 
 	@Override
-	public TransactionResult createOrUpdate(MyLocationSnapshot snapshot) {
+	public TransactionResult save(MyLocationSnapshot snapshot) {
 		initializeSession();
 
 		MyLocation myLocation;
@@ -148,7 +216,7 @@ public class MyLocationServiceBean extends CoreTestServiceBean implements MyLoca
 		} else {
 			 myLocation = myLocationRepository.load(snapshot.getEntityId());
 			 if (myLocation == null) 
-				 throw new JSRuntimeException(CoreErrorCode.MISSING_MY_LOCATION.getCode());
+				 throw new OBRuntimeException(CoreErrorCode.MISSING_MY_LOCATION.getCode());
 			 myLocation.updateWith(snapshot);
 		}
 		
@@ -161,7 +229,7 @@ public class MyLocationServiceBean extends CoreTestServiceBean implements MyLoca
 
 		MyLocation myLocation = myLocationRepository.load(entityId);
 		if (myLocation == null)
-			throw new JSRuntimeException(CoreErrorCode.MISSING_MY_LOCATION.getCode(), "" + entityId.getId());
+			throw new OBRuntimeException(CoreErrorCode.MISSING_MY_LOCATION.getCode(), "" + entityId.getId());
 		
 		MyLocationSnapshotAssembler assembler = new MyLocationSnapshotAssembler();
 		
@@ -175,7 +243,7 @@ public class MyLocationServiceBean extends CoreTestServiceBean implements MyLoca
 
 		MyLocation myLocation = myLocationRepository.findByName(name);
 		if (myLocation == null)
-			throw new JSRuntimeException(CoreErrorCode.MISSING_MY_LOCATION.getCode(), name);
+			throw new OBRuntimeException(CoreErrorCode.MISSING_MY_LOCATION.getCode(), name);
 		
 		MyLocationSnapshotAssembler assembler = new MyLocationSnapshotAssembler();
 		

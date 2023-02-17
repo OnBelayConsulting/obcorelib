@@ -18,6 +18,7 @@ package com.onbelay.core.test.repository;
 import java.util.List;
 
 import com.onbelay.core.entity.snapshot.EntityId;
+import com.onbelay.core.entity.snapshot.EntityListItem;
 import com.onbelay.core.query.snapshot.DefinedQuery;
 import com.onbelay.core.query.snapshot.QuerySelectedPage;
 import com.onbelay.core.test.model.MyLocation;
@@ -29,9 +30,13 @@ public interface MyLocationRepository {
 	
 	public MyLocation findByName(String name);
 
-	
-	public List<Long> findMyLocationIds(DefinedQuery definedQuery);
-	
+	public List<Integer> findMyLocationIds(DefinedQuery definedQuery);
+
+	public List<EntityListItem> fetchLocationList(DefinedQuery definedQuery);
+
+	public List<EntityListItem> fetchLocationListByIds(QuerySelectedPage selectedPage);
+
+
 	public List<MyLocation> fetchByIds(QuerySelectedPage selectedPage);
 
 	

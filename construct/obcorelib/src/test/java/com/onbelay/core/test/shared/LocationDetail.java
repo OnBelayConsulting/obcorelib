@@ -19,7 +19,7 @@ import javax.persistence.Column;
 
 import com.onbelay.core.entity.snapshot.AbstractDetail;
 import com.onbelay.core.enums.CoreErrorCode;
-import com.onbelay.core.exception.JSValidationException;
+import com.onbelay.core.exception.OBValidationException;
 
 public class LocationDetail extends AbstractDetail {
 
@@ -45,9 +45,9 @@ public class LocationDetail extends AbstractDetail {
 	}
 			
 
-	public void validate() throws JSValidationException {
+	public void validate() throws OBValidationException {
 		if (name == null)
-			throw new JSValidationException(CoreErrorCode.MISSING_MY_LOCATION_NAME.getCode());
+			throw new OBValidationException(CoreErrorCode.MISSING_MY_LOCATION_NAME.getCode());
 	}
 
 	@Column(name = "NAME_TXT")

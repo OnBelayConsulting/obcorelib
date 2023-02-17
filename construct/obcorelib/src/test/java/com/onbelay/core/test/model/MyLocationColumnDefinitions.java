@@ -29,14 +29,24 @@ public class MyLocationColumnDefinitions implements ColumnDefinitions{
 
 	public Map<String, ColumnDefinition> definitionsMap = new HashMap<String, ColumnDefinition>();
 	
-	public static final ColumnDefinition id = new ColumnDefinition("id", ColumnDataType.LONG, "id");
+	public static final ColumnDefinition id = new ColumnDefinition("id", ColumnDataType.INTEGER, "id");
 	public static final ColumnDefinition name = new ColumnDefinition("name", ColumnDataType.STRING, "detail.name");
 	
 	public MyLocationColumnDefinitions() {
 		add(id);
 		add(name);
 	}
-	
+
+	@Override
+	public String getCodeName() {
+		return name.getPath();
+	}
+
+	@Override
+	public String getDescriptionName() {
+		return name.getPath();
+	}
+
 	public ColumnDefinition get(String name) {
 		return definitionsMap.get(name);
 	}

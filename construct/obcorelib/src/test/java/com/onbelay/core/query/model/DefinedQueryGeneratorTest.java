@@ -321,7 +321,17 @@ public class DefinedQueryGeneratorTest extends TestCase {
 			add(times);
 			add(isAlive);
 		}
-		
+
+		@Override
+		public String getCodeName() {
+			return name.getPath();
+		}
+
+		@Override
+		public String getDescriptionName() {
+			return name.getPath();
+		}
+
 		public ColumnDefinition get(String name) {
 			return definitionsMap.get(name);
 		}

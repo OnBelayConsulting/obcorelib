@@ -19,6 +19,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.onbelay.core.entity.snapshot.EntityListItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -30,8 +31,6 @@ import com.onbelay.core.test.repository.MyLocationRepository;
 
 @Repository (value="myLocationRepository")
 @Transactional
-
-
 public class MyLocationRepositoryBean extends BaseRepository<MyLocation> implements MyLocationRepository {
 	public static final String FIND_MY_LOCATION_BY_NAME = "FIND_MY_LOCATION_BY_NAME";
 	
@@ -45,23 +44,36 @@ public class MyLocationRepositoryBean extends BaseRepository<MyLocation> impleme
 	@Override
 	public MyLocation load(EntityId entityId) {
 		if (entityId.isSet())
-			return (MyLocation) load(MyLocation.class, entityId.getId());
+			return (MyLocation) find(MyLocation.class, entityId.getId());
 		else
 			return null;
-		
 	}
-	
 
 	@Override
-	public List<Long> findMyLocationIds(DefinedQuery definedQuery) {
+	public List<Integer> findMyLocationIds(DefinedQuery definedQuery) {
 		return executeDefinedQueryForIds(
 				myLocationColumnDefinitions, 
 				definedQuery);
 	}
 
 	@Override
+	public List<EntityListItem> fetchLocationList(DefinedQuery definedQuery) {
+		return executeDefinedQueryForList(
+				myLocationColumnDefinitions,
+				definedQuery);
+	}
+
+	@Override
 	public List<MyLocation> fetchByIds(QuerySelectedPage selectedPage) {
 		return fetchEntitiesById(
+				myLocationColumnDefinitions,
+				"MyLocation",
+				selectedPage);
+	}
+
+	@Override
+	public List<EntityListItem> fetchLocationListByIds(QuerySelectedPage selectedPage) {
+		return fetchEntityListItemsById(
 				myLocationColumnDefinitions,
 				"MyLocation",
 				selectedPage);

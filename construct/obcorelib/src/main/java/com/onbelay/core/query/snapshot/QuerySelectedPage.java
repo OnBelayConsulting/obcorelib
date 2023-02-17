@@ -20,24 +20,24 @@ import java.util.List;
 
 public class QuerySelectedPage {
 	
-	private List<Long> ids = new ArrayList<Long>();
+	private List<Integer> ids = new ArrayList<>();
 	
 	private DefinedOrderByClause orderByClause;
 
-	public QuerySelectedPage(List<Long> ids, DefinedOrderByClause orderByClause) {
+	public QuerySelectedPage(List<Integer> ids, DefinedOrderByClause orderByClause) {
 		super();
 		this.ids = ids;
 		this.orderByClause = orderByClause;
 	}
 	
 
-	public QuerySelectedPage(List<Long> ids) {
+	public QuerySelectedPage(List<Integer> ids) {
 		super();
 		this.ids = ids;
 	}
 
 
-	public List<Long> getIds() {
+	public List<Integer> getIds() {
 		return ids;
 	}
 

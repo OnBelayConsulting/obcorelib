@@ -22,26 +22,32 @@ import java.util.List;
  * Thrown to indicate a business validation has failed.
  *
  */
-public class JSValidationException extends RuntimeException {
+public class OBValidationException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	
 	private String errorCode;
 	private List<String> parms = new ArrayList<String>();;
 	
-	public JSValidationException(String errorCode) {
+	public OBValidationException(String errorCode) {
 		super(errorCode);
 		this.errorCode = errorCode;
 	}
 
-    public JSValidationException(String errorCode, String parm) {
+    public OBValidationException(String errorCode, String parm) {
         super(errorCode);
         this.errorCode = errorCode;
         this.parms.add(parm);
     }
 
+    public OBValidationException(String errorCode, List<String> parms) {
+        super(errorCode);
+        this.errorCode = errorCode;
+        this.parms = parms;
+    }
 
-    public JSValidationException(String errorCode, Throwable t) {
+
+    public OBValidationException(String errorCode, RuntimeException t) {
 		super(errorCode, t);
 		this.errorCode = errorCode;
 	}
@@ -57,21 +63,10 @@ public class JSValidationException extends RuntimeException {
         return buffer.toString();
     }
 
-    public String getAggregatedMessageDetails() {
-        
-    	StringBuffer buffer = new StringBuffer();
-
-                
-        return buffer.toString();
-    }
-        
 	public String getErrorCode() {
 		return errorCode;
 	}
 
-    /**
-     * @return
-     */
     public List<String> getParms() {
         return this.parms;
     }	

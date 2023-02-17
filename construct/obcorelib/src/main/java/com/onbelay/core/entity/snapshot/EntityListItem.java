@@ -15,12 +15,18 @@
 */
 package com.onbelay.core.entity.snapshot;
 
-/**
- *
- */
-public interface KeyListItem extends ListItem {
-   
-    public Integer getId();
+public interface EntityListItem {
 
-    
+	public Integer getId();
+
+	public void setId(Integer id);
+
+	public String getCode();
+
+	public void setCode(String code);
+
+	public String getDescription();
+
+	public void setDescription(String description);
+
 }

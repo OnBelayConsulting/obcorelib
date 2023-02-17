@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.  
 */
-package com.onbelay.core.entity.enums;
+package com.onbelay.core.enums;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public enum TransactionErrorCode {
+public enum CoreTransactionErrorCode {
 
     SUCCESS                                       ("0", "Success: transaction was successful"),
     APPSET_MISSING_KEY                            ("OBC-E0001", "Missing application setting key"),
@@ -35,16 +35,16 @@ public enum TransactionErrorCode {
     private String code;
     private String description;
 
-    private static final Map<String, TransactionErrorCode> lookup
-            = new HashMap<String, TransactionErrorCode>();
+    private static final Map<String, CoreTransactionErrorCode> lookup
+            = new HashMap<String, CoreTransactionErrorCode>();
 
     static {
-        for (TransactionErrorCode c : EnumSet.allOf(TransactionErrorCode.class))
+        for (CoreTransactionErrorCode c : EnumSet.allOf(CoreTransactionErrorCode.class))
             lookup.put(c.code, c);
     }
 
 
-    private TransactionErrorCode(String code, String description) {
+    private CoreTransactionErrorCode(String code, String description) {
         this.code = code;
         this.description = description;
     }
@@ -59,7 +59,7 @@ public enum TransactionErrorCode {
 
     public static List<String> getTransactionCodes() {
         ArrayList<String> list = new ArrayList<String>();
-        for (TransactionErrorCode c : EnumSet.allOf(TransactionErrorCode.class))
+        for (CoreTransactionErrorCode c : EnumSet.allOf(CoreTransactionErrorCode.class))
             list.add(c.getCode() + " : " + c.getDescription());
         return list;
     }
@@ -68,7 +68,7 @@ public enum TransactionErrorCode {
         return description;
     }
 
-    public static TransactionErrorCode lookUp(String code) {
+    public static CoreTransactionErrorCode lookUp(String code) {
         return lookup.get(code);
     }
 }

@@ -1,5 +1,6 @@
 package com.onbelay.core.test;
 
+import com.onbelay.core.entity.snapshot.EntityListItemCollection;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.onbelay.core.entity.enums.EntityState;
 import com.onbelay.core.entity.persistence.TransactionalSpringTestCase;
 import com.onbelay.core.entity.snapshot.EntityId;
-import com.onbelay.core.entity.snapshot.TransactionResult;
 import com.onbelay.core.enums.CoreErrorCode;
-import com.onbelay.core.exception.JSRuntimeException;
+import com.onbelay.core.exception.OBRuntimeException;
 import com.onbelay.core.test.model.MyLocation;
 import com.onbelay.core.test.repository.MyLocationRepository;
 import com.onbelay.core.test.service.MyLocationService;
@@ -35,7 +35,12 @@ public class MyLocationServiceTest extends TransactionalSpringTestCase {
 	private MyLocationService myLocationService;
 
 	private EntityId locationId;
-	
+
+	@Override
+	public void setUp() {
+
+	}
+
 	public void beforeRun() throws Throwable {
 		super.beforeRun();
 		MyLocation location = new MyLocation(
@@ -68,7 +73,7 @@ public class MyLocationServiceTest extends TransactionalSpringTestCase {
 		savedLocation.setEntityState(EntityState.MODIFIED);
 		savedLocation.getDetail().setDescription("changed");
 		
-		myLocationService.createOrUpdate(savedLocation);
+		myLocationService.save(savedLocation);
 		flush();
 		
 		MyLocation location = myLocationRepository.load(savedLocation.getEntityId());
@@ -82,13 +87,24 @@ public class MyLocationServiceTest extends TransactionalSpringTestCase {
 		try {
 			myLocationService.findByName("NotHere");
 			fail("Should have thrown exception");
-		} catch (JSRuntimeException e) {
+		} catch (OBRuntimeException e) {
 			assertEquals(CoreErrorCode.MISSING_MY_LOCATION.getCode(), e.getErrorCode());
-		} catch (Throwable t) {
+		} catch (RuntimeException t) {
 			fail("Should have thrown JSRuntimeException");
 		}
 	}
-	
+
+	@Test
+	public void findLocationList() {
+		LocationFixture.createLocations("add", 10);
+		flush();
+		clearCache();
+
+		EntityListItemCollection collection = myLocationService.findList("WHERE", 0, 100);
+		assertEquals(11, collection.getCount());
+		assertEquals(11, collection.getSnapshots().size());
+	}
+
 	
 	@Test
 	public void testFindUsingDefinedQuery() {

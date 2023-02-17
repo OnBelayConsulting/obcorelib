@@ -15,25 +15,18 @@
 */
 package com.onbelay.core.entity.serviceimpl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.onbelay.core.appsetting.component.ApplicationSettingCacheManager;
 import com.onbelay.core.entity.component.JSAuditManager;
-import com.onbelay.core.lifecycle.component.GlobalThreadBeanManager;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class BaseDomainService  {
 
 	@Autowired
-	protected GlobalThreadBeanManager globalThreadBeanManager;
-	
-	@Autowired
 	protected JSAuditManager auditManager;
-	
-	public ApplicationSettingCacheManager getApplicationSettingCacheManager() {
-		return (ApplicationSettingCacheManager) globalThreadBeanManager.getThreadBean(ApplicationSettingCacheManager.BEAN_NAME);
-	}
-	
-	
+
+	@Autowired
+	protected ApplicationSettingCacheManager applicationSettingCacheManager;
+
 	protected void initializeSession(String name) {
 
 		auditManager.setCurrentAuditUserName(name);

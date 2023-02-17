@@ -26,10 +26,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.onbelay.core.entity.enums.EntityState;
-import com.onbelay.core.entity.enums.TransactionErrorCode;
+import com.onbelay.core.enums.CoreTransactionErrorCode;
 import com.onbelay.core.entity.snapshot.AbstractSnapshot;
-import com.onbelay.core.exception.JSRuntimeException;
-import com.onbelay.core.exception.JSValidationException;
+import com.onbelay.core.exception.OBRuntimeException;
+import com.onbelay.core.exception.OBValidationException;
 import com.onbelay.core.utils.DateUtils;
 
 
@@ -74,7 +74,7 @@ public abstract class TemporalAbstractEntity extends AbstractEntity implements V
 
 	
 	@Override
-	protected void validate() throws JSValidationException {
+	protected void validate() throws OBValidationException {
 	}
 
 	public void createWith(AbstractSnapshot valueObject) {
@@ -85,13 +85,13 @@ public abstract class TemporalAbstractEntity extends AbstractEntity implements V
         if (valueObject.isVersioned() && this.getVersion() != null) {
         	if (this.getVersion().longValue() != valueObject.getVersion().longValue()) {
         		logger.error("Entity version: " + this.getVersion() + " is not equal to update version: " + valueObject.getVersion());
-        		throw new JSRuntimeException(TransactionErrorCode.ENTITY_VERSION_FAIL.getCode());
+        		throw new OBRuntimeException(CoreTransactionErrorCode.ENTITY_VERSION_FAIL.getCode());
         	}
         }
 	}
 	
 	/**
-	 * Sub-classes should override this to handle events after the create. 
+	 * Sub-classes should override this to handle events after the creation.
 	 */
 	public void handleCreateUpdateWith(AbstractSnapshot valueObject) {
 	    
@@ -104,13 +104,13 @@ public abstract class TemporalAbstractEntity extends AbstractEntity implements V
 	public void save() {
 		validate();
         LocalDateTime historyDate = LocalDateTime.now();
-        getRepository().save(this);
+		getEntityRepository().save(this);
         
         if (newHistory == null)
 			newHistory = createHistory();
 		if (newHistory != null)
 			setHistoryAudit(newHistory, historyDate);
-		getRepository().saveWithHistory(this, newHistory);
+		getEntityRepository().saveWithHistory(this, newHistory);
 	}
 
     @Transient
@@ -141,7 +141,7 @@ public abstract class TemporalAbstractEntity extends AbstractEntity implements V
     	
         this.isDeleted = true;
         generateHistory();
-        getRepository().delete(this);
+		getEntityRepository().delete(this);
     }
     
 
@@ -166,12 +166,12 @@ public abstract class TemporalAbstractEntity extends AbstractEntity implements V
         if (recentHistory != null) {
             recentHistory.setIsRecentHistory(true);
             recentHistory.getHistoryDateTimeStamp().setValidToDateTime(historyDate);
-            getRepository().flush();
+            getEntityRepository().flush();
         }
         if (newHistory == null) {
             newHistory = createHistory();
             if (newHistory != null) {
-            	getRepository().save(newHistory);
+				getEntityRepository().save(newHistory);
 
             }
         }

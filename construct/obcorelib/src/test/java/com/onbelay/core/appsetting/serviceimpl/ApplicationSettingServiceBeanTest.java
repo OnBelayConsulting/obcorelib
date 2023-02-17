@@ -42,8 +42,12 @@ public class ApplicationSettingServiceBeanTest extends TransactionalSpringTestCa
 
 	
 	private ApplicationSettingService applicationSettingService;
-	
-	
+
+	@Override
+	public void setUp() {
+
+	}
+
 	@Override
 	public void beforeRun() throws Throwable {
 		super.beforeRun();

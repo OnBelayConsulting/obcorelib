@@ -16,57 +16,54 @@
 package com.onbelay.core.entity.snapshot;
 
 /**
- *
+ * Base class for defining list items.
  */
-public class SimpleBaseListItem implements SimpleListItem {
+public class EntityBaseListItem implements EntityListItem {
     private static final long serialVersionUID = 1L;
     
     private String code;
 	private String  description;
-    private Boolean expired;
 	private Integer id;
-	private boolean selectable = true;
 
-    public SimpleBaseListItem(Integer id, String code, String description, Boolean expired) {
+    public EntityBaseListItem(
+			Integer id,
+			String code,
+			String description) {
+
         this.id = id;
         this.code = code;
         this.description = description;
-        this.expired = expired;
     }
 
+    @Override
     public String getCode() {
         return code;
     }
-    
-    public String getValue() {
-        return code;
+
+    @Override
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public boolean isSelectable() {
-		return selectable;
-	}
+    @Override
+    public String getDescription() {
+        return description;
+    }
 
-	public boolean getSelectable() {
-		return selectable;
-	}
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public void setSelectable(boolean selectable) {
-		this.selectable = selectable;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public Boolean getExpired() {
-		return expired;
-	}
-	
-	public Integer getId() {
+    @Override
+    public Integer getId() {
         return id;
     }
-	
-    public String toString() {
-		return code;
-	}
+
+    @Override
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String toString() { return code;}
 }

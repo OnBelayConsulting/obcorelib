@@ -15,20 +15,16 @@
 */
 package com.onbelay.core.entity.model;
 
-import javax.persistence.Transient;
-
 import com.onbelay.core.appsetting.component.ApplicationSettingCacheManager;
-import com.onbelay.core.appsetting.model.ApplicationSetting;
 import com.onbelay.core.entity.component.ApplicationContextFactory;
 import com.onbelay.core.entity.enums.EntityState;
-import com.onbelay.core.entity.repository.BaseRepository;
+import com.onbelay.core.entity.repository.EntityRepository;
 import com.onbelay.core.entity.snapshot.EntityId;
-import com.onbelay.core.exception.JSRuntimeException;
-import com.onbelay.core.exception.JSValidationException;
-import com.onbelay.core.lifecycle.component.ApplicationLifecycleState;
-import com.onbelay.core.lifecycle.component.GlobalThreadBeanManager;
-import com.onbelay.core.lifecycle.enums.LifecycleApplicationSettings;
+import com.onbelay.core.exception.OBRuntimeException;
+import com.onbelay.core.exception.OBValidationException;
 import com.onbelay.core.messaging.pubsub.EntityEventPublisher;
+
+import javax.persistence.Transient;
 
 /**
  * Top-level persisted class. All  subtypes are expected to have an Integer primary key.
@@ -37,7 +33,7 @@ import com.onbelay.core.messaging.pubsub.EntityEventPublisher;
  */
 public abstract class AbstractEntity {
 	
-	protected abstract Long getId();
+	protected abstract Integer getId();
 
 	public String getEntityName() {
 		return this.getClass().getName();
@@ -47,9 +43,7 @@ public abstract class AbstractEntity {
 		return new EntityId(getId());
 	}
 
-	protected abstract BaseRepository getRepository();
-	
-	protected abstract void validate() throws JSValidationException; 
+	protected abstract void validate() throws OBValidationException;
 	
     
     @Transient
@@ -60,10 +54,10 @@ public abstract class AbstractEntity {
 	public void save() {
 	    try {
 	        validate();
-	    } catch (JSValidationException validationException) {
-	        throw new JSRuntimeException(validationException);
+	    } catch (OBValidationException validationException) {
+	        throw new OBRuntimeException(validationException);
 	    }
-	    getRepository().save(this);
+	    getEntityRepository().save(this);
 	}
 	
 	/**
@@ -72,8 +66,8 @@ public abstract class AbstractEntity {
 	public void update() {
         try {
             validate();
-        } catch (JSValidationException validationException) {
-            throw new JSRuntimeException(validationException);
+        } catch (OBValidationException validationException) {
+            throw new OBRuntimeException(validationException);
         }
 	}
 	
@@ -114,39 +108,18 @@ public abstract class AbstractEntity {
 	    return (AuditManager) ApplicationContextFactory.getBean(AuditManager.BEAN_NAME); 
 	}
 
-	/**
-	 * Return true if APPLICATION_STATUS is MIGRATION or ADMIN.
-	 * False otherwise.
-	 * 
-	 * @return
-	 */
-    protected boolean isInAdminState() {
-        ApplicationLifecycleState state = null;
-        ApplicationSetting ApplicationSetting = getApplicationSettingCacheManager().getValue(LifecycleApplicationSettings.APPLICATION_STATUS.getName());
-
-        if (ApplicationSetting != null) {
-            state =  ApplicationLifecycleState.lookUp(ApplicationSetting.getValue());
-        }
-        if (state == ApplicationLifecycleState.ADMIN)
-            return true;
-        return false;
-    }
-	
-    
 
 	@Transient
 	protected EntityEventPublisher getEventPublisher() {
 		return (EntityEventPublisher) ApplicationContextFactory.getBean(EntityEventPublisher.BEAN_NAME);
 	}
 
+	protected static EntityRepository getEntityRepository() {
+		return (EntityRepository) ApplicationContextFactory.getBean("entityRepository");
+	}
     
 	@Transient
     protected static ApplicationSettingCacheManager getApplicationSettingCacheManager() {
-    	return (ApplicationSettingCacheManager) getGlobalThreadBeanManager().getThreadBean(ApplicationSettingCacheManager.BEAN_NAME);
-    }
-    
-	@Transient
-    protected static GlobalThreadBeanManager getGlobalThreadBeanManager() {
-    	return (GlobalThreadBeanManager) ApplicationContextFactory.getBean(GlobalThreadBeanManager.BEAN_NAME);
+    	return (ApplicationSettingCacheManager) ApplicationContextFactory.getBean(ApplicationSettingCacheManager.BEAN_NAME);
     }
 }

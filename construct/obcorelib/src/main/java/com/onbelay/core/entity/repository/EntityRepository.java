@@ -13,28 +13,21 @@
    See the License for the specific language governing permissions and
    limitations under the License.  
 */
-package com.onbelay.core.entity.snapshot;
+package com.onbelay.core.entity.repository;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.onbelay.core.entity.model.AbstractEntity;
+import com.onbelay.core.entity.model.AuditAbstractEntity;
+import com.onbelay.core.entity.model.TemporalAbstractEntity;
 
-
-public abstract class ComplexBaseListItem implements ComplexListItem {
-    private static final long serialVersionUID = 1L;
+public interface EntityRepository<T> {
+	public void save(AbstractEntity entity);
 	
-	protected Map<String, String> values = new HashMap<String, String>();
-
-	public String valueAt(String key) {
-        return values.get(key);
-    }
-
-    public Map<String, String> getListValues() {
-        return values;
-    }
-
-    public void setListValues(Map<String, String> values) {
-		this.values = values;
-	}
-
+	public void delete(AbstractEntity entity);
+	
+	public void recordHistory(AuditAbstractEntity auditEntity);
+	
+	public void saveWithHistory(TemporalAbstractEntity entity, AuditAbstractEntity auditEntity);
+	
+	public void flush();
 
 }

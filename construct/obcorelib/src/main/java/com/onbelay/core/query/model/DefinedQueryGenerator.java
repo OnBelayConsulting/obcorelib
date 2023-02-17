@@ -195,7 +195,30 @@ public class DefinedQueryGenerator {
 
 		return buffer.toString();
 	}
-	
+
+	public String generateListQuery() {
+
+		StringBuffer buffer = new StringBuffer("SELECT new com.onbelay.core.entity.snapshot.EntityBaseListItem(");
+		buffer.append(ENTITY_NAME_PLACEHOLDER + ".id,");
+		buffer.append(ENTITY_NAME_PLACEHOLDER + "." + columnDefinitions.getCodeName() +"," );
+		buffer.append(ENTITY_NAME_PLACEHOLDER + "." + columnDefinitions.getDescriptionName() +")" );
+		buffer.append(" FROM ");
+		buffer.append(definedQuery.getEntityName());
+		buffer.append(" ");
+		buffer.append(ENTITY_NAME_PLACEHOLDER);
+
+		if (definedQuery.getWhereClause().hasExpressions()) {
+			addWhereClause(buffer, definedQuery.getWhereClause());
+		}
+
+		if (definedQuery.getOrderByClause().hasExpressions()) {
+			addOrderByClause(buffer, definedQuery.getOrderByClause());
+		}
+
+		return buffer.toString();
+	}
+
+
 	private String formatExpression(DefinedWhereExpression expression) {
 		ColumnDefinition definition = columnDefinitions.get(expression.getColumnName());
 		if (definition == null) {
@@ -224,7 +247,6 @@ public class DefinedQueryGenerator {
 
 	/**
 	 * Return a query that will fetch all the ids for domain objects based on the optional where and order by clauses.
-	 * @param definedQuery - defines the domain object by name, optional where and order by clauses
 	 * @return a list of zero to many ids in order if an order by clause is provided.
 	 */
 	public String generateQueryForIds() {
@@ -300,5 +322,4 @@ public class DefinedQueryGenerator {
 		
 
 	}
-	 
 }

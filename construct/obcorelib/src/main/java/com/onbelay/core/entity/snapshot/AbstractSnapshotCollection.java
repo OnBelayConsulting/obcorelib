@@ -30,44 +30,66 @@ import java.util.List;
  *
  * @param <T> - Snapshot class.
  */
-public abstract class AbstractJSONCollection<T> {
+public abstract class AbstractSnapshotCollection<T> extends ErrorHoldingSnapshot {
 
-	private Integer version;
-	private int start;
-	private int count;
+	private int start = 0;
+	private int limit = 10;
+	private int count = 0;
 	private int totalItems;
 	private String name;
-	
-	private String errorCode = "0";
-	private String errorMessage = "";
-	private boolean wasSuccessful = true;
-	
+
 	private List<T> snapshots = new ArrayList<T>();
 	
 
-	public AbstractJSONCollection() {
+	public AbstractSnapshotCollection() {
 
-	} 
-	
-	public AbstractJSONCollection(String errorCode, String errorMessage) {
-		this.errorCode = errorCode;
-		this.errorMessage = errorMessage;
-		wasSuccessful = false;
-	} 
-
-	
-	public AbstractJSONCollection(String name) {
-		
 	}
 
-	public AbstractJSONCollection(String name, List<T> snapshots) {
-		super();
+	public AbstractSnapshotCollection(String name) {
+		this.name = name;
+	}
+
+
+	public AbstractSnapshotCollection(String name, String errorMessage) {
+		super(errorMessage);
+		this.name = name;
+	}
+
+	public AbstractSnapshotCollection(
+			String name,
+			String errorMessage,
+			List<String> parameters) {
+		super(errorMessage, parameters);
+		this.name = name;
+	}
+
+	public AbstractSnapshotCollection(
+			String name,
+			int start,
+			int limit,
+			int totalItems,
+			List<T> snapshots) {
+
+		this.start = start;
+		this.limit = limit;
+		this.count = snapshots.size();
+		this.totalItems = totalItems;
 		this.name = name;
 		this.snapshots = snapshots;
-		count = snapshots.size();
 	}
-	
-	
+
+	public AbstractSnapshotCollection(
+			String name,
+			int start,
+			int limit,
+			int totalItems) {
+
+		this.start = start;
+		this.limit = limit;
+		this.count = 0;
+		this.totalItems = totalItems;
+		this.name = name;
+	}
 
 	public List<T> getSnapshots() {
 		return snapshots;
@@ -76,14 +98,6 @@ public abstract class AbstractJSONCollection<T> {
 	public void setSnapshots(List<T> snapshots) {
 		this.snapshots = snapshots;
 		count = snapshots.size();
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 
 	public int getTotalItems() {
@@ -106,8 +120,16 @@ public abstract class AbstractJSONCollection<T> {
 		return count;
 	}
 
-	public void setCount(int limit) {
-		this.count = limit;
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+	public int getLimit() {
+		return limit;
+	}
+
+	public void setLimit(int limit) {
+		this.limit = limit;
 	}
 
 	public String getName() {
@@ -118,29 +140,4 @@ public abstract class AbstractJSONCollection<T> {
 		this.name = name;
 	}
 
-	public String getErrorCode() {
-		return errorCode;
-	}
-
-	public void setErrorCode(String errorCode) {
-		this.errorCode = errorCode;
-	}
-
-	public String getErrorMessage() {
-		return errorMessage;
-	}
-
-	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
-	}
-
-	public boolean isWasSuccessful() {
-		return wasSuccessful;
-	}
-
-	public void setWasSuccessful(boolean wasSuccessful) {
-		this.wasSuccessful = wasSuccessful;
-	}
-	
-	
 }

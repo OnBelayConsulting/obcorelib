@@ -35,7 +35,7 @@ public class ControlDateTimeStamp {
 	
 	/**
 	 * Copy Constructor
-	 * @param audit
+	 * @param copy - copy to create from
 	 */
 	public ControlDateTimeStamp(ControlDateTimeStamp copy) {
 		modifiedBy = copy.modifiedBy;
@@ -47,7 +47,7 @@ public class ControlDateTimeStamp {
 	
 	/**
 	 * Set this audit from the given audit
-	 * @param audit
+	 * @param copy
 	 */
 	public void setFrom(ControlDateTimeStamp copy) {
 		modifiedBy = copy.modifiedBy;

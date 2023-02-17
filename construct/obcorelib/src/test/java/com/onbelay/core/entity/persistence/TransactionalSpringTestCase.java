@@ -55,45 +55,14 @@ public abstract class TransactionalSpringTestCase extends TestCase {
         } catch (InterruptedException e) {
         }
 	}
-	
-	/**
-	 * Asserts dates are equal by comparing year, month, day, hour, min, second.
-	 * @param expected
-	 * @param provided
-	 */
-	protected void assertDateTimeEquals(Date expected, Date provided) {
-		Calendar expectedCal = Calendar.getInstance();
-		expectedCal.setTime(expected);
-		Calendar providedCal = Calendar.getInstance();
-		providedCal.setTime(provided);
-		assertEquals("Year", expectedCal.get(Calendar.YEAR), providedCal.get(Calendar.YEAR));
-		assertEquals("Month", expectedCal.get(Calendar.MONTH), providedCal.get(Calendar.MONTH));
-		assertEquals("Day", expectedCal.get(Calendar.DAY_OF_MONTH), providedCal.get(Calendar.DAY_OF_MONTH));
-		assertEquals("Hour", expectedCal.get(Calendar.HOUR_OF_DAY), providedCal.get(Calendar.HOUR_OF_DAY));
-		assertEquals("Minute", expectedCal.get(Calendar.MINUTE), providedCal.get(Calendar.MINUTE));
-		assertEquals("Second", expectedCal.get(Calendar.SECOND), providedCal.get(Calendar.SECOND));
-	}
-	
-    /**
-     * Asserts dates are equal by comparing year, month, day, hour, min, second.
-     * @param expected
-     * @param provided
-     */
-    protected void assertDateEquals(Date expected, Date provided) {
-        Calendar expectedCal = Calendar.getInstance();
-        expectedCal.setTime(expected);
-        Calendar providedCal = Calendar.getInstance();
-        providedCal.setTime(provided);
-        assertEquals("year", expectedCal.get(Calendar.YEAR), providedCal.get(Calendar.YEAR));
-        assertEquals("month", expectedCal.get(Calendar.MONTH) + 1, providedCal.get(Calendar.MONTH) + 1);
-        assertEquals("day", expectedCal.get(Calendar.DAY_OF_MONTH), providedCal.get(Calendar.DAY_OF_MONTH));        
-    }
-	
+
+	public void setUp() {};
 
 	@Before
 	public void beforeRun() throws Throwable {
 	    initiateSession();
 		setUpTransaction();
+		setUp();
 	}
 	
 	@After
@@ -118,12 +87,7 @@ public abstract class TransactionalSpringTestCase extends TestCase {
 		this.commit = commit;
 	}
 
-	public int executeBulkQuery(String queryText) {
-		EntityManager masterEntityMgr = EntityManagerFactoryUtils.getTransactionalEntityManager(masterEntityMgrFactory);
-		Query query = masterEntityMgr.createQuery(queryText);
-		return query.executeUpdate();
-	}
-	
+
 	public void flush() {
 		EntityManager masterEntityMgr = EntityManagerFactoryUtils.getTransactionalEntityManager(masterEntityMgrFactory);
 		masterEntityMgr.flush();
@@ -196,7 +160,7 @@ public abstract class TransactionalSpringTestCase extends TestCase {
         catch (PersistenceException ex) {
             logger.trace("Could not close JPA EntityManager" + ex.getMessage());
         }
-        catch (Throwable ex) {
+        catch (RuntimeException ex) {
             logger.trace("Unexpected exception on closing JPA EntityManager" + ex);
         } finally {
             TransactionSynchronizationManager.unbindResource(masterEntityMgrFactory);

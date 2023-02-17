@@ -18,5 +18,9 @@ package com.onbelay.core.query.model;
 public interface ColumnDefinitions {
 
 	public ColumnDefinition get(String name);
+
+	public String getCodeName();
+
+	public String getDescriptionName();
 	
 }

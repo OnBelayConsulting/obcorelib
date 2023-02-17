@@ -15,16 +15,18 @@
 */
 package com.onbelay.core.appsetting.component;
 
-import java.util.HashMap;
-
 import com.onbelay.core.appsetting.model.ApplicationSetting;
 import com.onbelay.core.appsetting.repository.ApplicationSettingRepository;
 import com.onbelay.core.entity.component.ApplicationContextFactory;
-import com.onbelay.core.lifecycle.component.ThreadBean;
+import org.springframework.stereotype.Component;
 
-public class ApplicationSettingCacheManagerImpl implements ApplicationSettingCacheManager, ThreadBean {
+import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+
+@Component
+public class ApplicationSettingCacheManagerImpl implements ApplicationSettingCacheManager {
 	
-	private HashMap<String, ApplicationSettingWrapper> ApplicationSettings = new HashMap<>();
+	private ConcurrentHashMap<String, ApplicationSettingWrapper> ApplicationSettings = new ConcurrentHashMap<>();
 
 	@Override
 	public ApplicationSetting getValue(String key) {
@@ -54,17 +56,6 @@ public class ApplicationSettingCacheManagerImpl implements ApplicationSettingCac
 		return (ApplicationSettingRepository) ApplicationContextFactory.getBean(ApplicationSettingRepository.BEAN_NAME);
 	}
 
-
-	@Override
-	public void cleanupThread() {
-		ApplicationSettings.clear();
-	}
-
-	@Override
-	public void terminate() {
-		ApplicationSettings.clear();
-	}
-	
 	public static class ApplicationSettingWrapper {
 		
 		private ApplicationSetting ApplicationSetting;

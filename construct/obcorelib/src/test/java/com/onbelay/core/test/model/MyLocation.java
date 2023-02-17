@@ -15,26 +15,15 @@
  */
 package com.onbelay.core.test.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import com.onbelay.core.entity.component.ApplicationContextFactory;
 import com.onbelay.core.entity.model.AuditAbstractEntity;
 import com.onbelay.core.entity.model.TemporalAbstractEntity;
-import com.onbelay.core.entity.repository.BaseRepository;
 import com.onbelay.core.entity.snapshot.EntitySlot;
-import com.onbelay.core.exception.JSValidationException;
+import com.onbelay.core.exception.OBValidationException;
 import com.onbelay.core.test.shared.LocationDetail;
 import com.onbelay.core.test.snapshot.MyLocationSnapshot;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "MY_LOCATION")
@@ -47,7 +36,7 @@ import com.onbelay.core.test.snapshot.MyLocationSnapshot;
 })
 public class MyLocation extends TemporalAbstractEntity {
 
-	private Long id;
+	private Integer id;
 
 	private LocationDetail detail = new  LocationDetail();
 	
@@ -82,7 +71,7 @@ public class MyLocation extends TemporalAbstractEntity {
 		update();
 	}
 	
-	protected void validate() throws JSValidationException {
+	protected void validate() throws OBValidationException {
 		detail.validate();
 	}
 
@@ -105,11 +94,11 @@ public class MyLocation extends TemporalAbstractEntity {
     @Column(name="ENTITY_ID", insertable = false, updatable = false)
     @SequenceGenerator(name="MyLocationGen", sequenceName="MY_LOCATION_SEQ", allocationSize = 1)
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "MyLocationGen")
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long myLocationId) {
+	public void setId(Integer myLocationId) {
 		this.id = myLocationId;
 	}
 
@@ -129,24 +118,12 @@ public class MyLocation extends TemporalAbstractEntity {
 
 	@Override
 	public AuditAbstractEntity fetchRecentHistory() {
-		return getAuditRepository().findRecentHistory(this);
+		return MyLocationAudit.findRecentHistory(this);
 	}
 
 	@Transient
-	public MyLocationRepositoryBean getEntityRepository() {
+	public MyLocationRepositoryBean getLocationRepository() {
 		return (MyLocationRepositoryBean) ApplicationContextFactory.getBean(MyLocationRepositoryBean.BEAN_NAME);
 	}
 
-	@Transient
-	public MyLocationAuditRepository getAuditRepository() {
-		return (MyLocationAuditRepository) ApplicationContextFactory.getBean(MyLocationAuditRepository.BEAN_NAME);
-	}
-
-	@Override
-	@Transient
-	public BaseRepository<MyLocation> getRepository() {
-		return getEntityRepository();
-	}
-	
-	
 }

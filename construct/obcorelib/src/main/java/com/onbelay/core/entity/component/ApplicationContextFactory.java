@@ -101,7 +101,7 @@ public class ApplicationContextFactory {
         catch (PersistenceException ex) {
             logger.error("Could not close JPA EntityManager" + ex.getMessage());
         }
-        catch (Throwable ex) {
+        catch (RuntimeException ex) {
             logger.error("Unexpected exception on closing JPA EntityManager" + ex);
         } finally {
             TransactionSynchronizationManager.unbindResource(getEntityManagerFactory());

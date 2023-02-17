@@ -15,11 +15,9 @@
 */
 package com.onbelay.core.entity.assembler;
 
-import com.onbelay.core.entity.component.ApplicationContextFactory;
 import com.onbelay.core.entity.model.AbstractEntity;
 import com.onbelay.core.entity.model.VersionedEntity;
 import com.onbelay.core.entity.snapshot.AbstractSnapshot;
-import com.onbelay.core.lifecycle.component.GlobalThreadBeanManager;
 
 /**
  * Responsible for setting the common attributes from an entity into the value object:
@@ -38,11 +36,5 @@ public abstract class EntityAssembler {
         		value.setVersion(versionedEntity.getVersion());
         }
     }
-    
-    
-    protected static GlobalThreadBeanManager getGlobalThreadBeanManager() {
-    	return (GlobalThreadBeanManager) ApplicationContextFactory.getBean(GlobalThreadBeanManager.BEAN_NAME);
-    }
-
 
 }

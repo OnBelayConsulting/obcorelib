@@ -22,8 +22,10 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
+import com.onbelay.core.entity.component.ApplicationContextFactory;
 import com.onbelay.core.entity.enums.EntityState;
-import com.onbelay.core.exception.JSValidationException;
+import com.onbelay.core.entity.repository.AuditEntityRepository;
+import com.onbelay.core.exception.OBValidationException;
 import com.onbelay.core.utils.DateUtils;
 
 
@@ -79,18 +81,11 @@ public abstract class AuditAbstractEntity extends AbstractEntity implements Vers
 
     protected void recordHistory() {
         this.setIsRecentHistory(true); // 
-        getRepository().recordHistory(this);
+        getAuditEntityRepository().recordHistory(this);
     }
     
-
-	public void prepareForImport(AuditAbstractEntity entity) {	
-		if (getParent().getVersion() == null) {
-			getParent().setVersion(0L);
-		}
-	}
-
 	@Override
-	protected void validate() throws JSValidationException {
+	protected void validate() throws OBValidationException {
 	}
 
 	@Transient
@@ -140,4 +135,9 @@ public abstract class AuditAbstractEntity extends AbstractEntity implements Vers
     public void setIsDeleted(Boolean isExpired) {
         this.isDeleted = isExpired;
     }
+
+    protected static AuditEntityRepository getAuditEntityRepository() {
+        return (AuditEntityRepository) ApplicationContextFactory.getBean("auditEntityRepository");
+    }
+
 }

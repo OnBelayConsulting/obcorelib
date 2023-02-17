@@ -33,7 +33,7 @@ public class HistoryDateTimeStamp {
 	
 	/**
 	 * Copy Constructor
-	 * @param historyDateTimeStamp
+	 * @param copy - copy  to create from
 	 */
 	public HistoryDateTimeStamp(HistoryDateTimeStamp copy) {
 		this.validFromDateTime = copy.validFromDateTime;

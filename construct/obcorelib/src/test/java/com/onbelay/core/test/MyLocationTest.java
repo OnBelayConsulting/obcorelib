@@ -84,7 +84,7 @@ public class MyLocationTest extends TransactionalSpringTestCase {
 							ExpressionOperator.LIKE, 
 							"add%"));
 		
-		List<Long> ids = myLocationRepository.findMyLocationIds(query);
+		List<Integer> ids = myLocationRepository.findMyLocationIds(query);
 		assertEquals(10, ids.size());
 		
 		List<MyLocation> locations = myLocationRepository.fetchByIds(new QuerySelectedPage(ids));

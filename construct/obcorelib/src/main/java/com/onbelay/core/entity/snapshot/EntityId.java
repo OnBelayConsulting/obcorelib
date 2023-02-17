@@ -35,28 +35,35 @@ import com.onbelay.core.entity.enums.EntityIdStatus;
 public class EntityId implements Serializable {
     private static final long serialVersionUID = 1L;
     
-    private Long id;
+    private Integer id;
     
     private EntityIdStatus status = EntityIdStatus.VALID;
     
     public EntityId() { }
     
     
-    public EntityId(Long id) {
+    public EntityId(Integer id) {
     	this.id = id;
     }
 
+    public static EntityId makeNullEntityId() {
+        EntityId id = new EntityId();
+        id.status = EntityIdStatus.IS_NULL;
+        return id;
+    }
+
+    public static EntityId makeInvalidEntityId() {
+        EntityId id = new EntityId();
+        id.status = EntityIdStatus.INVALID;
+        return id;
+    }
 
     @JsonIgnore
     public boolean isSet() {
         return status == EntityIdStatus.VALID;
     }
     
-    @JsonIgnore
-    public void setToNull() {
-       status = EntityIdStatus.IS_NULL;
-    }
-    
+
     @JsonIgnore
     public boolean isNotNull() {
         return status != EntityIdStatus.IS_NULL;
@@ -66,24 +73,20 @@ public class EntityId implements Serializable {
     public boolean isNull() {
         return status == EntityIdStatus.IS_NULL;
     }
-    
-    public void makeInvalid() {
-        status = EntityIdStatus.INVALID;
-    }
-    
+
     @JsonIgnore
     public boolean isInvalid() {
         return status != EntityIdStatus.VALID;
     }
     
-    public Long getId() {
+    public Integer getId() {
     	return id;
     }
-    
-    public void setId(Long id) {
+
+    public void setId(Integer id) {
     	this.id = id;
     }
-    
+
     public EntityIdStatus getStatus() {
 		return status;
 	}

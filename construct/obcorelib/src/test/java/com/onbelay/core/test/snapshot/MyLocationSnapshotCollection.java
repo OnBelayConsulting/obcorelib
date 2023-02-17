@@ -2,32 +2,49 @@ package com.onbelay.core.test.snapshot;
 
 import java.util.List;
 
-import com.onbelay.core.entity.snapshot.AbstractJSONCollection;
+import com.onbelay.core.entity.snapshot.AbstractSnapshotCollection;
 
-public class MyLocationSnapshotCollection extends AbstractJSONCollection<MyLocationSnapshot>{
+public class MyLocationSnapshotCollection extends AbstractSnapshotCollection<MyLocationSnapshot> {
 	
 	public static final String ITEM_TYPE = "myLocation";
 	
 	public MyLocationSnapshotCollection() {
 		super(ITEM_TYPE);
 	}
-	
-	public MyLocationSnapshotCollection(List<MyLocationSnapshot> snapshots) {
-		super(ITEM_TYPE, snapshots);
+
+	public MyLocationSnapshotCollection(
+			int start,
+			int limit,
+			int totalItems,
+			List<MyLocationSnapshot> snapshots
+			) {
+
+		super(
+				ITEM_TYPE,
+				start,
+				limit,
+				totalItems,
+				snapshots);
 	}
-	
-	public MyLocationSnapshotCollection(List<MyLocationSnapshot> snapshots, int totalItems) {
-		super(ITEM_TYPE, snapshots);
-		setTotalItems(totalItems);
+
+	public MyLocationSnapshotCollection(
+			int start,
+			int limit,
+			int totalItems) {
+
+		super(
+				ITEM_TYPE,
+				start,
+				limit,
+				totalItems);
 	}
-	
-	public MyLocationSnapshotCollection(String errorCode, String errorMessage) {
-		super(errorCode, errorMessage);
+
+	public MyLocationSnapshotCollection(String errorCode) {
+		super(ITEM_TYPE, errorCode);
 	}
-	
-	public MyLocationSnapshotCollection(int total) {
-		super(ITEM_TYPE);
-		setTotalItems(total);
+
+	public MyLocationSnapshotCollection(String errorCode, List<String> parameters) {
+		super(ITEM_TYPE, errorCode, parameters);
 	}
 
 }

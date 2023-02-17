@@ -28,8 +28,8 @@ import javax.persistence.Transient;
 import com.onbelay.core.appsetting.repository.ApplicationSettingRepository;
 import com.onbelay.core.appsetting.snapshot.ApplicationSettingSnapshot;
 import com.onbelay.core.entity.component.ApplicationContextFactory;
-import com.onbelay.core.entity.enums.TransactionErrorCode;
-import com.onbelay.core.exception.JSValidationException;
+import com.onbelay.core.enums.CoreTransactionErrorCode;
+import com.onbelay.core.exception.OBValidationException;
 
 /**
  * @author CANMXF
@@ -138,18 +138,18 @@ public class ApplicationSetting {
     	save();
     }
     
-    public void validate() throws JSValidationException {
+    public void validate() throws OBValidationException {
     	if (this.key == null) {
-    		throw new JSValidationException(TransactionErrorCode.APPSET_MISSING_KEY.getCode());
+    		throw new OBValidationException(CoreTransactionErrorCode.APPSET_MISSING_KEY.getCode());
     	}
     	
     	if (this.key.length() == 0 || key.length() > MAX_KEY_LENGTH) {
-    		throw new JSValidationException(TransactionErrorCode.APPSET_MISSING_KEY.getCode());
+    		throw new OBValidationException(CoreTransactionErrorCode.APPSET_MISSING_KEY.getCode());
     	}
     	
     	if (this.value != null &&
     		this.value.length() > MAX_VALUE_LENGTH) {
-    		throw new JSValidationException(TransactionErrorCode.APPSET_MISSING_VALUE.getCode());
+    		throw new OBValidationException(CoreTransactionErrorCode.APPSET_MISSING_VALUE.getCode());
     	}
     }
     

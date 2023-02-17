@@ -33,14 +33,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.onbelay.core.appsetting.model.ApplicationSetting;
 import com.onbelay.core.entity.component.ApplicationContextFactory;
-import com.onbelay.core.entity.enums.TransactionErrorCode;
+import com.onbelay.core.enums.CoreTransactionErrorCode;
 import com.onbelay.core.entity.model.AbstractEntity;
 import com.onbelay.core.entity.model.AuditAbstractEntity;
 import com.onbelay.core.entity.model.TemporalAbstractEntity;
-import com.onbelay.core.entity.snapshot.ComplexListItem;
-import com.onbelay.core.entity.snapshot.SimpleListItem;
-import com.onbelay.core.entity.snapshot.TreeListItem;
-import com.onbelay.core.exception.JSRuntimeException;
+import com.onbelay.core.entity.snapshot.EntityListItem;
+import com.onbelay.core.exception.OBRuntimeException;
 import com.onbelay.core.query.enums.ExpressionOperator;
 import com.onbelay.core.query.model.ColumnDefinitions;
 import com.onbelay.core.query.model.DefinedQueryGenerator;
@@ -53,25 +51,13 @@ import com.onbelay.core.utils.SubLister;
  * Base class for all repositories.
  */
 @Transactional
-public class BaseRepository<T> implements Repository<T> {
+public class BaseRepository<T> implements EntityRepository<T> {
     private static final Logger logger = LogManager.getLogger();
     public static final int MAX_SIZE_FOR_IN = 1000;
     
     @PersistenceContext
     protected EntityManager entityManager;
     
-    
-    
-    /**
-     * Load an object using its primary key
-     * @param claz - class for object to be loaded
-     * @param id - primary key
-     * @return object as AbstractEntity. (This method will return a proxy if supported by the JPA implementation)
-     * @throws A ObjectNotFoundException if the object is not found.
-     */
-    public T load(Class<T> claz, Object id) {
-        return  entityManager.find(claz, id);
-    }
     
 
     public <E> E loadChild(Class<E> claz, Object id) {
@@ -89,7 +75,7 @@ public class BaseRepository<T> implements Repository<T> {
      * @param id - primary key (may be a composite key object)
      * @return null if not found or the domain object.
      */
-    public T find(Class<T> claz, Long id) {
+    public T find(Class<T> claz, Integer id) {
         return entityManager.find(claz, id);
     }
     
@@ -101,7 +87,6 @@ public class BaseRepository<T> implements Repository<T> {
      * @param parmName - name of parameter
      * @param parm - parameter value
      * @return An AbstractEntity or null if not found
-     * @throws BookRunnerRuntimeException if more than one object is returned
      */
     public T executeSingleResultQuery(String queryName, String parmName, Object parm) {
         Query query = entityManager.createNamedQuery(queryName);
@@ -112,7 +97,7 @@ public class BaseRepository<T> implements Repository<T> {
         else if (results.size() == 0)
             return null;
         else
-            throw new JSRuntimeException(TransactionErrorCode.QUERY_MORE_THAN_ONE_RESULT.getCode());
+            throw new OBRuntimeException(CoreTransactionErrorCode.QUERY_MORE_THAN_ONE_RESULT.getCode());
     }
     
     /**
@@ -121,7 +106,7 @@ public class BaseRepository<T> implements Repository<T> {
      * @param paramNames - An array of parameter names
      * @param parms - An array of parameter values
      * @return An AbstractEntity or null if not found
-     * @throws BookRunnerRuntimeException if more than one object is returned
+     * @throws RuntimeException if more than one object is returned
      */
     public T executeSingleResultQuery(String queryName, String[] paramNames, Object[] parms) {
         HashMap<String, Object> parmMap = new HashMap<String, Object>();
@@ -136,7 +121,7 @@ public class BaseRepository<T> implements Repository<T> {
         else if (results.size() == 0)
             return null;
         else
-            throw new JSRuntimeException(TransactionErrorCode.QUERY_MORE_THAN_ONE_RESULT.getCode());
+            throw new OBRuntimeException(CoreTransactionErrorCode.QUERY_MORE_THAN_ONE_RESULT.getCode());
     }
     
     /**
@@ -168,8 +153,6 @@ public class BaseRepository<T> implements Repository<T> {
     /**
      * Execute a JPA query that will return a list of value objects. 
      * @param queryName - a query with a single parameter
-     * @param parmName - parameter name
-     * @param parm - parameter value that is for the parameter name above
      * @return a list of report objects.
      */
     @SuppressWarnings("unchecked")
@@ -181,8 +164,7 @@ public class BaseRepository<T> implements Repository<T> {
     /**
      * Execute a JPA query that will return a list of value objects. 
      * @param queryName - a query with a single parameter
-     * @param parmName - parameter name
-     * @param parm - parameter value that is for the parameter name above
+     * @param maxResults - maximum number of results to be returned
      * @return a list of report objects.
      */
     @SuppressWarnings("unchecked")
@@ -213,7 +195,30 @@ public class BaseRepository<T> implements Repository<T> {
     	return jpaQuery.getResultList();
     }
 
-    public List<Long> executeDefinedQueryForIds(
+
+    public List<EntityListItem> executeDefinedQueryForList(
+            ColumnDefinitions columnDefinitions,
+            DefinedQuery definedQuery) {
+
+        DefinedQueryGenerator generator = new DefinedQueryGenerator(
+                definedQuery,
+                columnDefinitions);
+
+        String queryString = generator.generateListQuery();
+        logger.debug("Generated query: " + queryString);
+
+        Query jpaQuery = entityManager.createQuery(queryString);
+        if (definedQuery.getWhereClause().hasParameters()) {
+            for (Map.Entry<String, ?> entry : generator.getParameterMap().entrySet()) {
+                logger.debug("Generated Query parameter key : " + entry.getKey() + " value: " + entry.getValue());
+                jpaQuery.setParameter(entry.getKey(), entry.getValue());
+            }
+        }
+        return jpaQuery.getResultList();
+    }
+
+
+    public List<Integer> executeDefinedQueryForIds(
     		ColumnDefinitions columnDefinitions, 
     		DefinedQuery definedQuery) {
     	
@@ -261,7 +266,7 @@ public class BaseRepository<T> implements Repository<T> {
 	    	
     	} else {
     	
-    		SubLister<Long> subLister = new SubLister<Long>(
+    		SubLister<Integer> subLister = new SubLister<>(
     				selectedPage.getIds(), 
     				MAX_SIZE_FOR_IN);
     		
@@ -269,7 +274,7 @@ public class BaseRepository<T> implements Repository<T> {
     		
     		while (subLister.moreElements()) {
     			
-    			List<Long> subList = subLister.nextList();
+    			List<Integer> subList = subLister.nextList();
     	    	query = new DefinedQuery(entityName);
     	    	
     	    	query.getWhereClause().addExpression(
@@ -289,7 +294,63 @@ public class BaseRepository<T> implements Repository<T> {
     		return items;
     	}
     }
-    
+
+    public List<EntityListItem> fetchEntityListItemsById(
+            ColumnDefinitions columnDefinitions,
+            String entityName,
+            QuerySelectedPage selectedPage) {
+
+        if (selectedPage.getIds().isEmpty())
+            return new ArrayList<EntityListItem>();
+
+
+        DefinedQuery query = new DefinedQuery(entityName);
+
+        if (selectedPage.getIds().size() <= MAX_SIZE_FOR_IN) {
+
+            query.getWhereClause().addExpression(
+                    new DefinedWhereExpression(
+                            "id",
+                            ExpressionOperator.IN,
+                            selectedPage.getIds()));
+
+            if (selectedPage.hasOrderClause()) {
+                query.getOrderByClause().copyIn(selectedPage.getOrderByClause());
+            }
+
+            return executeDefinedQueryForList(columnDefinitions, query);
+
+        } else {
+
+            SubLister<Integer> subLister = new SubLister<>(
+                    selectedPage.getIds(),
+                    MAX_SIZE_FOR_IN);
+
+            ArrayList<EntityListItem> items = new ArrayList<>();
+
+            while (subLister.moreElements()) {
+
+                List<Integer> subList = subLister.nextList();
+                query = new DefinedQuery(entityName);
+
+                query.getWhereClause().addExpression(
+                        new DefinedWhereExpression(
+                                "id",
+                                ExpressionOperator.IN,
+                                subList));
+
+                if (selectedPage.hasOrderClause()) {
+                    query.getOrderByClause().copyIn(selectedPage.getOrderByClause());
+                }
+
+                List<EntityListItem> results = executeDefinedQueryForList(columnDefinitions, query);
+                items.addAll(results);
+            }
+
+            return items;
+        }
+    }
+
     /**
      * Execute a JPA query that will return a list of value objects. 
      * @param queryName - a query with a single parameter
@@ -342,7 +403,7 @@ public class BaseRepository<T> implements Repository<T> {
             return null;
         
         if (items.size() > 1)
-            throw new JSRuntimeException(TransactionErrorCode.QUERY_MORE_THAN_ONE_RESULT.getCode());
+            throw new OBRuntimeException(CoreTransactionErrorCode.QUERY_MORE_THAN_ONE_RESULT.getCode());
         
         return items.get(0);
     }
@@ -356,15 +417,15 @@ public class BaseRepository<T> implements Repository<T> {
             return null;
         
         if (items.size() > 1)
-            throw new JSRuntimeException(TransactionErrorCode.QUERY_MORE_THAN_ONE_RESULT.getCode());
+            throw new OBRuntimeException(CoreTransactionErrorCode.QUERY_MORE_THAN_ONE_RESULT.getCode());
         
         return items.get(0);
     }
     /**
      * Execute a JPA query that will return a value object. 
      * @param queryName - a query with a single parameter
-     * @param parmName - parameter name
-     * @param parm - parameter value that is for the parameter name above
+     * @param paramNames - array of parameter names
+     * @param parms - array of parms that match paramNames
      * @return a value object
      */
     @SuppressWarnings("unchecked")
@@ -381,7 +442,7 @@ public class BaseRepository<T> implements Repository<T> {
             return null;
         
         if (items.size() > 1)
-            throw new JSRuntimeException(TransactionErrorCode.QUERY_MORE_THAN_ONE_RESULT.getCode());
+            throw new OBRuntimeException(CoreTransactionErrorCode.QUERY_MORE_THAN_ONE_RESULT.getCode());
         
         return items.get(0);
     }
@@ -401,7 +462,7 @@ public class BaseRepository<T> implements Repository<T> {
             return null;
         
         if (items.size() > 1)
-            throw new JSRuntimeException(TransactionErrorCode.QUERY_MORE_THAN_ONE_RESULT.getCode());
+            throw new OBRuntimeException(CoreTransactionErrorCode.QUERY_MORE_THAN_ONE_RESULT.getCode());
         
         return items.get(0);
     }
@@ -409,7 +470,7 @@ public class BaseRepository<T> implements Repository<T> {
     /**
      * Execute a JPA query that will return a list of value objects. 
      * @param queryName - a query with multiple parameters
-     * @param parmNames - a list of parameter names
+     * @param paramNames - a list of parameter names
      * @param parms -  a list of parameter values that is for the parameter names above
      * @return a list of value objects
      */
@@ -426,7 +487,7 @@ public class BaseRepository<T> implements Repository<T> {
     /**
      * Execute a JPA query that will return a list of value objects. 
      * @param queryName - a query with multiple parameters
-     * @param parmNames - a list of parameter names
+     * @param paramNames - a list of parameter names
      * @param parms -  a list of parameter values that is for the parameter names above
      * @return a list of value objects
      */
@@ -493,25 +554,11 @@ public class BaseRepository<T> implements Repository<T> {
      * @return A List of SimpleListItems.
      */
     @SuppressWarnings("unchecked")
-    public List<SimpleListItem> executeSimpleListQuery(String queryName) {
+    public List<EntityListItem> executeSimpleListQuery(String queryName) {
         Query query = entityManager.createNamedQuery(queryName);
         return query.getResultList();
     }
 
-    /**
-     * Execute a query that will return a list of TreeListItems. See TreeListItem.  
-     * @param queryName - name of query that is defined to return a list of TreeListItems.
-     * @return A List of TreeListItems.
-     */
-    @SuppressWarnings("unchecked")
-    public List<? extends TreeListItem> executeTreeListQuery(String queryName, String[] paramNames, Object parms[]) {
-        Query query = entityManager.createNamedQuery(queryName);
-        if (paramNames.length != parms.length)
-            throw new RuntimeException("paramNames and parms arrays are not same size");
-        for (int i=0; i<paramNames.length; i++)
-            query.setParameter(paramNames[i], parms[i]);
-        return query.getResultList();
-    }
 
     /**
      * Execute a query that will return a list of SimpleListItems based on a single query parameter.  
@@ -521,7 +568,7 @@ public class BaseRepository<T> implements Repository<T> {
      * @return A List of SimpleListItems.
      */
     @SuppressWarnings("unchecked")
-    public List<SimpleListItem> executeSimpleListQuery(String queryName, String paramName, Object parm) {
+    public List<EntityListItem> executeSimpleListQuery(String queryName, String paramName, Object parm) {
         Query query = entityManager.createNamedQuery(queryName);
         query.setParameter(paramName, parm);
         return query.getResultList();
@@ -535,7 +582,7 @@ public class BaseRepository<T> implements Repository<T> {
      * @return A List of SimpleListItems.
      */
     @SuppressWarnings("unchecked")
-    public List<SimpleListItem> executeSimpleListQuery(String queryName, String[] paramNames, Object[] parms) {
+    public List<EntityListItem> executeSimpleListQuery(String queryName, String[] paramNames, Object[] parms) {
         Query query = entityManager.createNamedQuery(queryName);
         if (paramNames.length != parms.length)
             throw new RuntimeException("paramNames and parms arrays are not same size");
@@ -594,25 +641,12 @@ public class BaseRepository<T> implements Repository<T> {
     }
 
     /**
-     * Execute a query that will return a list of ComplexListItems. See ComplexListItem.  
-     * @param queryName - name of query that is defined to return a list of ComplexListItems.
-     * @return A List of SimpleListItems.
-     */
-    @SuppressWarnings("unchecked")
-    public List<ComplexListItem> executeComplexListQuery(String queryName) {
-        Query query = entityManager.createNamedQuery(queryName);
-        return query.getResultList();
-    }
-
-    
-    
-    /**
      * Dynamically execute the JPA query provided.
      * @param queryString - JPA query
      * @return a list of zero to many SimpleListItems.
      */
     @SuppressWarnings("unchecked")
-    public List<SimpleListItem> executeListQueryString(String queryString) {
+    public List<EntityListItem> executeListQueryString(String queryString) {
         Query query = entityManager.createQuery(queryString);
         return query.getResultList();
     }
@@ -692,7 +726,7 @@ public class BaseRepository<T> implements Repository<T> {
      * @return a list of zero to many SimpleListItems.
      */
     @SuppressWarnings("unchecked")
-    public List<SimpleListItem> executeListQueryStringWithNamedParms(String queryString, Map<String, Object> parms) {
+    public List<EntityListItem> executeListQueryStringWithNamedParms(String queryString, Map<String, Object> parms) {
         Query query = entityManager.createQuery(queryString);
         for (Map.Entry<String, ?> entry : parms.entrySet()) {
             query.setParameter(entry.getKey(), entry.getValue());
@@ -727,7 +761,7 @@ public class BaseRepository<T> implements Repository<T> {
 
     /**
      * @param claz
-     * @param fieldName - a primary id as a string
+     * @param stringId - a primary id as a string
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -737,7 +771,7 @@ public class BaseRepository<T> implements Repository<T> {
 
     /**
      * @param claz
-     * @param fieldName - a primary id as a string
+     * @param stringId - a primary id as a string
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -857,7 +891,7 @@ public class BaseRepository<T> implements Repository<T> {
 	 * @param parmName - name of parameter
 	 * @param parm - parameter value
 	 * @return void
-	 * @throws BookRunnerRuntimeException if the remove fails
+	 * @throws RuntimeException if the remove fails
 	 */
 	public void executeDelete(String queryName, String parmName, Object parm) {
 		HashMap<String, Object> parms = new HashMap<String, Object>();
@@ -866,7 +900,7 @@ public class BaseRepository<T> implements Repository<T> {
 			entityManager.remove(executeSingleResultQuery(queryName, parmName, parm));
 		}
 		catch (DataAccessException e) {
-			throw new JSRuntimeException(TransactionErrorCode.ENTITY_DELETE_FAIL.getCode(), e);
+			throw new OBRuntimeException(CoreTransactionErrorCode.ENTITY_DELETE_FAIL.getCode(), e);
 		}
 	}
 

@@ -19,7 +19,7 @@ import java.io.Serializable;
 
 import javax.persistence.Embeddable;
 
-import com.onbelay.core.exception.JSValidationException;
+import com.onbelay.core.exception.OBValidationException;
 
 @Embeddable
 public abstract class AbstractDetail implements Serializable {
@@ -29,7 +29,7 @@ public abstract class AbstractDetail implements Serializable {
         return object == null;
     }
 
-    public void validate() throws JSValidationException {
+    public void validate() throws OBValidationException {
     }
     
 

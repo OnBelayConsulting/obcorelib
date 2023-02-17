@@ -33,20 +33,23 @@ import com.onbelay.core.entity.component.ApplicationContextFactory;
 import com.onbelay.core.entity.model.AuditAbstractEntity;
 import com.onbelay.core.entity.model.TemporalAbstractEntity;
 import com.onbelay.core.entity.repository.BaseRepository;
+import com.onbelay.core.test.repository.MyLocationRepository;
 import com.onbelay.core.test.shared.LocationDetail;
+import com.onbelay.core.utils.DateUtils;
 
 @Entity
 @Table(name = "MY_LOCATION_AUDIT")
 @NamedQueries({
     @NamedQuery(
-       name = MyLocationAuditRepositoryBean.FIND_LOCATION_AUDIT_BY_TO_DATE,
+       name = MyLocationAudit.FIND_AUDIT_BY_TO_DATE,
        query = "SELECT myLocationAudit FROM MyLocationAudit myLocationAudit " +
        		    "WHERE myLocationAudit.historyDateTimeStamp.validToDateTime = :date " +
        		      "AND myLocationAudit.myLocation = :myLocation")
 })
 public class MyLocationAudit extends AuditAbstractEntity {
+	public static final String FIND_AUDIT_BY_TO_DATE = "MyLocationAudit.FIND_AUDIT_BY_TO_DATE";
 
-	private Long id;
+	private Integer id;
 
 	private MyLocation myLocation;
 	
@@ -71,11 +74,11 @@ public class MyLocationAudit extends AuditAbstractEntity {
     @Column(name="AUDIT_ID", insertable = false, updatable = false)
     @SequenceGenerator(name="MyLocationAuditGen", sequenceName="MY_LOCATION_AUDIT_SEQ", allocationSize = 1)
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "MyLocationAuditGen")
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long myLocationId) {
+	public void setId(Integer myLocationId) {
 		this.id = myLocationId;
 	}
 
@@ -99,17 +102,6 @@ public class MyLocationAudit extends AuditAbstractEntity {
 		this.detail = detail;
 	}
 
-	
-	@Transient
-	public MyLocationAuditRepositoryBean getAuditRepository() {
-		return (MyLocationAuditRepositoryBean) ApplicationContextFactory.getBean(MyLocationAuditRepository.BEAN_NAME);
-	}
-
-	@Override
-	@Transient
-	protected BaseRepository<MyLocationAudit> getRepository() {
-		return getAuditRepository();
-	}
 
 	@Override
 	@Transient
@@ -122,7 +114,18 @@ public class MyLocationAudit extends AuditAbstractEntity {
 		MyLocation myLocation = (MyLocation) entity;
 		this.detail.copyFrom(myLocation.getDetail());
 	}
-	
-	
-	
+
+	public static MyLocationAudit findRecentHistory(MyLocation myLocation) {
+		String[] parmNames = {"myLocation", "date" };
+		Object[] parms =     {myLocation,   DateUtils.getValidToDateTime()};
+
+		return (MyLocationAudit) getAuditEntityRepository().executeSingleResultQuery(
+				FIND_AUDIT_BY_TO_DATE,
+				parmNames,
+				parms);
+
+	}
+
+
+
 }

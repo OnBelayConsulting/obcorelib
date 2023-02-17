@@ -15,89 +15,75 @@
 */
 package com.onbelay.core.entity.snapshot;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.onbelay.core.utils.ErrorMessageFormatter;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringSubstitutor;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
- * Contains the EntityIds of the domain objects in the processed transaction. In some cases one or more EntityIdMaps are returned
- * as well. EntityIdMaps contain a set of primary and child entity keys.
- *
+ * Contains the EntityIds of the domain objects in the processed transaction.
  */
-public class TransactionResult extends BaseTransactionResult {
+public class TransactionResult extends ErrorHoldingSnapshot {
     private static final long serialVersionUID = 1L;
-    
-    private List<EntityId> keys = new ArrayList<EntityId>();
-	private List<EntityIdMap> entityIdMaps = new ArrayList<EntityIdMap>(); 
-	
+
+
+    private List<EntityId> entityIds = new ArrayList<EntityId>();
+
 	public TransactionResult() { }
-	
-	public TransactionResult(EntityId key) {
-	    this.keys.add(key);
+
+	public TransactionResult(String errorMessage) {
+		super(errorMessage);
+	}
+
+	public TransactionResult(String errorMessage, List<String> parameters) {
+		super(errorMessage, parameters);
+	}
+
+	public TransactionResult(EntityId entityId) {
+	    this.entityIds.add(entityId);
 	}
 	
-	public TransactionResult(Long id) {
-	    this.keys.add(new EntityId(id));
+	public TransactionResult(Integer id) {
+	    this.entityIds.add(new EntityId(id));
 	}
 	
 	
-	public TransactionResult(List<EntityId> keys) {
-        this.keys = keys;
+	public TransactionResult(List<EntityId> entityIds) {
+        this.entityIds = entityIds;
     }
 
-    public EntityId getKey() {
-	    if (keys.size() >0)
-	        return keys.get(0);
+	@JsonIgnore
+    public EntityId getEntityId() {
+	    if (entityIds.size() >0)
+	        return entityIds.get(0);
 	    else
 	        return null;
 	}
 	
-	public void addKey(EntityId key) {
-		this.keys.add(key);
+	public void addEntityId(EntityId entityId) {
+		this.entityIds.add(entityId);
 	}
 	
-	public void addKey(Long id) {
-		this.keys.add(new EntityId(id));
+	public void addEntityId(Integer id) {
+		this.entityIds.add(new EntityId(id));
 	}
 	
-	public void addKeys(List<EntityId> keysIn) {
-	    keys.addAll(keysIn);
+	public void addEntityIds(List<EntityId> entityIdsIn) {
+	    entityIds.addAll(entityIdsIn);
 	}
 
-    public List<EntityId> getKeys() {
-        return keys;
+    public List<EntityId> getEntityIds() {
+        return entityIds;
     }
 
-    public void setKeys(List<EntityId> keys) {
-        this.keys = keys;
-    }
-    
-    public boolean hasEntityIdMap() {
-        return entityIdMaps.size() > 0;
+    public void setEntityIds(List<EntityId> entityIds) {
+        this.entityIds = entityIds;
     }
 
-    public List<EntityIdMap> getEntityIdMaps() {
-        return entityIdMaps;
-    }
-
-	public void setEntityIdMaps(List<EntityIdMap> businessKeyMapsIn) {
-        this.entityIdMaps = businessKeyMapsIn;
-        for (int i=0; i < entityIdMaps.size(); i++) {
-            EntityIdMap businessKeyMap = entityIdMaps.get(i);
-            keys.add(businessKeyMap.getEntityId());
-        }
-    }
-
-    public EntityIdMap getEntityIdMap() {
-        if (entityIdMaps.size() > 0)
-            return entityIdMaps.get(0);
-        else
-            return null;
-    }
-
-    public void addEntityIdMap(EntityIdMap businessKeyMap) {
-        this.entityIdMaps.add(businessKeyMap);
-        this.keys.add(businessKeyMap.getEntityId());
-    }
-    
 }

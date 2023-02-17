@@ -24,7 +24,7 @@ import java.io.Serializable;
  * @author lefeu
  *
  */
-public abstract class AbstractSnapshot  implements Serializable {
+public abstract class AbstractSnapshot extends ErrorHoldingSnapshot  implements Serializable {
     private static final long serialVersionUID = 1L;
     
 	private EntityState entityState = EntityState.NEW;

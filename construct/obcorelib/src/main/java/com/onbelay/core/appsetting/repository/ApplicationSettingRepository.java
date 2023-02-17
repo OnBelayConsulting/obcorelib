@@ -18,9 +18,9 @@ package com.onbelay.core.appsetting.repository;
 import java.util.List;
 
 import com.onbelay.core.appsetting.model.ApplicationSetting;
-import com.onbelay.core.entity.repository.Repository;
+import com.onbelay.core.entity.repository.EntityRepository;
 
-public interface ApplicationSettingRepository extends Repository<ApplicationSetting> {
+public interface ApplicationSettingRepository extends EntityRepository<ApplicationSetting> {
 	
 	public static final String BEAN_NAME = "applicationSettingRepository";
 	
