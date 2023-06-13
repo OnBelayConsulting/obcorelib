@@ -16,6 +16,7 @@
 package com.onbelay.core.utils;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class DateUtils {
 	
@@ -24,5 +25,11 @@ public class DateUtils {
 	public static LocalDateTime getValidToDateTime() {
 		return END_DATETIME_MARKER;
 	}
+
+	public static LocalDateTime truncateToSeconds(LocalDateTime dateTimeIn) {
+		return dateTimeIn.truncatedTo(ChronoUnit.SECONDS);
+	}
+
+
 	
 }

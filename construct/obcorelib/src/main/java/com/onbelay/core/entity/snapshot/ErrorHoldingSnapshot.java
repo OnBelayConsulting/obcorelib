@@ -9,6 +9,7 @@ public class ErrorHoldingSnapshot {
     public static final String SUCCESS = "0";
     private String errorCode = SUCCESS;
     private String errorMessage;
+    private boolean isPermissionException = false;
     private List<String> parameters = new ArrayList<>();
 
     public ErrorHoldingSnapshot() {
@@ -16,6 +17,11 @@ public class ErrorHoldingSnapshot {
 
     public ErrorHoldingSnapshot(String errorCode) {
         this.errorCode = errorCode;
+    }
+
+    public ErrorHoldingSnapshot(String errorCode, boolean isPermissionException) {
+        this.errorCode = errorCode;
+        this.isPermissionException = isPermissionException;
     }
 
     public ErrorHoldingSnapshot(String errorCode, List<String> parameters) {
@@ -53,4 +59,11 @@ public class ErrorHoldingSnapshot {
         this.parameters = parameters;
     }
 
+    public boolean isPermissionException() {
+        return isPermissionException;
+    }
+
+    public void setPermissionException(boolean permissionException) {
+        isPermissionException = permissionException;
+    }
 }

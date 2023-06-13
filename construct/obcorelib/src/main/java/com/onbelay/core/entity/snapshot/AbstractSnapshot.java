@@ -19,11 +19,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.onbelay.core.entity.enums.EntityState;
 
 import java.io.Serializable;
-/**
- * Base class for snapshots. extends ResourceSupport to enable HATEOS and handles common elements such as entity id, state, etc.
- * @author lefeu
- *
- */
+import java.util.List;
+
 public abstract class AbstractSnapshot extends ErrorHoldingSnapshot  implements Serializable {
     private static final long serialVersionUID = 1L;
     
@@ -38,7 +35,19 @@ public abstract class AbstractSnapshot extends ErrorHoldingSnapshot  implements 
 	public AbstractSnapshot(EntityId entityId) {
 		this.entityId = entityId;
 	}
-	
+
+	public AbstractSnapshot(String errorCode) {
+		super(errorCode);
+	}
+
+	public AbstractSnapshot(String errorCode, boolean isPermissionException) {
+		super(errorCode, isPermissionException);
+	}
+
+	public AbstractSnapshot(String errorCode, List<String> parameters) {
+		super(errorCode, parameters);
+	}
+
 	public EntityId getEntityId() {
         return entityId;
     }

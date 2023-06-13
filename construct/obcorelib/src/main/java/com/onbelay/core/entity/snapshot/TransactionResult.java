@@ -41,6 +41,10 @@ public class TransactionResult extends ErrorHoldingSnapshot {
 		super(errorMessage);
 	}
 
+	public TransactionResult(String errorCode, boolean isPermissionException) {
+		super(errorCode, isPermissionException);
+	}
+
 	public TransactionResult(String errorMessage, List<String> parameters) {
 		super(errorMessage, parameters);
 	}

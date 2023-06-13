@@ -38,7 +38,7 @@
       <column name="OPTIMISTIC_LOCK_NO" remarks="Version number." defaultValueNumeric="0" type="java.sql.Types.NUMERIC(10, 0)">
         <constraints nullable="false"/>
       </column>
-      <column name="IS_DELETED" type="java.sql.Types.CHAR(1)">
+      <column name="EXPIRED_FLG" type="java.sql.Types.CHAR(1)">
         <constraints nullable="false"/>
       </column>
       <column name="VALID_FROM_DATETIME" type="java.sql.Types.TIMESTAMP">

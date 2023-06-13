@@ -40,14 +40,14 @@ public class HistoryDateTimeStamp {
 		this.validToDateTime = copy.validToDateTime;
 	}
 	
-	@Column (name="VALID_FROM_DATETIME")
+	@Column (name="VALID_FROM_DTTM")
 	public LocalDateTime getValidFromDateTime() {
 		return validFromDateTime;
 	}
 	public void setValidFromDateTime(LocalDateTime validFromDateTime) {
 		this.validFromDateTime = validFromDateTime;
 	}
-	@Column (name="VALID_TO_DATETIME")
+	@Column (name="VALID_TO_DTTM")
 	public LocalDateTime getValidToDateTime() {
 		return validToDateTime;
 	}
@@ -62,7 +62,7 @@ public class HistoryDateTimeStamp {
 		this.validToDateTime = DateUtils.getValidToDateTime();
 	}
 	
-	@Column(name="UPDATED_BY")
+	@Column(name="LAST_USER")
 	public String getLastUserid() {
         return lastUserid;
     }

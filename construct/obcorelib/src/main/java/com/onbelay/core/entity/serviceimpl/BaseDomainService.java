@@ -16,13 +16,13 @@
 package com.onbelay.core.entity.serviceimpl;
 
 import com.onbelay.core.appsetting.component.ApplicationSettingCacheManager;
-import com.onbelay.core.entity.component.JSAuditManager;
+import com.onbelay.core.entity.component.OBAuditManagerBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class BaseDomainService  {
 
 	@Autowired
-	protected JSAuditManager auditManager;
+	protected OBAuditManagerBean auditManager;
 
 	@Autowired
 	protected ApplicationSettingCacheManager applicationSettingCacheManager;

@@ -2,7 +2,7 @@ package com.onbelay.core.entity.snapshot;
 
 import java.util.List;
 
-public class EntityListItemCollection extends AbstractSnapshotCollection<EntityListItem> {
+public class EntityListItemCollection extends AbstractSnapshotCollection<EntityId> {
 
     public static final String ITEM_TYPE = "entityListItem";
 
@@ -14,7 +14,7 @@ public class EntityListItemCollection extends AbstractSnapshotCollection<EntityL
             int start,
             int limit,
             int totalItems,
-            List<EntityListItem> snapshots) {
+            List<EntityId> snapshots) {
 
         super(
                 ITEM_TYPE,
@@ -25,13 +25,35 @@ public class EntityListItemCollection extends AbstractSnapshotCollection<EntityL
     }
 
     public EntityListItemCollection(
-            String errorCode,
-            String errorMessage) {
+            String errorCode) {
 
         super(
-                errorCode,
-                errorMessage);
+                "listItems",
+                errorCode);
     }
+
+
+    public EntityListItemCollection(
+            String errorCode,
+            List<String> parameters) {
+
+        super(
+                "listItems",
+                errorCode,
+                parameters);
+    }
+
+
+    public EntityListItemCollection(
+            String errorCode,
+            boolean isPermissionException) {
+
+        super(
+                "listItems",
+                errorCode,
+                isPermissionException);
+    }
+
 
     public EntityListItemCollection(
             int start,

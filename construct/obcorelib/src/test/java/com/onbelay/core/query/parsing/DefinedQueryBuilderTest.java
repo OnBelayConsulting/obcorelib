@@ -40,7 +40,49 @@ public class DefinedQueryBuilderTest extends TestCase {
 		assertEquals("FROM Deal WHERE dealNo = 2", query.toString());
 	}
 
-	
+
+	@Test
+	public void testTextEQExpression() {
+
+		String expressionText = "WHERE dealNo eq 2";
+
+		DefinedQueryBuilder builder = new DefinedQueryBuilder("Deal", expressionText);
+
+		DefinedQuery query = builder.build();
+
+		logger.error(query.toString());
+
+		assertEquals("FROM Deal WHERE dealNo = 2", query.toString());
+	}
+
+	@Test
+	public void testTextGEExpression() {
+
+		String expressionText = "WHERE dealNo ge 2";
+
+		DefinedQueryBuilder builder = new DefinedQueryBuilder("Deal", expressionText);
+
+		DefinedQuery query = builder.build();
+
+		logger.error(query.toString());
+
+		assertEquals("FROM Deal WHERE dealNo >= 2", query.toString());
+	}
+
+	@Test
+	public void testContainsExpression() {
+
+		String expressionText = "WHERE shortName contains 'JK'";
+
+		DefinedQueryBuilder builder = new DefinedQueryBuilder("Deal", expressionText);
+
+		DefinedQuery query = builder.build();
+
+		logger.error(query.toString());
+
+		assertEquals("FROM Deal WHERE shortName LIKE '%JK%'", query.toString());
+	}
+
 	@Test
 	public void testSimpleWhereAndOrderExpression() {
 		

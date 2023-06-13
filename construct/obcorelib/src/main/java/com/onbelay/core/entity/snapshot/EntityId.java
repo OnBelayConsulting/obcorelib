@@ -36,7 +36,10 @@ public class EntityId implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private Integer id;
-    
+    private String code;
+    private String description;
+    private boolean isDeleted;
+
     private EntityIdStatus status = EntityIdStatus.VALID;
     
     public EntityId() { }
@@ -44,6 +47,17 @@ public class EntityId implements Serializable {
     
     public EntityId(Integer id) {
     	this.id = id;
+    }
+
+    public EntityId(String code) {
+        this.code = code;
+    }
+
+    public EntityId(Integer id, String code, String description, boolean isDeleted) {
+        this.id = id;
+        this.code = code;
+        this.description = description;
+        this.isDeleted = isDeleted;
     }
 
     public static EntityId makeNullEntityId() {
@@ -60,9 +74,13 @@ public class EntityId implements Serializable {
 
     @JsonIgnore
     public boolean isSet() {
+        return id != null;
+    }
+
+    @JsonIgnore
+    public boolean isValid() {
         return status == EntityIdStatus.VALID;
     }
-    
 
     @JsonIgnore
     public boolean isNotNull() {
@@ -95,13 +113,39 @@ public class EntityId implements Serializable {
     	this.status = status;
     }
 
-	/**
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    /**
      * Create a key using an existing key
      * @param key
      */
     public EntityId(EntityId key) {
         this.id = key.id;
-        this.status = key.status; 
+        this.code = key.code;
+        this.status = key.status;
+        this.isDeleted = key.isDeleted;
     }
 
     

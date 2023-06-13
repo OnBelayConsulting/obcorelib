@@ -16,6 +16,8 @@
 package com.onbelay.core.query.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -41,7 +43,7 @@ public class DefinedQueryGeneratorTest extends TestCase {
 	@Test
 	public void testWithOrderByClause() {
 
-		ArrayList<Integer> ids = new ArrayList<Integer>();
+		ArrayList<Integer> ids = new ArrayList<>();
 		ids.add(2);
 		
 		DefinedQuery query = new DefinedQuery("Organization");
@@ -85,7 +87,8 @@ public class DefinedQueryGeneratorTest extends TestCase {
 		
 		assertEquals(1, valuesMap.size());
 		assertTrue(valuesMap.containsKey("p1"));
-		assertEquals(Long.valueOf(2l), valuesMap.get("p1"));
+		long value = ((Long)valuesMap.get("p1")).longValue();
+		assertEquals(2l, value);
 	}
 	
 	public void testSimpleWhereQueryString() {
@@ -149,7 +152,7 @@ public class DefinedQueryGeneratorTest extends TestCase {
 				new DefinedWhereExpression(
 						"amount",
 						ExpressionOperator.EQUALS,
-						new Integer(3)));
+						3));
 		
 		DefinedQueryGenerator generator = new DefinedQueryGenerator(
 				query,
@@ -179,7 +182,7 @@ public class DefinedQueryGeneratorTest extends TestCase {
 				new DefinedWhereExpression(
 						"times",
 						ExpressionOperator.EQUALS,
-						new Integer(3)));
+						3));
 		
 		DefinedQueryGenerator generator = new DefinedQueryGenerator(
 				query,
@@ -204,7 +207,7 @@ public class DefinedQueryGeneratorTest extends TestCase {
 	
 	public void testInWhereQueryInteger() {
 		DefinedQuery query = new DefinedQuery("Deal");
-		List<Integer> values = Arrays.asList(new Integer(1), new Integer(2), new Integer(3));
+		List<Integer> values = Arrays.asList(1, 2, 3);
 		query.getWhereClause().addExpression(
 				new DefinedWhereExpression(
 						"times",
@@ -272,7 +275,7 @@ public class DefinedQueryGeneratorTest extends TestCase {
 				new DefinedWhereExpression(
 						"id",
 						ExpressionOperator.NOT_EQUALS,
-						new Long(3)));
+						3l));
 		
 		
 		
@@ -298,8 +301,139 @@ public class DefinedQueryGeneratorTest extends TestCase {
 		
 		
 	}
-	
-	
+
+
+	@Test
+	public void testSimpleBuildQueryWithDate() {
+
+		DefinedQuery query = new DefinedQuery("Organization");
+		query.getWhereClause().addExpression(
+				new DefinedWhereExpression(
+						"dueDate",
+						ExpressionOperator.NOT_EQUALS,
+						"2022-01-01"));
+
+
+
+		DefinedQueryGenerator generator = new DefinedQueryGenerator(
+				query,
+				new TestColumnDefinitions());
+
+		String queryText = generator.generateQuery();
+
+		logger.error(queryText);
+
+		assertEquals("SELECT e FROM Organization e WHERE e.detail.dueDate != :p1", queryText);
+
+		Map<String, Object> valuesMap = generator.getParameterMap();
+
+		logger.debug(valuesMap);
+		assertEquals(1, valuesMap.size());
+		assertTrue(valuesMap.containsKey("p1"));
+		Object parm = valuesMap.get("p1");
+		assertTrue(parm instanceof LocalDate);
+
+	}
+
+	@Test
+	public void testSimpleBuildQueryWithDateFromDateTime() {
+
+		DefinedQuery query = new DefinedQuery("Organization");
+		query.getWhereClause().addExpression(
+				new DefinedWhereExpression(
+						"dueDate",
+						ExpressionOperator.NOT_EQUALS,
+						LocalDateTime.of(2022, 1, 1, 0, 0)));
+
+
+
+		DefinedQueryGenerator generator = new DefinedQueryGenerator(
+				query,
+				new TestColumnDefinitions());
+
+		String queryText = generator.generateQuery();
+
+		logger.error(queryText);
+
+		assertEquals("SELECT e FROM Organization e WHERE e.detail.dueDate != :p1", queryText);
+
+		Map<String, Object> valuesMap = generator.getParameterMap();
+
+		logger.debug(valuesMap);
+		assertEquals(1, valuesMap.size());
+		assertTrue(valuesMap.containsKey("p1"));
+		Object parm = valuesMap.get("p1");
+		assertTrue(parm instanceof LocalDate);
+
+	}
+
+
+	@Test
+	public void testSimpleBuildQueryWithDateTime() {
+
+		DefinedQuery query = new DefinedQuery("Organization");
+		query.getWhereClause().addExpression(
+				new DefinedWhereExpression(
+						"observedDateTime",
+						ExpressionOperator.NOT_EQUALS,
+						"2022-01-01"));
+
+
+
+		DefinedQueryGenerator generator = new DefinedQueryGenerator(
+				query,
+				new TestColumnDefinitions());
+
+		String queryText = generator.generateQuery();
+
+		logger.error(queryText);
+
+		assertEquals("SELECT e FROM Organization e WHERE e.detail.observedDateTime != :p1", queryText);
+
+		Map<String, Object> valuesMap = generator.getParameterMap();
+
+		logger.debug(valuesMap);
+		assertEquals(1, valuesMap.size());
+		assertTrue(valuesMap.containsKey("p1"));
+		Object parm = valuesMap.get("p1");
+		assertTrue(parm instanceof LocalDateTime);
+
+	}
+
+
+	@Test
+	public void testSimpleBuildQueryWithDateTimeWithDate() {
+
+		DefinedQuery query = new DefinedQuery("Organization");
+		query.getWhereClause().addExpression(
+				new DefinedWhereExpression(
+						"observedDateTime",
+						ExpressionOperator.NOT_EQUALS,
+						LocalDate.of(2022, 01, 01)));
+
+
+
+		DefinedQueryGenerator generator = new DefinedQueryGenerator(
+				query,
+				new TestColumnDefinitions());
+
+		String queryText = generator.generateQuery();
+
+		logger.error(queryText);
+
+		assertEquals("SELECT e FROM Organization e WHERE e.detail.observedDateTime != :p1", queryText);
+
+		Map<String, Object> valuesMap = generator.getParameterMap();
+
+		logger.debug(valuesMap);
+		assertEquals(1, valuesMap.size());
+		assertTrue(valuesMap.containsKey("p1"));
+		Object parm = valuesMap.get("p1");
+		assertTrue(parm instanceof LocalDateTime);
+
+	}
+
+
 	public static class TestColumnDefinitions implements ColumnDefinitions {
 
 		public Map<String, ColumnDefinition> definitionsMap = new HashMap<String, ColumnDefinition>();

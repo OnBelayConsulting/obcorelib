@@ -41,6 +41,14 @@ public class DefinedWhereClause {
 		
 	}
 
+	public void surroundWithBrackets() {
+		if (hasExpressions() == false)
+			return;
+		elements.add(0, ExpressionBracket.OPEN);
+
+		elements.add(ExpressionBracket.CLOSE);
+	}
+
 	public void addBracket(ExpressionBracket bracket) {
 		elements.add(bracket);
 	}

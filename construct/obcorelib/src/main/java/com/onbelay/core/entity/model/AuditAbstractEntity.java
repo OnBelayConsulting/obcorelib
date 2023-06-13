@@ -126,7 +126,7 @@ public abstract class AuditAbstractEntity extends AbstractEntity implements Vers
 		this.historyDateTimeStamp = historyDateTimeStamp;
 	}
 
-    @Column(name="IS_DELETED")
+    @Column(name="EXPIRED_FLG")
     @org.hibernate.annotations.Type(type="yes_no")
     public Boolean getIsDeleted() {
         return isDeleted;

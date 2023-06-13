@@ -55,6 +55,12 @@ public abstract class AbstractSnapshotCollection<T> extends ErrorHoldingSnapshot
 		this.name = name;
 	}
 
+	public AbstractSnapshotCollection(String name, String errorMessage, boolean isPermssionException) {
+		super(errorMessage, isPermssionException);
+		this.name = name;
+	}
+
+
 	public AbstractSnapshotCollection(
 			String name,
 			String errorMessage,

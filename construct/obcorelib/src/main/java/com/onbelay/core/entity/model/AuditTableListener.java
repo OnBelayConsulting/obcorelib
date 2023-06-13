@@ -35,7 +35,7 @@ public class AuditTableListener {
     
 		TemporalAbstractEntity parent = history.getParent();
 
-		history.setIsDeleted(parent.getIsDeleted());
+		history.setIsDeleted(parent.getIsExpired());
 
 		history.copyFrom(parent);
 		history.setEntityVersion(parent.getVersion());
@@ -55,7 +55,7 @@ public class AuditTableListener {
 		if (parent == null)
 		    history.setIsDeleted(true);
 		else {
-		    history.setIsDeleted(parent.getIsDeleted());
+		    history.setIsDeleted(parent.getIsExpired());
 		    history.copyFrom(parent);
 		    history.setEntityVersion(parent.getVersion());
 		}

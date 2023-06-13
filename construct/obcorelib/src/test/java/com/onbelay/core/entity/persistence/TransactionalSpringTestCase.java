@@ -15,13 +15,9 @@
 */
 package com.onbelay.core.entity.persistence;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceException;
-import javax.persistence.Query;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,7 +32,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import com.onbelay.core.entity.component.ApplicationContextFactory;
-import com.onbelay.core.entity.component.JSAuditManager;
+import com.onbelay.core.entity.component.OBAuditManagerBean;
 import com.onbelay.core.entity.model.AuditManager;
 
 import junit.framework.TestCase;
@@ -130,7 +126,7 @@ public abstract class TransactionalSpringTestCase extends TestCase {
 		transactionStatus = transMgr.getTransaction(def);
 		
 		logger.trace("clearing conversionMgr and cache manager");
-        JSAuditManager auditManager = (JSAuditManager) ApplicationContextFactory.getBean(AuditManager.BEAN_NAME);
+        OBAuditManagerBean auditManager = (OBAuditManagerBean) ApplicationContextFactory.getBean(AuditManager.BEAN_NAME);
         auditManager.setCurrentAuditUserName("fred");
         flush();
         

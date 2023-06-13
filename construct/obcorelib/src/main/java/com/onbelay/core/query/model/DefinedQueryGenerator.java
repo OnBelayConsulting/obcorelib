@@ -18,11 +18,15 @@ package com.onbelay.core.query.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.onbelay.core.enums.CoreTransactionErrorCode;
+import com.onbelay.core.exception.OBRuntimeException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -151,17 +155,25 @@ public class DefinedQueryGenerator {
 				return new Long(valueIn.toString());
 		
 		case DATE :
-			if (valueIn instanceof LocalDate)
+			if (valueIn instanceof LocalDate) {
 				return valueIn;
-			else  
-				return LocalDate.parse(valueIn.toString());
+			} else if (valueIn instanceof LocalDateTime) {
+				LocalDateTime ldt = (LocalDateTime) valueIn;
+				return ldt.toLocalDate();
+			} else {
+				return parseDateOrDateTimeToDate(valueIn.toString());
+			}
 			
 			
 		case DATE_TIME :
-			if (valueIn instanceof LocalDateTime)
+			if (valueIn instanceof LocalDateTime) {
 				return valueIn;
-			else  
-				return LocalDateTime.parse(valueIn.toString());
+			} else if(valueIn instanceof  LocalDate) {
+				LocalDate ld = (LocalDate) valueIn;
+				return LocalDateTime.of(ld, LocalTime.MIDNIGHT);
+			} else {
+				return parseDateOrDateTimeToDateTime(valueIn.toString());
+			}
 				
 		default :
 			logger.error("Mapping failed to convert a " + dataType + " from " + valueIn.toString());
@@ -171,14 +183,34 @@ public class DefinedQueryGenerator {
 		}
 		
 	}
-	
+
+	private LocalDate parseDateOrDateTimeToDate(String dateString) {
+		try {
+			return LocalDate.parse(dateString);
+		} catch (DateTimeParseException e) {
+			LocalDateTime ldt = LocalDateTime.parse(dateString);
+			LocalDate ld = ldt.toLocalDate();
+			return ld;
+		}
+	}
+
+
+	private LocalDateTime parseDateOrDateTimeToDateTime(String dateString) {
+		try {
+			return LocalDateTime.parse(dateString);
+		} catch (DateTimeParseException e) {
+			LocalDate ldt = LocalDate.parse(dateString);
+			return LocalDateTime.of(ldt, LocalTime.MIDNIGHT);
+		}
+	}
+
 	/**
 	 * Generate a query in string format that may be consumed by the Base Repository.
 	 * @return
 	 */
 	public String generateQuery() {
 		
-		StringBuffer buffer = new StringBuffer("SELECT ");
+		StringBuilder buffer = new StringBuilder("SELECT ");
 		buffer.append(ENTITY_NAME_PLACEHOLDER);
 		buffer.append(" FROM ");
 		buffer.append(definedQuery.getEntityName());
@@ -198,10 +230,20 @@ public class DefinedQueryGenerator {
 
 	public String generateListQuery() {
 
-		StringBuffer buffer = new StringBuffer("SELECT new com.onbelay.core.entity.snapshot.EntityBaseListItem(");
-		buffer.append(ENTITY_NAME_PLACEHOLDER + ".id,");
-		buffer.append(ENTITY_NAME_PLACEHOLDER + "." + columnDefinitions.getCodeName() +"," );
-		buffer.append(ENTITY_NAME_PLACEHOLDER + "." + columnDefinitions.getDescriptionName() +")" );
+		StringBuilder buffer = new StringBuilder("SELECT new com.onbelay.core.entity.snapshot.EntityId(");
+		buffer.append(ENTITY_NAME_PLACEHOLDER);
+		buffer.append(".id,");
+		buffer.append(ENTITY_NAME_PLACEHOLDER);
+		buffer.append(".");
+		buffer.append(columnDefinitions.getCodeName());
+		buffer.append("," );
+		buffer.append(ENTITY_NAME_PLACEHOLDER);
+		buffer.append(".");
+		buffer.append(columnDefinitions.getDescriptionName());
+		buffer.append("," );
+		buffer.append(ENTITY_NAME_PLACEHOLDER);
+		buffer.append(".");
+		buffer.append("isExpired)" );
 		buffer.append(" FROM ");
 		buffer.append(definedQuery.getEntityName());
 		buffer.append(" ");
@@ -218,6 +260,36 @@ public class DefinedQueryGenerator {
 		return buffer.toString();
 	}
 
+	public String generatePropertiesQuery(List<ColumnDefinition> properties) {
+		StringBuilder buffer = new StringBuilder("SELECT ");
+		if (properties.isEmpty())
+			throw new OBRuntimeException(CoreTransactionErrorCode.SYSTEM_FAILURE.getCode());
+		buffer.append(ENTITY_NAME_PLACEHOLDER);
+		buffer.append(".");
+		buffer.append(properties.get(0).getPath());
+		
+		for (int i=1; i < properties.size();i++) {
+			buffer.append(",");
+			buffer.append(ENTITY_NAME_PLACEHOLDER);
+			buffer.append(".");
+			buffer.append(properties.get(i).getPath());
+			buffer.append(" ");
+		}
+		buffer.append(" FROM ");
+		buffer.append(definedQuery.getEntityName());
+		buffer.append(" ");
+		buffer.append(ENTITY_NAME_PLACEHOLDER);
+
+		if (definedQuery.getWhereClause().hasExpressions()) {
+			addWhereClause(buffer, definedQuery.getWhereClause());
+		}
+
+		if (definedQuery.getOrderByClause().hasExpressions()) {
+			addOrderByClause(buffer, definedQuery.getOrderByClause());
+		}
+
+		return buffer.toString();
+	}
 
 	private String formatExpression(DefinedWhereExpression expression) {
 		ColumnDefinition definition = columnDefinitions.get(expression.getColumnName());
@@ -250,7 +322,7 @@ public class DefinedQueryGenerator {
 	 * @return a list of zero to many ids in order if an order by clause is provided.
 	 */
 	public String generateQueryForIds() {
-		StringBuffer buffer = new StringBuffer("SELECT ");
+		StringBuilder buffer = new StringBuilder("SELECT ");
 		buffer.append(ENTITY_NAME_PLACEHOLDER);
 		buffer.append(".id");
 		buffer.append(" FROM ");
@@ -270,7 +342,7 @@ public class DefinedQueryGenerator {
 	}
 	
 	
-	private void addWhereClause(StringBuffer buffer, DefinedWhereClause whereClause) {
+	private void addWhereClause(StringBuilder buffer, DefinedWhereClause whereClause) {
 		buffer.append(" WHERE ");
 		ExpressionElement element = whereClause.getElements().get(0);
 		
@@ -298,7 +370,7 @@ public class DefinedQueryGenerator {
 	}
 	
 	
-	private void addOrderByClause(StringBuffer buffer, DefinedOrderByClause orderByClause) {
+	private void addOrderByClause(StringBuilder buffer, DefinedOrderByClause orderByClause) {
 		buffer.append(" ORDER BY ");
 		DefinedOrderExpression expression = orderByClause.getExpressions().get(0);
 		buffer.append(lookUpOrderName(expression));

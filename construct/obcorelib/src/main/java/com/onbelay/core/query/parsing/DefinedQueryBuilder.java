@@ -390,6 +390,9 @@ public class DefinedQueryBuilder {
 				tokens.add(
 						i,
 						handleNOTOperator(i, tokens));
+			} else if (token instanceof TextOperatorHolder) {
+				List<ExpressionToken> replacementTokens = handleTextExpressionOperator(i, tokens);
+				tokens.addAll(i, replacementTokens);
 			}
 			
 		}
@@ -434,8 +437,46 @@ public class DefinedQueryBuilder {
 		}
 		
 	}
-	
-	
+
+
+	private List<ExpressionToken> handleTextExpressionOperator(int i, List<ExpressionToken> tokens) {
+		ExpressionToken token = tokens.get(i);
+		token.setProcessed(true);
+		TextOperatorHolder operatorHolder = (TextOperatorHolder) token;
+
+		ExpressionToken nextToken = nextUnprocessedToken(i + 1, tokens);
+
+		if (nextToken == null || nextToken instanceof ParameterHolder == false) {
+			logger.error("Contains or startsWith must be followed by a String");
+			throw new DefinedQueryException("Contains or startsWith must be followed by a String");
+		}
+		nextToken.setProcessed(true);
+		ParameterHolder containsValue = (ParameterHolder) nextToken;
+
+		ArrayList<ExpressionToken> replacementTokens = new ArrayList<>();
+		replacementTokens.add(
+				new OperatorHolder(ExpressionOperator.LIKE));
+
+		ParameterHolder newValue;
+		switch (operatorHolder.getOperator()) {
+
+			case CONTAINS:
+				newValue =  new ParameterHolder("%" + containsValue.getString() + "%");
+				break;
+
+			case STARTS_WITH:
+				newValue =  new ParameterHolder(containsValue.getString() + "%");
+				break;
+
+			default :
+				logger.error("Missing operator");
+				throw new DefinedQueryException("Missing operator");
+		}
+		replacementTokens.add(newValue);
+		return replacementTokens;
+	}
+
+
 	private OperatorHolder handleISOperator(int i, List<ExpressionToken> tokens) {
 		ExpressionToken token = tokens.get(i);
 		token.setProcessed(true);

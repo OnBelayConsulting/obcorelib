@@ -19,28 +19,43 @@
       <column name="ENTITY_ID" remarks="Primary key for the MY_LOCATION table." type="java.sql.Types.NUMERIC(10, 0)">
         <constraints nullable="false"/>
       </column>
-      <column name="NAME_TXT" remarks="Name of Location" type="java.sql.Types.VARCHAR(20)">
+      <column name="LOCATION_NO"  type="java.sql.Types.NUMERIC(10, 0)">
         <constraints nullable="false"/>
       </column>
-      <column name="DESCRIPTION_TXT" remarks="Descrption" type="java.sql.Types.VARCHAR(100)">
+      <column name="PARENT_LOCATION_ID"  type="java.sql.Types.NUMERIC(10, 0)">
         <constraints nullable="true"/>
       </column>
-      <column name="AUDIT_LOCK_NO" remarks="Audit Version number." defaultValueNumeric="0" type="java.sql.Types.NUMERIC(10, 0)">
+      <column name="NAME_TXT"  type="java.sql.Types.VARCHAR(20)">
         <constraints nullable="false"/>
       </column>
-      <column name="OPTIMISTIC_LOCK_NO" remarks="Version number." defaultValueNumeric="0" type="java.sql.Types.NUMERIC(10, 0)">
+      <column name="DESCRIPTION_TXT"  type="java.sql.Types.VARCHAR(100)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="GEO_CODE"  type="java.sql.Types.VARCHAR(32)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="AUDIT_LOCK_NO"  defaultValueNumeric="0" type="java.sql.Types.NUMERIC(10, 0)">
         <constraints nullable="false"/>
       </column>
-      <column name="IS_DELETED" type="java.sql.Types.CHAR(1)">
+      <column name="OPTIMISTIC_LOCK_NO"  defaultValueNumeric="0" type="java.sql.Types.NUMERIC(10, 0)">
         <constraints nullable="false"/>
       </column>
-      <column name="VALID_FROM_DATETIME" type="java.sql.Types.TIMESTAMP">
+      <column name="EXPIRED_FLG" type="java.sql.Types.CHAR(1)">
         <constraints nullable="false"/>
       </column>
-      <column name="VALID_TO_DATETIME" type="java.sql.Types.TIMESTAMP">
+      <column name="EFFECTIVE_DATE"  type="java.sql.Types.TIMESTAMP">
         <constraints nullable="false"/>
       </column>
-      <column name="UPDATED_BY" type="java.sql.Types.VARCHAR(30)">
+      <column name="GENERATED_DATE_TIME"  type="java.sql.Types.TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="VALID_FROM_DTTM" type="java.sql.Types.TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="VALID_TO_DTTM" type="java.sql.Types.TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="LAST_USER" type="java.sql.Types.VARCHAR(30)">
         <constraints nullable="false"/>
       </column>
     </createTable>

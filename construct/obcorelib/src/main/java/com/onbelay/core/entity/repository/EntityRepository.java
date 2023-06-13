@@ -30,4 +30,6 @@ public interface EntityRepository<T> {
 	
 	public void flush();
 
+	public Integer executeNativeScalarQuery(String query);
+
 }

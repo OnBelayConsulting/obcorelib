@@ -1,0 +1,51 @@
+<databaseChangeLog
+	xmlns='http://www.liquibase.org/xml/ns/dbchangelog'
+	xsi:schemaLocation='http://www.liquibase.org/xml/ns/dbchangelog-ext
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+	http://www.liquibase.org/xml/ns/dbchangelog
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd'
+	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+	logicalFilePath='/com/onbelay/obcore/snapshot/dml/INSERT_GEO_CODE_DATA.xml'
+>
+	<changeSet
+		author='onbelay'
+		id='insert_geo_code_data'
+	>
+		<insert
+			tableName='GEO_CODE_LANG'
+		>
+			<column name='CODE_CD' value='West'/>
+			<column name='LOCALE_LANGUAGE_CD' value='en'/>
+			<column name='LOCALE_COUNTRY_CD' value='CA'/>
+			<column name='DISPLAY_ORDER_NO' value='NULL'/>
+			<column name='CODE_LABEL' value='Western Region'/>
+		</insert>
+		<insert
+			tableName='GEO_CODE_LANG'
+		>
+			<column name='CODE_CD' value='East'/>
+			<column name='LOCALE_LANGUAGE_CD' value='en'/>
+			<column name='LOCALE_COUNTRY_CD' value='CA'/>
+			<column name='DISPLAY_ORDER_NO' value='NULL'/>
+			<column name='CODE_LABEL' value='Eastern Region'/>
+		</insert>
+		<insert
+			tableName='GEO_CODE_LANG'
+		>
+			<column name='CODE_CD' value='Central'/>
+			<column name='LOCALE_LANGUAGE_CD' value='en'/>
+			<column name='LOCALE_COUNTRY_CD' value='CA'/>
+			<column name='DISPLAY_ORDER_NO' value='NULL'/>
+			<column name='CODE_LABEL' value='Central Region'/>
+		</insert>
+		<insert
+			tableName='GEO_CODE_LANG'
+		>
+			<column name='CODE_CD' value='North'/>
+			<column name='LOCALE_LANGUAGE_CD' value='en'/>
+			<column name='LOCALE_COUNTRY_CD' value='CA'/>
+			<column name='DISPLAY_ORDER_NO' value='NULL'/>
+			<column name='CODE_LABEL' value='Northern Region'/>
+		</insert>
+	</changeSet>
+</databaseChangeLog>

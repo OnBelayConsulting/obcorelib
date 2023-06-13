@@ -24,13 +24,16 @@ import java.util.Map;
 public enum CoreTransactionErrorCode {
 
     SUCCESS                                       ("0", "Success: transaction was successful"),
-    APPSET_MISSING_KEY                            ("OBC-E0001", "Missing application setting key"),
-    APPSET_MISSING_VALUE                          ("OBC-E0002", "Missing application setting value"),
-    ENTITY_VERSION_FAIL                           ("OBC-EE_001", "Update failed - unmatched version number."),
-    ENTITY_DELETE_FAIL                            ("OBC-EE_010", "Entity delete failed."),
-    QUERY_MORE_THAN_ONE_RESULT                    ("OBC-EQRY_001", "More than one result returned"),
-    USER_MISSING_NAME                             ("OBC-EUSR_001", "Missing user name"),
-    SYSTEM_FAILURE                                ("OBC-9999", "Error: Application error has occurred"); 
+    APPSET_MISSING_KEY                            ("OB-E0001", "Missing application setting key"),
+    APPSET_MISSING_VALUE                          ("OB-E0002", "Missing application setting value"),
+    ENTITY_VERSION_FAIL                           ("OB-E0003", "Update failed - unmatched version number."),
+    ENTITY_DELETE_FAIL                            ("OB-E0004", "Entity delete failed."),
+    INVALID_ENTITY_ID                             ("OB-E0005", "Invalid EntityId."),
+    QUERY_MORE_THAN_ONE_RESULT                    ("OB-E0100", "More than one result returned"),
+    USER_MISSING_NAME                             ("OB-E0200", "Missing user name"),
+    INVALID_CODE_FAMILY                           ("OB-E1000", "Invalid code family"),
+    USER_UNAUTHORIZED                             ("OB-E2000", "User not authorized for this function."),
+    SYSTEM_FAILURE                                ("OB-9999", "Error: Application error has occurred");
 
     private String code;
     private String description;

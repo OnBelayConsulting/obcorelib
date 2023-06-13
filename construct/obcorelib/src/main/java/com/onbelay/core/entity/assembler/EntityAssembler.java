@@ -28,7 +28,7 @@ public abstract class EntityAssembler {
     
     protected void setEntityAttributes(AbstractEntity entity, AbstractSnapshot value) {
         value.setEntityState(entity.getEntityState());
-        value.setEntityId(entity.getEntityId());
+        value.setEntityId(entity.generateEntityId());
         
         if (entity instanceof VersionedEntity) {
         	VersionedEntity versionedEntity = (VersionedEntity) entity;

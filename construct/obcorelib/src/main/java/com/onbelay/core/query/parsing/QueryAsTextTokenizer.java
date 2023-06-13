@@ -22,6 +22,7 @@ import java.util.function.Supplier;
 
 import com.onbelay.core.query.enums.ExpressionConnector;
 import com.onbelay.core.query.enums.ExpressionOperator;
+import com.onbelay.core.query.enums.TextExpressionOperator;
 
 /**
  * Tokenizes a string into tokens based on basic matches and a stringTokenMap to map reserved words.
@@ -73,6 +74,27 @@ public class QueryAsTextTokenizer {
 		stringTokenMap.put(
 				"LIKE", 
 				() -> new OperatorHolder(ExpressionOperator.LIKE));
+		stringTokenMap.put(
+				"EQ",
+				() -> new OperatorHolder(ExpressionOperator.EQUALS));
+		stringTokenMap.put(
+				"GT",
+				() -> new OperatorHolder(ExpressionOperator.GREATER_THAN));
+		stringTokenMap.put(
+				"GE",
+				() -> new OperatorHolder(ExpressionOperator.GREATER_THAN_OR_EQUALS));
+		stringTokenMap.put(
+				"LT",
+				() -> new OperatorHolder(ExpressionOperator.LESS_THAN));
+		stringTokenMap.put(
+				"LE",
+				() -> new OperatorHolder(ExpressionOperator.LESS_THAN_OR_EQUALS));
+		stringTokenMap.put(
+				"CONTAINS",
+				() -> new TextOperatorHolder(TextExpressionOperator.CONTAINS));
+		stringTokenMap.put(
+				"STARTSWITH",
+				() -> new TextOperatorHolder(TextExpressionOperator.STARTS_WITH));
 
 	}
 	

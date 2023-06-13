@@ -1,0 +1,29 @@
+<databaseChangeLog 
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	logicalFilePath="/com/onbelay/obcore/table/GEO_CODE_LANG.xml">
+	
+  <changeSet author="lefeuvrem" id="geo_code" objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+  
+
+      <createTable tableName="GEO_CODE_LANG" tablespace="${tblspace_data}">
+      <column name="CODE_CD"  type="java.sql.Types.VARCHAR(32)">
+        <constraints primaryKey="true" primaryKeyName="GEO_CODE_PK" nullable="false" />
+      </column>
+      <column name="CODE_LABEL"  type="java.sql.Types.VARCHAR(40)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="LOCALE_LANGUAGE_CD"  type="java.sql.Types.VARCHAR(3)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="LOCALE_COUNTRY_CD"  type="java.sql.Types.VARCHAR(2)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="DISPLAY_ORDER_NO"  type="java.sql.Types.NUMERIC(10, 0)">
+        <constraints nullable="true"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+</databaseChangeLog>

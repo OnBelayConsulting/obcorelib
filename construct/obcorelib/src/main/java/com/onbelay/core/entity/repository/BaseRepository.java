@@ -16,6 +16,7 @@
 package com.onbelay.core.entity.repository;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,8 +27,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.onbelay.core.entity.snapshot.EntityId;
+import com.onbelay.core.query.model.ColumnDefinition;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +41,6 @@ import com.onbelay.core.enums.CoreTransactionErrorCode;
 import com.onbelay.core.entity.model.AbstractEntity;
 import com.onbelay.core.entity.model.AuditAbstractEntity;
 import com.onbelay.core.entity.model.TemporalAbstractEntity;
-import com.onbelay.core.entity.snapshot.EntityListItem;
 import com.onbelay.core.exception.OBRuntimeException;
 import com.onbelay.core.query.enums.ExpressionOperator;
 import com.onbelay.core.query.model.ColumnDefinitions;
@@ -57,8 +60,22 @@ public class BaseRepository<T> implements EntityRepository<T> {
     
     @PersistenceContext
     protected EntityManager entityManager;
-    
-    
+
+
+    @Value("${isSqlServer:false}")
+    private boolean isSqlServer;
+
+    protected Integer getNextSequenceValue(String sequenceName) {
+        String query;
+
+        if (isSqlServer) {
+            query = "SELECT NEXT VALUE FOR " + sequenceName;
+        } else {
+            query = "SELECT NEXTVAL('" + sequenceName + "')";
+        }
+        return executeNativeScalarQuery(query);
+    }
+
 
     public <E> E loadChild(Class<E> claz, Object id) {
         return  entityManager.find(claz, id);
@@ -196,7 +213,7 @@ public class BaseRepository<T> implements EntityRepository<T> {
     }
 
 
-    public List<EntityListItem> executeDefinedQueryForList(
+    public List<EntityId> executeDefinedQueryForList(
             ColumnDefinitions columnDefinitions,
             DefinedQuery definedQuery) {
 
@@ -295,13 +312,13 @@ public class BaseRepository<T> implements EntityRepository<T> {
     	}
     }
 
-    public List<EntityListItem> fetchEntityListItemsById(
+    public List<EntityId> fetchEntityIdsById(
             ColumnDefinitions columnDefinitions,
             String entityName,
             QuerySelectedPage selectedPage) {
 
         if (selectedPage.getIds().isEmpty())
-            return new ArrayList<EntityListItem>();
+            return new ArrayList<EntityId>();
 
 
         DefinedQuery query = new DefinedQuery(entityName);
@@ -326,7 +343,7 @@ public class BaseRepository<T> implements EntityRepository<T> {
                     selectedPage.getIds(),
                     MAX_SIZE_FOR_IN);
 
-            ArrayList<EntityListItem> items = new ArrayList<>();
+            ArrayList<EntityId> items = new ArrayList<>();
 
             while (subLister.moreElements()) {
 
@@ -343,7 +360,7 @@ public class BaseRepository<T> implements EntityRepository<T> {
                     query.getOrderByClause().copyIn(selectedPage.getOrderByClause());
                 }
 
-                List<EntityListItem> results = executeDefinedQueryForList(columnDefinitions, query);
+                List<EntityId> results = executeDefinedQueryForList(columnDefinitions, query);
                 items.addAll(results);
             }
 
@@ -475,7 +492,8 @@ public class BaseRepository<T> implements EntityRepository<T> {
      * @return a list of value objects
      */
     @SuppressWarnings("unchecked")
-    public List<?> executeReportQuery(String queryName, String[] paramNames, Object[] parms) {
+    public List<?>
+    executeReportQuery(String queryName, String[] paramNames, Object[] parms) {
         Query query = entityManager.createNamedQuery(queryName);
         if (paramNames.length != parms.length)
             throw new RuntimeException("paramNames and parms arrays are not same size");
@@ -483,7 +501,92 @@ public class BaseRepository<T> implements EntityRepository<T> {
             query.setParameter(paramNames[i], parms[i]);
         return query.getResultList();
     }
-    
+
+    public List executePropertiesQueryFromIds(
+        ColumnDefinitions columnDefinitions,
+        List<ColumnDefinition> properties,
+        String entityName,
+        QuerySelectedPage selectedPage) {
+
+        if (selectedPage.getIds().isEmpty())
+            return new ArrayList();
+
+
+        DefinedQuery query = new DefinedQuery(entityName);
+
+        if (selectedPage.getIds().size() <= MAX_SIZE_FOR_IN) {
+
+            query.getWhereClause().addExpression(
+                    new DefinedWhereExpression(
+                            "id",
+                            ExpressionOperator.IN,
+                            selectedPage.getIds()));
+
+            if (selectedPage.hasOrderClause()) {
+                query.getOrderByClause().copyIn(selectedPage.getOrderByClause());
+            }
+            DefinedQueryGenerator generator = new DefinedQueryGenerator(
+                    query,
+                    columnDefinitions);
+
+            String queryString = generator.generatePropertiesQuery(properties);
+            logger.debug("Generated query: " + queryString);
+
+            Query jpaQuery = entityManager.createQuery(queryString);
+            if (query.getWhereClause().hasParameters()) {
+                for (Map.Entry<String, ?> entry : generator.getParameterMap().entrySet()) {
+                    logger.debug("Generated Query parameter key : " + entry.getKey() + " value: " + entry.getValue());
+                    jpaQuery.setParameter(entry.getKey(), entry.getValue());
+                }
+            }
+            return jpaQuery.getResultList();
+
+        } else {
+
+            SubLister<Integer> subLister = new SubLister<>(
+                    selectedPage.getIds(),
+                    MAX_SIZE_FOR_IN);
+
+            ArrayList items = new ArrayList();
+
+            while (subLister.moreElements()) {
+
+                List<Integer> subList = subLister.nextList();
+                query = new DefinedQuery(entityName);
+
+                query.getWhereClause().addExpression(
+                        new DefinedWhereExpression(
+                                "id",
+                                ExpressionOperator.IN,
+                                subList));
+
+                if (selectedPage.hasOrderClause()) {
+                    query.getOrderByClause().copyIn(selectedPage.getOrderByClause());
+                }
+
+                DefinedQueryGenerator generator = new DefinedQueryGenerator(
+                        query,
+                        columnDefinitions);
+
+                String queryString = generator.generatePropertiesQuery(properties);
+                logger.debug("Generated query: " + queryString);
+
+                Query jpaQuery = entityManager.createQuery(queryString);
+                if (query.getWhereClause().hasParameters()) {
+                    for (Map.Entry<String, ?> entry : generator.getParameterMap().entrySet()) {
+                        logger.debug("Generated Query parameter key : " + entry.getKey() + " value: " + entry.getValue());
+                        jpaQuery.setParameter(entry.getKey(), entry.getValue());
+                    }
+                }
+                List subItems = jpaQuery.getResultList();
+                items.addAll(subItems);
+            }
+
+            return items;
+        }
+
+    }
+
     /**
      * Execute a JPA query that will return a list of value objects. 
      * @param queryName - a query with multiple parameters
@@ -554,7 +657,7 @@ public class BaseRepository<T> implements EntityRepository<T> {
      * @return A List of SimpleListItems.
      */
     @SuppressWarnings("unchecked")
-    public List<EntityListItem> executeSimpleListQuery(String queryName) {
+    public List<EntityId> executeSimpleListQuery(String queryName) {
         Query query = entityManager.createNamedQuery(queryName);
         return query.getResultList();
     }
@@ -568,7 +671,7 @@ public class BaseRepository<T> implements EntityRepository<T> {
      * @return A List of SimpleListItems.
      */
     @SuppressWarnings("unchecked")
-    public List<EntityListItem> executeSimpleListQuery(String queryName, String paramName, Object parm) {
+    public List<EntityId> executeSimpleListQuery(String queryName, String paramName, Object parm) {
         Query query = entityManager.createNamedQuery(queryName);
         query.setParameter(paramName, parm);
         return query.getResultList();
@@ -582,7 +685,7 @@ public class BaseRepository<T> implements EntityRepository<T> {
      * @return A List of SimpleListItems.
      */
     @SuppressWarnings("unchecked")
-    public List<EntityListItem> executeSimpleListQuery(String queryName, String[] paramNames, Object[] parms) {
+    public List<EntityId> executeSimpleListQuery(String queryName, String[] paramNames, Object[] parms) {
         Query query = entityManager.createNamedQuery(queryName);
         if (paramNames.length != parms.length)
             throw new RuntimeException("paramNames and parms arrays are not same size");
@@ -646,7 +749,7 @@ public class BaseRepository<T> implements EntityRepository<T> {
      * @return a list of zero to many SimpleListItems.
      */
     @SuppressWarnings("unchecked")
-    public List<EntityListItem> executeListQueryString(String queryString) {
+    public List<EntityId> executeListQueryString(String queryString) {
         Query query = entityManager.createQuery(queryString);
         return query.getResultList();
     }
@@ -726,7 +829,7 @@ public class BaseRepository<T> implements EntityRepository<T> {
      * @return a list of zero to many SimpleListItems.
      */
     @SuppressWarnings("unchecked")
-    public List<EntityListItem> executeListQueryStringWithNamedParms(String queryString, Map<String, Object> parms) {
+    public List<EntityId> executeListQueryStringWithNamedParms(String queryString, Map<String, Object> parms) {
         Query query = entityManager.createQuery(queryString);
         for (Map.Entry<String, ?> entry : parms.entrySet()) {
             query.setParameter(entry.getKey(), entry.getValue());
@@ -743,7 +846,18 @@ public class BaseRepository<T> implements EntityRepository<T> {
         Query query = entityManager.createNativeQuery(nativeQueryString);
         return query.getResultList();
     }
-    
+
+
+    @Override
+    public Integer executeNativeScalarQuery(String nativeQueryString) {
+        Query query = entityManager.createNativeQuery(nativeQueryString);
+        List items = query.getResultList();
+        if ( items.isEmpty())
+            return null;
+        BigInteger bg = (BigInteger) items.get(0);
+        return bg.intValue();
+    }
+
     /**
      * Execute a query with 
      * @param queryName - named query name

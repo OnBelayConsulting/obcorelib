@@ -22,7 +22,6 @@ import com.onbelay.core.entity.repository.EntityRepository;
 import com.onbelay.core.entity.snapshot.EntityId;
 import com.onbelay.core.exception.OBRuntimeException;
 import com.onbelay.core.exception.OBValidationException;
-import com.onbelay.core.messaging.pubsub.EntityEventPublisher;
 
 import javax.persistence.Transient;
 
@@ -38,8 +37,8 @@ public abstract class AbstractEntity {
 	public String getEntityName() {
 		return this.getClass().getName();
 	}
-	
-	public EntityId getEntityId() {
+
+	public EntityId generateEntityId() {
 		return new EntityId(getId());
 	}
 
@@ -77,7 +76,7 @@ public abstract class AbstractEntity {
 	public void preSave() {
 	    
 	}
-    
+
 	@Override
 	public int hashCode() {
 		if (getId() == null)
@@ -106,12 +105,6 @@ public abstract class AbstractEntity {
 	
 	protected static AuditManager getAuditManager() {
 	    return (AuditManager) ApplicationContextFactory.getBean(AuditManager.BEAN_NAME); 
-	}
-
-
-	@Transient
-	protected EntityEventPublisher getEventPublisher() {
-		return (EntityEventPublisher) ApplicationContextFactory.getBean(EntityEventPublisher.BEAN_NAME);
 	}
 
 	protected static EntityRepository getEntityRepository() {

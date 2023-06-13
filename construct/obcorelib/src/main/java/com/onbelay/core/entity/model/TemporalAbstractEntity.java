@@ -22,6 +22,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
+import com.onbelay.core.entity.snapshot.EntityId;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -56,7 +57,7 @@ import com.onbelay.core.utils.DateUtils;
 public abstract class TemporalAbstractEntity extends AbstractEntity implements VersionedEntity {
 	private static Logger logger = LogManager.getLogger(TemporalAbstractEntity.class);
 	
-	private Boolean isDeleted = Boolean.FALSE;
+	private Boolean isExpired = Boolean.FALSE;
     private Long version;
 
 	private AuditAbstractEntity recentHistory;
@@ -77,7 +78,7 @@ public abstract class TemporalAbstractEntity extends AbstractEntity implements V
 	protected void validate() throws OBValidationException {
 	}
 
-	public void createWith(AbstractSnapshot valueObject) {
+	public void createWith(AbstractSnapshot snapshot) {
 	        
 	}
 	
@@ -96,7 +97,12 @@ public abstract class TemporalAbstractEntity extends AbstractEntity implements V
 	public void handleCreateUpdateWith(AbstractSnapshot valueObject) {
 	    
 	}
-	
+
+	@Transient
+	@Override
+	public EntityId generateEntityId() {
+		return new EntityId(getId(), "", "", isExpired);
+	}
 
 	/**
 	 * Overrides the default save to save with history
@@ -121,25 +127,25 @@ public abstract class TemporalAbstractEntity extends AbstractEntity implements V
 	    return EntityState.UNMODIFIED;
 	}
 
-	@Column(name="IS_DELETED")
+	@Column(name="EXPIRED_FLG")
 	@org.hibernate.annotations.Type(type="yes_no")
-    public Boolean getIsDeleted() {
-        return isDeleted;
+    public Boolean getIsExpired() {
+        return isExpired;
     }
 
-    public void setIsDeleted(Boolean isExpired) {
-        this.isDeleted = isExpired;
+    public void setIsExpired(Boolean isExpired) {
+        this.isExpired = isExpired;
     }
 
     
     public void delete() {
-    	if (this.isDeleted) {
+    	if (this.isExpired) {
     		// Don't try to expire an already expired entity.
     		return;
     	}
     	
     	
-        this.isDeleted = true;
+        this.isExpired = true;
         generateHistory();
 		getEntityRepository().delete(this);
     }

@@ -28,5 +28,7 @@ public class ParameterHolder extends ExpressionToken {
 		return parameter;
 	}
 	
-
+	public String getString() {
+		return parameter;
+	}
 }

@@ -29,7 +29,7 @@
       <column name="OPTIMISTIC_LOCK_NO" remarks="Version number." defaultValueNumeric="0" type="java.sql.Types.NUMERIC(10, 0)">
         <constraints nullable="false"/>
       </column>
-      <column name="IS_DELETED" remarks="Logical delete Y or N" type="java.sql.Types.CHAR(1)">
+      <column name="EXPIRED_FLG" remarks="Logical delete Y or N" type="java.sql.Types.CHAR(1)">
         <constraints nullable="false"/>
       </column>
     </createTable>
