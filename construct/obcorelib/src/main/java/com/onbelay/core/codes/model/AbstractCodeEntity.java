@@ -11,9 +11,10 @@ class AbstractCodeEntity {
     private String code;
     private String label;
     private Integer displayNo;
+    private Boolean isActive;
 
     @Id
-    @Column(name = "CODE_CD")
+    @Column(name = "CODE_ID")
     public String getCode() {
         return code;
     }
@@ -32,11 +33,21 @@ class AbstractCodeEntity {
     }
 
     @Column(name = "DISPLAY_ORDER_NO")
-    public Integer getDisplayNo() {
+    public Integer getDisplayOrderNo() {
         return displayNo;
     }
 
-    public void setDisplayNo(Integer displayNo) {
+    public void setDisplayOrderNo(Integer displayNo) {
         this.displayNo = displayNo;
+    }
+
+    @Column(name = "IS_ACTIVE")
+    @org.hibernate.annotations.Type(type="yes_no")
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }

@@ -1,0 +1,43 @@
+<databaseChangeLog
+	xmlns='http://www.liquibase.org/xml/ns/dbchangelog'
+	xsi:schemaLocation='http://www.liquibase.org/xml/ns/dbchangelog-ext
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+	http://www.liquibase.org/xml/ns/dbchangelog
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd'
+	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+	logicalFilePath='/com/onbelay/obcore/snapshot/dml/GEO_CODE_Insert.xml'
+>
+	<changeSet
+		author='onbelay'
+		id='1'
+	>
+		<insert
+			tableName='GEO_CODE'
+		>
+			<column name='CODE_ID' value='West'/>
+			<column name='DISPLAY_ORDER_NO' value='10'/>
+			<column name='CODE_LABEL' value='Western Region'/>
+		</insert>
+		<insert
+			tableName='GEO_CODE'
+		>
+			<column name='CODE_ID' value='East'/>
+			<column name='DISPLAY_ORDER_NO' value='20'/>
+			<column name='CODE_LABEL' value='Eastern Region'/>
+		</insert>
+		<insert
+			tableName='GEO_CODE'
+		>
+			<column name='CODE_ID' value='Central'/>
+			<column name='DISPLAY_ORDER_NO' value='30'/>
+			<column name='CODE_LABEL' value='Central Region'/>
+		</insert>
+		<insert
+			tableName='GEO_CODE'
+		>
+			<column name='CODE_ID' value='North'/>
+			<column name='DISPLAY_ORDER_NO' value='40'/>
+			<column name='CODE_LABEL' value='Northern Region'/>
+		</insert>
+	</changeSet>
+</databaseChangeLog>

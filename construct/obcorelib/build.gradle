@@ -113,13 +113,13 @@ publishing {
 		obcorelibrary(MavenPublication) {
 			groupId = 'com.onbelay.core'
 			artifactId = 'obcore'
-			version = '1.8.3'
+			version = '1.8.5'
 			artifact jar
 		}
 		obcorelibraryTest(MavenPublication) {
 			groupId = 'com.onbelay.core'
 			artifactId = 'obcoretest'
-			version = '1.8.3'
+			version = '1.8.5'
 			artifact testJar
 		}
 	}

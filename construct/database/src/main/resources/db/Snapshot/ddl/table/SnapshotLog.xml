@@ -15,7 +15,7 @@
 	<include file="MY_CHILD_AUDIT.xml" relativeToChangelogFile="true"/>
 	<include file="MY_LOCATION.xml" relativeToChangelogFile="true"/>
 	<include file="MY_LOCATION_AUDIT.xml" relativeToChangelogFile="true"/>
-	<include file="GEO_CODE_LANG.xml" relativeToChangelogFile="true"/>
+	<include file="GEO_CODE.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
 
 

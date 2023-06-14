@@ -47,7 +47,7 @@ public class CodeRepositoryBean extends BaseRepository<AbstractCodeEntity> imple
             );
         }
         query.getOrderByClause().addOrderExpression(
-                new DefinedOrderExpression("label"));
+                new DefinedOrderExpression("displayOrderNo"));
 
         List<AbstractCodeEntity> codes = executeDefinedQuery(
                 codeColumnDefinitions,

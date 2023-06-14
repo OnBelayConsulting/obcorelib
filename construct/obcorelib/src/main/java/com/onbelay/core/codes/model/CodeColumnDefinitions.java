@@ -30,11 +30,13 @@ public class CodeColumnDefinitions  implements ColumnDefinitions{
 
 	public static final ColumnDefinition code = new ColumnDefinition("code", ColumnDataType.STRING, "code");
 	public static final ColumnDefinition label = new ColumnDefinition("label", ColumnDataType.STRING, "label");
+	public static final ColumnDefinition isActive = new ColumnDefinition("isActive", ColumnDataType.STRING, "isActive");
 	public static final ColumnDefinition displayOrderNo = new ColumnDefinition("displayOrderNo", ColumnDataType.INTEGER, "displayOrderNo");
 
 	public CodeColumnDefinitions() {
 		add(code);
 		add(label);
+		add(isActive);
 		add(displayOrderNo);
 	}
 

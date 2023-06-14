@@ -8,7 +8,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	logicalFilePath="/com/onbelay/obcore/snapshot/dml/SnapshotLog.xml"
 >
-	<include file="INSERT_GEO_CODE_Data.xml" relativeToChangelogFile="true"/>
+	<include file="GEO_CODE_Insert.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
 
