@@ -46,4 +46,12 @@ public class CodeManagerBean implements CodeManager {
     public void addCodeEntity(String codeFamily, String codeEntityName) {
         codeEntityHashMap.put(codeFamily, codeEntityName);
     }
+
+    protected CodeRepository getCodeRepository() {
+        return codeRepository;
+    }
+
+    protected void setCodeRepository(CodeRepository codeRepository) {
+        this.codeRepository = codeRepository;
+    }
 }
