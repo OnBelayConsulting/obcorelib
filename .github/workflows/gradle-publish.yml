@@ -89,6 +89,5 @@ jobs:
       with:
         arguments: publish
       env:
-        env:
           GPR_TOKEN: ${{ secrets.GPR_TOKEN }}
           GPR_USER: ${{ secrets.GPR_USER }}
