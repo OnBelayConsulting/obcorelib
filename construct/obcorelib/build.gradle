@@ -104,8 +104,8 @@ publishing {
 			name = "GitHubPackages"
 			url = uri("https://maven.pkg.github.com/onbelayconsulting/obcorelib")
 			credentials {
-				username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-				password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+				username = project.findProperty("gpr.user") ?: System.getenv("GPR_USER")
+				password = project.findProperty("gpr.key") ?: System.getenv("GPR_TOKEN")
 			}
 		}
 	}
@@ -113,13 +113,13 @@ publishing {
 		obcorelibrary(MavenPublication) {
 			groupId = 'com.onbelay.core'
 			artifactId = 'obcore'
-			version = '1.8.5'
+			version = '1.9.0'
 			artifact jar
 		}
 		obcorelibraryTest(MavenPublication) {
 			groupId = 'com.onbelay.core'
 			artifactId = 'obcoretest'
-			version = '1.8.5'
+			version = '1.9.0'
 			artifact testJar
 		}
 	}
