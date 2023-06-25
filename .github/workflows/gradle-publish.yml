@@ -47,14 +47,14 @@ jobs:
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: ./gradlew construct:obcorelib:build
+        arguments: construct:obcorelib:build
 
     # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
     # the publishing section of your build.gradle
     - name: Publish to GitHub Packages
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: ./gradlew construct:obcorelib:publish
+        arguments: construct:obcorelib:publish
       env:
           SEMANTIC_VERSION: ${{steps.version.outputs.version}}
           GPR_TOKEN: ${{ secrets.GPR_TOKEN }}
