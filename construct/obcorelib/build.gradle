@@ -71,6 +71,7 @@ task srcZip (type: Zip) {
 	
 }
 
+semantic_version = project.findProperty("semantic_version") ?: System.getenv("SEMANTIC_VERSION")
 
 jar {
 	enabled = true
@@ -113,13 +114,13 @@ publishing {
 		obcorelibrary(MavenPublication) {
 			groupId = 'com.onbelay.core'
 			artifactId = 'obcore'
-			version = '1.9.0'
+			version = semantic_version
 			artifact jar
 		}
 		obcorelibraryTest(MavenPublication) {
 			groupId = 'com.onbelay.core'
 			artifactId = 'obcoretest'
-			version = '1.9.0'
+			version = semantic_version
 			artifact testJar
 		}
 	}

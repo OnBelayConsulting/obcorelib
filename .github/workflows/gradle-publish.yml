@@ -26,48 +26,11 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v0
+    - name: Git Semantic Version
+      id: version
+      uses: PaulHatch/semantic-version@v5.0.3
       with:
-        versionSpec: '5.x'
-
-    - name: Execute GitVersion
-      uses: gittools/actions/gitversion/execute@v0
-
-    - name: Display GitVersion outputs (step output)
-      run: |
-        echo "Major: ${{ steps.gitversion.outputs.major }}"
-        echo "Minor: ${{ steps.gitversion.outputs.minor }}"
-        echo "Patch: ${{ steps.gitversion.outputs.patch }}"
-        echo "PreReleaseTag: ${{ steps.gitversion.outputs.preReleaseTag }}"
-        echo "PreReleaseTagWithDash: ${{ steps.gitversion.outputs.preReleaseTagWithDash }}"
-        echo "PreReleaseLabel: ${{ steps.gitversion.outputs.preReleaseLabel }}"
-        echo "PreReleaseNumber: ${{ steps.gitversion.outputs.preReleaseNumber }}"
-        echo "WeightedPreReleaseNumber: ${{ steps.gitversion.outputs.weightedPreReleaseNumber }}"
-        echo "BuildMetaData: ${{ steps.gitversion.outputs.buildMetaData }}"
-        echo "BuildMetaDataPadded: ${{ steps.gitversion.outputs.buildMetaDataPadded }}"
-        echo "FullBuildMetaData: ${{ steps.gitversion.outputs.fullBuildMetaData }}"
-        echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
-        echo "SemVer: ${{ steps.gitversion.outputs.semVer }}"
-        echo "LegacySemVer: ${{ steps.gitversion.outputs.legacySemVer }}"
-        echo "LegacySemVerPadded: ${{ steps.gitversion.outputs.legacySemVerPadded }}"
-        echo "AssemblySemVer: ${{ steps.gitversion.outputs.assemblySemVer }}"
-        echo "AssemblySemFileVer: ${{ steps.gitversion.outputs.assemblySemFileVer }}"
-        echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
-        echo "InformationalVersion: ${{ steps.gitversion.outputs.informationalVersion }}"
-        echo "BranchName: ${{ steps.gitversion.outputs.branchName }}"
-        echo "EscapedBranchName: ${{ steps.gitversion.outputs.escapedBranchName }}"
-        echo "Sha: ${{ steps.gitversion.outputs.sha }}"
-        echo "ShortSha: ${{ steps.gitversion.outputs.shortSha }}"
-        echo "NuGetVersionV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}"
-        echo "NuGetVersion: ${{ steps.gitversion.outputs.nuGetVersion }}"
-        echo "NuGetPreReleaseTagV2: ${{ steps.gitversion.outputs.nuGetPreReleaseTagV2 }}"
-        echo "NuGetPreReleaseTag: ${{ steps.gitversion.outputs.nuGetPreReleaseTag }}"
-        echo "VersionSourceSha: ${{ steps.gitversion.outputs.versionSourceSha }}"
-        echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.commitsSinceVersionSource }}"
-        echo "CommitsSinceVersionSourcePadded: ${{ steps.gitversion.outputs.commitsSinceVersionSourcePadded }}"
-        echo "UncommittedChanges: ${{ steps.gitversion.outputs.uncommittedChanges }}"
-        echo "CommitDate: ${{ steps.gitversion.outputs.commitDate }}"
+        branch: main
 
     - name: Set up JDK 11
       uses: actions/setup-java@v3
@@ -78,16 +41,17 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      uses: gradle/gradle-build-action@v2
       with:
-        arguments: build
+        arguments: ./gradlew construct:obcorelib:build
 
     # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
     # the publishing section of your build.gradle
     - name: Publish to GitHub Packages
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      uses: gradle/gradle-build-action@v2
       with:
-        arguments: publish
+        arguments: ./gradlew construct:obcorelib:publish
       env:
+          SEMANTIC_VERSION: ${{steps.version.outputs.version}}
           GPR_TOKEN: ${{ secrets.GPR_TOKEN }}
           GPR_USER: ${{ secrets.GPR_USER }}
