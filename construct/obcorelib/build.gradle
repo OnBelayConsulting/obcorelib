@@ -95,6 +95,31 @@ task testJar(type: Jar, dependsOn: testClasses) {
 	from sourceSets.test.output
 }
 
+
+task runUnitTests(type: Test) {
+	jvmArgs '-Xmx2G', '-Xms512m', '-Duser.timezone=GMT-7'
+	testLogging.exceptionFormat "full" //produces a little more information in the output, mainly useful for development
+	scanForTestClasses = false  //this turns off the auto discovery feature which causes all kinds of false failures
+
+	include "**/*Test.class"
+
+	exclude "**/Base*.class" //have no tests in them
+	exclude "**/TransactionalSpringTestCase.class" //has no tests in it
+
+	testLogging {
+		int numTestsPerformed = 0
+		afterTest { desc, result ->
+			numTestsPerformed++
+			if (numTestsPerformed % 100 == 0) {
+				println('Still Testing... finished ' + numTestsPerformed + ' tests')
+			}
+		}
+	}
+
+}
+
+
+
 artifacts {
 	tests testJar
 }
