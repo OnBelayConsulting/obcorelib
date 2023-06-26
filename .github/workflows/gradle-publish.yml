@@ -90,6 +90,7 @@ jobs:
 
     - name: run gradle publish
       run: |
+        echo version = ${{steps.version.outputs.version}}
         ./gradlew construct:obcorelib:publish
       env:
         SEMANTIC_VERSION: ${{steps.version.outputs.version}}

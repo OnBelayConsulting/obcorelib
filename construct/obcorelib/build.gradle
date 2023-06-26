@@ -115,13 +115,13 @@ publishing {
 		obcorelibrary(MavenPublication) {
 			groupId = 'com.onbelay.core'
 			artifactId = 'obcore'
-			version = semantic_version
+			version = System.getenv("SEMANTIC_VERSION") ?: project.findProperty("semantic_version")
 			artifact jar
 		}
 		obcorelibraryTest(MavenPublication) {
 			groupId = 'com.onbelay.core'
 			artifactId = 'obcoretest'
-			version = semantic_version
+			version = System.getenv("SEMANTIC_VERSION") ?: project.findProperty("semantic_version")
 			artifact testJar
 		}
 	}
