@@ -49,14 +49,16 @@ jobs:
 
     - name: Git Semantic Version
       id: versioning
-      uses: PaulHatch/semantic-version@v5
+      uses: PaulHatch/semantic-version@v5.0.3
       with:
         branch: main
         tag_prefix: "v"
         major_pattern: "BREAKING_CHANGE:"
         minor_pattern: "feat:"
         bump_each_commit: true
-        format: "${major}.${minor}.${patch}"
+        search_commit_body: true
+        version_format: "${major}.${minor}.${patch}"
+        enable_prerelease_mode: true
 
     - name: install other utilities
       run: |
@@ -97,16 +99,16 @@ jobs:
       env:
         GITHUB_TOKEN: ${{secrets.github_token}}
       with:
-        tag_name: "v${{steps.versioning.outputs.version}}"
-        release_name: "v${{steps.versioning.outputs.version}}"
+        tag_name: ${{ steps.versioning.outputs.version_tag }}
+        release_name: ${{ steps.versioning.outputs.version_tag }}
         prerelease: true
 
     - name: run gradle publish
       run: |
-        echo version = ${{steps.versioning.outputs.version}}
+        echo version = ${{ steps.versioning.outputs.version }}
         ./gradlew construct:obcorelib:publish
       env:
-        SEMANTIC_VERSION: ${{steps.versioning.outputs.version}}
+        SEMANTIC_VERSION: ${{ steps.versioning.outputs.version }}
         GPR_TOKEN: ${{ secrets.GPR_TOKEN }}
         GPR_USER: ${{ secrets.GPR_USER }}
 
