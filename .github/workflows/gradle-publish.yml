@@ -51,7 +51,7 @@ jobs:
       id: version
       uses: PaulHatch/semantic-version@v5.0.3
       with:
-        branch: main
+        bump_each_commit: true
 
     - name: install other utilities
       run: |
