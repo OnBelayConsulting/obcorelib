@@ -59,6 +59,18 @@ jobs:
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
+    - name: install other utilities
+      run: |
+        apt-get update
+        apt-get install --yes postgresql-client
+
+    - name: query database
+      run: |
+        psql -h postgres -d coretest -U coretest -c 'SELECT 1;'
+      env:
+        PGPASSWORD: coretest
+
+
 
     - name: set up gradlew for execution
       run: |
