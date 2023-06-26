@@ -58,7 +58,6 @@ jobs:
         bump_each_commit: true
         search_commit_body: true
         version_format: "${major}.${minor}.${patch}"
-        enable_prerelease_mode: true
 
     - name: install other utilities
       run: |
