@@ -83,6 +83,22 @@ public class DefinedQueryBuilderTest extends TestCase {
 		assertEquals("FROM Deal WHERE shortName LIKE '%JK%'", query.toString());
 	}
 
+
+
+	@Test
+	public void testStartsWithExpression() {
+
+		String expressionText = "WHERE shortName startsWith 'JK'";
+
+		DefinedQueryBuilder builder = new DefinedQueryBuilder("Deal", expressionText);
+
+		DefinedQuery query = builder.build();
+
+		logger.error(query.toString());
+
+		assertEquals("FROM Deal WHERE shortName LIKE 'JK%'", query.toString());
+	}
+
 	@Test
 	public void testSimpleWhereAndOrderExpression() {
 		
