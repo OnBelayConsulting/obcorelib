@@ -5,6 +5,7 @@ task copyOverlayConstruct(type: Copy, group: 'CI Test') {
 	into "construct"
 }
 
+
 task copyOverlayDeploy(type: Copy, group: 'CI Test') {
 	description = "Copy the overlay to support testing."
 	from "overlays/deploy"

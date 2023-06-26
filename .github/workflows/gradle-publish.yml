@@ -49,7 +49,7 @@ jobs:
 
     - name: Git Semantic Version
       id: versioning
-      uses: PaulHatch/semantic-version@v4.0.2
+      uses: PaulHatch/semantic-version@v5
       with:
         branch: main
         tag_prefix: "v"
@@ -99,6 +99,7 @@ jobs:
       with:
         tag_name: "v${{steps.versioning.outputs.version}}"
         release_name: "v${{steps.versioning.outputs.version}}"
+        prerelease: true
 
     - name: run gradle publish
       run: |
