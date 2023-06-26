@@ -67,7 +67,6 @@ jobs:
       env:
         PGPASSWORD: coretest
 
-
     - name: set up gradlew for execution
       run: |
         chmod +x gradlew
