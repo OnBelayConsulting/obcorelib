@@ -40,12 +40,13 @@ dependencies {
 	implementation group: "org.apache.commons", name: "commons-lang3", version: "3.12.0"
 	implementation group: "org.apache.commons", name: "commons-text", version: "1.+"
 	implementation group: "org.apache.commons", name: "commons-collections4", version: "4.4"
-	implementation group: 'org.postgresql', name: 'postgresql', version: '42.5.1'
+	implementation group: 'org.postgresql', name: 'postgresql', version: '42.6.0'
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 	testImplementation('org.springframework.security:spring-security-test')
 	testImplementation("org.junit.vintage:junit-vintage-engine")
 	implementation('org.springframework.boot:spring-boot-starter-log4j2')
 }
+
 
 
 configurations {
