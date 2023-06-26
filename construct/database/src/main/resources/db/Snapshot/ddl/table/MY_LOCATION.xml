@@ -18,7 +18,7 @@
       <column name="ENTITY_ID" defaultValueSequenceNext="MY_LOCATION_SEQ" remarks="Surrogate key for the MY_LOCATION table." type="java.sql.Types.NUMERIC(10, 0)">
         <constraints primaryKey="true" primaryKeyName="MY_LOCATION_PK" nullable="false" />
       </column>
-      <column name="NAME_TXT"  type="java.sql.Types.VARCHAR(20)">
+      <column name="LOCATION_NAME"  type="java.sql.Types.VARCHAR(20)">
         <constraints nullable="false"/>
       </column>
       <column name="PARENT_LOCATION_ID"  type="java.sql.Types.NUMERIC(10, 0)">
@@ -33,7 +33,7 @@
       <column name="GENERATED_DATE_TIME"  type="java.sql.Types.TIMESTAMP">
        <constraints nullable="false"/>
       </column>
-      <column name="DESCRIPTION_TXT"  type="java.sql.Types.VARCHAR(100)">
+      <column name="LOCATION_DESCRIPTION"  type="java.sql.Types.VARCHAR(100)">
         <constraints nullable="true"/>
       </column>
       <column name="GEO_CODE"  type="java.sql.Types.VARCHAR(32)">

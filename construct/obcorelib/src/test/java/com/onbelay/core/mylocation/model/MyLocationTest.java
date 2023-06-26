@@ -2,6 +2,7 @@ package com.onbelay.core.mylocation.model;
 
 import java.util.List;
 
+import com.onbelay.core.test.CoreSpringTestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +17,11 @@ import com.onbelay.core.query.enums.ExpressionOperator;
 import com.onbelay.core.query.snapshot.DefinedQuery;
 import com.onbelay.core.query.snapshot.DefinedWhereExpression;
 import com.onbelay.core.query.snapshot.QuerySelectedPage;
-import com.onbelay.core.testfixture.model.MyLocation;
-import com.onbelay.core.testfixture.repository.MyLocationRepository;
-import com.onbelay.core.testfixture.shared.LocationDetail;
+import com.onbelay.testfixture.model.MyLocation;
+import com.onbelay.testfixture.repository.MyLocationRepository;
+import com.onbelay.testfixture.shared.LocationDetail;
 
-@ComponentScan("com.onbelay")
-@RunWith(SpringRunner.class)
-@TestPropertySource( locations="classpath:application-core-integrationtest.properties")
-@SpringBootTest
-public class MyLocationTest extends TransactionalSpringTestCase {
+public class MyLocationTest extends CoreSpringTestCase {
 
 	
 	@Autowired

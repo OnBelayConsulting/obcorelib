@@ -4,24 +4,18 @@ import com.onbelay.core.entity.snapshot.EntityListItemCollection;
 import com.onbelay.core.mylocation.model.LocationFixture;
 import com.onbelay.core.test.CoreSpringTestCase;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.onbelay.core.entity.enums.EntityState;
-import com.onbelay.core.entity.persistence.TransactionalSpringTestCase;
 import com.onbelay.core.entity.snapshot.EntityId;
 import com.onbelay.core.enums.CoreErrorCode;
 import com.onbelay.core.exception.OBRuntimeException;
-import com.onbelay.core.testfixture.model.MyLocation;
-import com.onbelay.core.testfixture.repository.MyLocationRepository;
-import com.onbelay.core.testfixture.service.MyLocationService;
-import com.onbelay.core.testfixture.shared.LocationDetail;
-import com.onbelay.core.testfixture.snapshot.MyLocationSnapshot;
-import com.onbelay.core.testfixture.snapshot.MyLocationSnapshotCollection;
+import com.onbelay.testfixture.model.MyLocation;
+import com.onbelay.testfixture.repository.MyLocationRepository;
+import com.onbelay.testfixture.service.MyLocationService;
+import com.onbelay.testfixture.shared.LocationDetail;
+import com.onbelay.testfixture.snapshot.MyLocationSnapshot;
+import com.onbelay.testfixture.snapshot.MyLocationSnapshotCollection;
 
 public class MyLocationServiceTest extends CoreSpringTestCase {
 
@@ -38,6 +32,8 @@ public class MyLocationServiceTest extends CoreSpringTestCase {
 
 	@Override
 	public void setUp() {
+		super.setUp();
+
 		parentLocation = new MyLocation(
 				new LocationDetail()
 						.withName("British Columbia")

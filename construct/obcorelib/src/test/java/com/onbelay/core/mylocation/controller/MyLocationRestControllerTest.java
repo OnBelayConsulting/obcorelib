@@ -1,14 +1,12 @@
 package com.onbelay.core.mylocation.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onbelay.core.entity.snapshot.TransactionResult;
-import com.onbelay.core.mylocation.model.LocationFixture;
 import com.onbelay.core.test.CoreSpringTestCase;
-import com.onbelay.core.testfixture.controller.MyLocationRestController;
-import com.onbelay.core.testfixture.enums.GeoCode;
-import com.onbelay.core.testfixture.model.MyLocation;
-import com.onbelay.core.testfixture.snapshot.MyLocationSnapshot;
-import com.onbelay.core.testfixture.snapshot.MyLocationSnapshotCollection;
+import com.onbelay.testfixture.controller.MyLocationRestController;
+import com.onbelay.testfixture.enums.GeoCode;
+import com.onbelay.testfixture.model.MyLocation;
+import com.onbelay.testfixture.snapshot.MyLocationSnapshot;
+import com.onbelay.testfixture.snapshot.MyLocationSnapshotCollection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;

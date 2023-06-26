@@ -59,21 +59,31 @@ jobs:
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-    - name: Create JDBC.properties
-      run: |
-        echo "jdbc.driverClassName=org.postgresql.Driver" > jdbc.properties
-        echo "jdbc.url=jdbc:postgresql://postgres:5432/coretest" >> jdbc.properties
-        echo "jdbc.username=coretest" >> jdbc.properties
-        echo "jdbc.password=coretest" >> jdbc.properties
 
     - name: set up gradlew for execution
       run: |
         chmod +x gradlew
 
+
+    - name: Copy overlays to support testing
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: copyAllOverlays
+
+
+
+    - name: Create database with Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: deploy:database:deployNew
+
+
+
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
       with:
         arguments: construct:obcorelib:build
+
 
     # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
     # the publishing section of your build.gradle
