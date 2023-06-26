@@ -16,6 +16,25 @@ on:
 jobs:
   build:
 
+    services:
+      postgres:
+        image: postgres:latest
+
+        env:
+          POSTGRES_DB: coretest
+          POSTGRES_USER: coretest
+          POSTGRES_PASSWORD: coretest
+        ports:
+          - 5432:5432
+
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    
+
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -39,6 +58,13 @@ jobs:
         distribution: 'temurin'
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+    - name: Create JDBC.properties
+      run: |
+        echo "jdbc.driverClassName=org.postgresql.Driver" > jdbc.properties
+        echo "jdbc.url=jdbc:postgresql://postgres:5432/coretest" >> jdbc.properties
+        echo "jdbc.username=coretest" >> jdbc.properties
+        echo "jdbc.password=coretest" >> jdbc.properties
 
     - name: set up gradlew for execution
       run: |
