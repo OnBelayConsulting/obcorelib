@@ -43,18 +43,20 @@ jobs:
       packages: write
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
       with:
         fetch-depth: 0
 
     - name: Git Semantic Version
       id: versioning
-      uses: PaulHatch/semantic-version@v5.0.3
+      uses: PaulHatch/semantic-version@v4.0.2
       with:
+        branch: main
         tag_prefix: "v"
         major_pattern: "BREAKING_CHANGE:"
         minor_pattern: "feat:"
         bump_each_commit: true
+        format: "${major}.${minor}.${patch}"
 
     - name: install other utilities
       run: |
@@ -89,6 +91,14 @@ jobs:
       env:
         GPR_TOKEN: ${{ secrets.GPR_TOKEN }}
         GPR_USER: ${{ secrets.GPR_USER }}
+
+    - name: create release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{secrets.github_token}}
+      with:
+        tag_name: "v${{steps.versioning.outputs.version}}"
+        release_name: "v${{steps.versioning.outputs.version}}"
 
     - name: run gradle publish
       run: |
