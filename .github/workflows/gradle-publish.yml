@@ -47,20 +47,23 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v0
+    - name: find change
+      id: bump
+      uses: zwaldowski/match-label-action@v4
       with:
-        versionSpec: '5.5.0'
+        allowed: major,minor,patch
 
-    - name: calculate version
+    - name: calculate semantic version
       id: versioning
-      uses: gittools/actions/gitversion/execute@v0
-
+      uses: zwaldowski/semver-release-action@v3
+      with:
+        bump: ${{ steps.bump.outputs.match }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: show versioning
       run: |
-        echo ${{ steps.versioning.outputs.semVer }}
-        echo versionTag="v${{ steps.versioning.outputs.semVer }}" >> $GITHUB_ENV
+        echo ${{ steps.versioning.outputs.version }}
+        echo versionTag="v${{ steps.versioning.outputs.version }}" >> $GITHUB_ENV
         echo ${{ env.versionTag }}
 
     - name: install other utilities
@@ -101,14 +104,14 @@ jobs:
       uses: rickstaa/action-create-tag@v1
       id: tag_create
       with:
-        tag: v${{ env.versionTag }}
+        tag: ${{ steps.versioning.outputs.version_tag }}
 
     - name: run gradle publish
       run: |
-        echo version = ${{ steps.versioning.outputs.semVer }}
+        echo version = ${{ steps.versioning.outputs.version }}
         ./gradlew construct:obcorelib:publish
       env:
-        SEMANTIC_VERSION: ${{ steps.versioning.outputs.semVer }}
+        SEMANTIC_VERSION: ${{ steps.versioning.outputs.version }}
         GPR_TOKEN: ${{ secrets.GPR_TOKEN }}
         GPR_USER: ${{ secrets.GPR_USER }}
 
