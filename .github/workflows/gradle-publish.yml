@@ -101,7 +101,7 @@ jobs:
       id: tag_create
       with:
         tag: ${{ steps.versioning.outputs.next }}
-        token: ${{ github.token }}
+        github_token: ${{ github.token }}
 
     - name: run gradle publish
       run: |
