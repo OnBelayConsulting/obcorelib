@@ -13,9 +13,6 @@ on:
       - main
   workflow_dispatch:
 
-env:
-  version_tag : not_set
-
 jobs:
   build:
 
@@ -51,14 +48,21 @@ jobs:
         fetch-depth: 0
 
 
-    - name: Get Semantic Version
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0
+      with:
+        versionSpec: '5.x'
+        preferLatestVersion: true
+
+    - name: calculate version
       id: versioning
-      uses: thenativeweb/get-next-version@main
+      uses: gittools/actions/gitversion/execute@v0
+
 
     - name: show versioning
       run: |
-        echo ${{ steps.versioning.outputs.version }}
-        set env.versionTag = "v${{ steps.versioning.outputs.version }}"
+        echo ${{ steps.versioning.outputs.semVer }}
+        echo versionTag="v${{ steps.versioning.outputs.semVer }}" >> $GITHUB_ENV
         echo ${{ env.versionTag }}
 
     - name: install other utilities
@@ -99,14 +103,14 @@ jobs:
       uses: rickstaa/action-create-tag@v1
       id: tag_create
       with:
-        tag: v${{ steps.versioning.outputs.version }}
+        tag: v${{ env.versionTag }}
 
     - name: run gradle publish
       run: |
-        echo version = ${{ steps.versioning.outputs.version }}
+        echo version = ${{ steps.versioning.outputs.semVer }}
         ./gradlew construct:obcorelib:publish
       env:
-        SEMANTIC_VERSION: ${{ steps.versioning.outputs.version }}
+        SEMANTIC_VERSION: ${{ steps.versioning.outputs.semVer }}
         GPR_TOKEN: ${{ secrets.GPR_TOKEN }}
         GPR_USER: ${{ secrets.GPR_USER }}
 
