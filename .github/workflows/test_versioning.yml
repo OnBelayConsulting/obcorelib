@@ -1,0 +1,64 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a package using Gradle and then publish it to GitHub packages when a release is created
+# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#Publishing-using-gradle
+
+name: Tag and publish Main
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    services:
+      postgres:
+        image: postgres:latest
+
+        env:
+          POSTGRES_DB: coretest
+          POSTGRES_USER: coretest
+          POSTGRES_PASSWORD: coretest
+        ports:
+          - 5432:5432
+
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    
+
+    runs-on: ubuntu-latest
+    container: gradle:jdk11-focal
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Semver Conventional Commits
+      id: versioning
+      uses: ietf-tools/semver-action@v1
+      with:
+        token: ${{ github.token }}
+        majorList: major
+        minorList: minor, feat
+        skipInvalidTags: true
+
+
+    - name: show versioning
+      run: |
+        echo ${{ steps.versioning.outputs.next }}
+        echo ${{ steps.versioning.outputs.nextStrict }}
+
