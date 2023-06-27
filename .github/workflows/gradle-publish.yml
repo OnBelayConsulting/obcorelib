@@ -13,6 +13,9 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  version_tag : not_set
+
 jobs:
   build:
 
@@ -55,6 +58,8 @@ jobs:
     - name: show versioning
       run: |
         echo ${{ steps.versioning.outputs.version }}
+        set env.versionTag = "v${{ steps.versioning.outputs.version }}"
+        echo ${{ env.versionTag }}
 
     - name: install other utilities
       run: |
@@ -90,14 +95,11 @@ jobs:
         GPR_TOKEN: ${{ secrets.GPR_TOKEN }}
         GPR_USER: ${{ secrets.GPR_USER }}
 
-    - name: create release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{secrets.github_token}}
+    - name: create tag
+      uses: rickstaa/action-create-tag@v1
+      id: tag_create
       with:
-        tag_name: v${{ steps.versioning.outputs.version }}
-        release_name: v${{ steps.versioning.outputs.version }}
-        prerelease: true
+        tag: v${{ steps.versioning.outputs.version }}
 
     - name: run gradle publish
       run: |
