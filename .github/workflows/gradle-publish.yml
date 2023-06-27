@@ -97,11 +97,9 @@ jobs:
         GPR_USER: ${{ secrets.GPR_USER }}
 
     - name: create tag
-      uses: rickstaa/action-create-tag@v1
-      id: tag_create
-      with:
-        tag: ${{ steps.versioning.outputs.next }}
-        github_token: ${{ github.token }}
+      run: |
+        git tag -a  ${{ steps.versioning.outputs.next }} -m "versioned" 
+        git push origin ${{ steps.versioning.outputs.next }}
 
     - name: run gradle publish
       run: |
