@@ -51,7 +51,7 @@ jobs:
       id: bump
       uses: zwaldowski/match-label-action@v4
       with:
-        allowed: major,minor,patch
+        allowed_multiple: major, minor, patch
 
     - name: calculate semantic version
       id: versioning
