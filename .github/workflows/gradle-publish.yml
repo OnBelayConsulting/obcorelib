@@ -50,8 +50,6 @@ jobs:
       uses: ietf-tools/semver-action@v1
       with:
         token: ${{ github.token }}
-        majorList: major
-        minorList: minor, feat
         skipInvalidTags: true
 
     - name: show versioning
