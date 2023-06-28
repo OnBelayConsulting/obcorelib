@@ -55,7 +55,6 @@ jobs:
         minorList: minor, feat
         skipInvalidTags: true
 
-
     - name: show versioning
       run: |
         echo ${{ steps.versioning.outputs.next }}
