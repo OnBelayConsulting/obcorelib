@@ -10,7 +10,7 @@ name: Test versioning
 on:
   push:
     branches:
-      - "!main"
+      - main
   workflow_dispatch:
 
 jobs:
@@ -33,10 +33,8 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     
-    
 
     runs-on: ubuntu-latest
-    container: gradle:jdk11-focal
 
     permissions:
       contents: read
@@ -61,4 +59,11 @@ jobs:
       run: |
         echo ${{ steps.versioning.outputs.next }}
         echo ${{ steps.versioning.outputs.nextStrict }}
+
+    - name: create release
+      uses: comnoco/create-release-action@v2.0.5
+      with:
+        tag_name: ${{ steps.versioning.outputs.next }}
+        release_name: ${{ steps.versioning.outputs.next }}
+        prerelease: true
 
