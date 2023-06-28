@@ -63,7 +63,7 @@ jobs:
     - name: create release
       uses: comnoco/create-release-action@v2.0.5
       env:
-        token: ${{ GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ github.token }}
       with:
         tag_name: ${{ steps.versioning.outputs.next }}
         release_name: ${{ steps.versioning.outputs.next }}
