@@ -33,7 +33,6 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     
-    
 
     runs-on: ubuntu-latest
     container: gradle:jdk11-focal
