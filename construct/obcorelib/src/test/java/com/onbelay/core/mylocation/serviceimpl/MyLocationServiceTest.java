@@ -100,6 +100,36 @@ public class MyLocationServiceTest extends CoreSpringTestCase {
 		assertNotNull(savedLocation);
 	}
 
+
+	@Test
+	public void removeParentMyLocation() {
+
+		MyLocationSnapshot savedLocation = myLocationService.findByName("Kelowna");
+
+		savedLocation.setEntityState(EntityState.MODIFIED);
+		savedLocation.setParentLocationId(parentLocation.generateEntityId());
+
+		myLocationService.save(savedLocation);
+		flush();
+
+		MyLocation location = myLocationRepository.load(savedLocation.getEntityId());
+		assertEquals("British Columbia", location.getParentLocation().getDetail().getName());
+		assertNotNull(savedLocation);
+		MyLocationSnapshot updateSnapshot = new MyLocationSnapshot();
+		updateSnapshot.setEntityState(EntityState.MODIFIED);
+		updateSnapshot.setEntityId(location.generateEntityId());
+		updateSnapshot.setParentLocationId(EntityId.makeNullEntityId());
+		myLocationService.save(updateSnapshot);
+		flush();
+		clearCache();
+
+		location = myLocationRepository.load(location.generateEntityId());
+		assertNull(location.getParentLocation());
+
+
+	}
+
+
 	@Test
 	public void addParentMyLocationWithName() {
 

@@ -53,7 +53,7 @@ public class MyLocationRepositoryBean extends BaseRepository<MyLocation> impleme
 
 	@Override
 	public MyLocation load(EntityId entityId) {
-		if (entityId.isDeleted())
+		if (entityId.isNull())
 			return null;
 
 		if (entityId.isInvalid())
