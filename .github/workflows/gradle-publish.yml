@@ -79,7 +79,9 @@ jobs:
 
     - name: run gradle deployNew
       run: |
-        ./gradlew deploy:database:deployNew
+        cd database
+        ../gradlew deployNew
+        cd ..
       env:
         GPR_TOKEN: ${{ secrets.GPR_TOKEN }}
         GPR_USER: ${{ secrets.GPR_USER }}
