@@ -6,14 +6,14 @@ task copyOverlayConstruct(type: Copy, group: 'CI Test') {
 }
 
 
-task copyOverlayDeploy(type: Copy, group: 'CI Test') {
+task copyOverlayDatabase(type: Copy, group: 'CI Test') {
 	description = "Copy the overlay to support testing."
-	from "overlays/deploy"
-	into "deploy"
+	from "overlays/database"
+	into "database"
 }
 task copyAllOverlays(group: 'CI Test') {
 	dependsOn 'copyOverlayConstruct'
-	dependsOn 'copyOverlayDeploy'
+	dependsOn 'copyOverlayDatabase'
 
 
 }
