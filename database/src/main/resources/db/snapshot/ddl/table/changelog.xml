@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+	http://www.liquibase.org/xml/ns/dbchangelog
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	logicalFilePath="/com/onbelay/obcore/snapshot/ddl/changelog.xml"
+>
+	<include file="APPLICATION_SETTING.xml" relativeToChangelogFile="true"/>
+	<include file="MY_AGGREGATE.xml" relativeToChangelogFile="true"/>
+	<include file="MY_AGGREGATE_AUDIT.xml" relativeToChangelogFile="true"/>
+	<include file="MY_CHILD.xml" relativeToChangelogFile="true"/>
+	<include file="MY_CHILD_AUDIT.xml" relativeToChangelogFile="true"/>
+	<include file="MY_LOCATION.xml" relativeToChangelogFile="true"/>
+	<include file="MY_LOCATION_AUDIT.xml" relativeToChangelogFile="true"/>
+	<include file="GEO_CODE.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>
+
+
+
