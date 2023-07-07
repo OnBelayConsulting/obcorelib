@@ -39,9 +39,10 @@ import com.onbelay.core.utils.DateUtils;
 @NamedQueries({
     @NamedQuery(
        name = MyLocationAudit.FIND_AUDIT_BY_TO_DATE,
-       query = "SELECT myLocationAudit FROM MyLocationAudit myLocationAudit " +
-       		    "WHERE myLocationAudit.historyDateTimeStamp.validToDateTime = :date " +
-       		      "AND myLocationAudit.myLocation = :myLocation")
+       query = "SELECT audit " +
+			   "  FROM MyLocationAudit audit " +
+       		    "WHERE audit.historyDateTimeStamp.validToDateTime = :date " +
+       		      "AND audit.myLocation = :myLocation")
 })
 public class MyLocationAudit extends AuditAbstractEntity {
 	public static final String FIND_AUDIT_BY_TO_DATE = "MyLocationAudit.FIND_AUDIT_BY_TO_DATE";

@@ -1,4 +1,3 @@
 rootProject.name = 'obcorelib'
 include ':construct:obcorelib',
-        ':construct:database',
-        ':deploy:database'
+        'database'

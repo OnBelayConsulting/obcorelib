@@ -1,9 +1,0 @@
-<databaseChangeLog
-	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	logicalFilePath="/com/onbelay/obcore/change/BOOKR-xxxxx-Changes.xml"
->
-	<include file="directory_name/description.xml" relativeToChangelogFile="true">
-</databaseChangeLog>
