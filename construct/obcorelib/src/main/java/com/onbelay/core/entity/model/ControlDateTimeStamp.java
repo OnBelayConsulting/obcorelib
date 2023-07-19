@@ -17,7 +17,7 @@ package com.onbelay.core.entity.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
+import jakarta.persistence.Column;
 
 /**
  * Component used to capture Audit stamp information.

@@ -25,8 +25,8 @@ import com.onbelay.core.enums.CoreErrorCode;
 import com.onbelay.core.exception.OBValidationException;
 import com.onbelay.testfixture.enums.GeoCode;
 
-import javax.persistence.Column;
-import javax.persistence.Transient;
+import jakarta.persistence.Column;
+import jakarta.persistence.Transient;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

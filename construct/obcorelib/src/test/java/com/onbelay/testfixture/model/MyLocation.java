@@ -23,7 +23,7 @@ import com.onbelay.core.exception.OBValidationException;
 import com.onbelay.testfixture.shared.LocationDetail;
 import com.onbelay.testfixture.snapshot.MyLocationSnapshot;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;

@@ -17,8 +17,8 @@ package com.onbelay.core.appsetting.model;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import com.onbelay.core.appsetting.repository.ApplicationSettingRepository;

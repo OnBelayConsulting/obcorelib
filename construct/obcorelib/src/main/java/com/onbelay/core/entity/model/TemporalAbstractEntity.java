@@ -17,10 +17,10 @@ package com.onbelay.core.entity.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
-import javax.persistence.Version;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
 
 import com.onbelay.core.entity.snapshot.EntityId;
 import org.apache.logging.log4j.LogManager;

@@ -15,12 +15,12 @@
 */
 package com.onbelay.core.entity.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
-import javax.persistence.Version;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
 
 import com.onbelay.core.entity.component.ApplicationContextFactory;
 import com.onbelay.core.entity.enums.EntityState;
