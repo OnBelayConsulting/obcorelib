@@ -18,11 +18,8 @@ package com.onbelay.core.entity.component;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.SessionFactory;
-import org.hibernate.jpa.HibernateEntityManagerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.orm.jpa.EntityManagerHolder;
@@ -112,28 +109,19 @@ public class ApplicationContextFactory {
 	public static EntityManagerFactory getEntityManagerFactory() {
 		return (EntityManagerFactory) getBean("entityManagerFactory");
 	}
-	
+
 	public static void shutdown() {
-	    ConfigurableApplicationContext cac = (ConfigurableApplicationContext) getApplicationContext();
-	    cac.stop();
+		ConfigurableApplicationContext cac = (ConfigurableApplicationContext) getApplicationContext();
+		cac.stop();
 	}
-	
+
 	public static ApplicationContext getApplicationContext() {
-	    return applicationContext;
+		return applicationContext;
 	}
 
-    /**
-     * @return
-     */
-    public static SessionFactory getSessionFactory() {
-        EntityManagerFactory entityManagerFactory = getEntityManagerFactory();
-        HibernateEntityManagerFactory hFactory = (HibernateEntityManagerFactory) entityManagerFactory;
-        return hFactory.getSessionFactory();
-    }
-
-    public static void flushIfInSession() {
-        EntityManager entityManager = ApplicationContextFactory.getCurrentEntityManagerOnThread();
-        if (entityManager != null)
-            entityManager.flush();
-    }
+	public static void flushIfInSession() {
+		EntityManager entityManager = ApplicationContextFactory.getCurrentEntityManagerOnThread();
+		if (entityManager != null)
+			entityManager.flush();
+	}
 }
