@@ -15,18 +15,13 @@
 */
 package com.onbelay.core.entity.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Transient;
-import jakarta.persistence.Version;
-
 import com.onbelay.core.entity.component.ApplicationContextFactory;
 import com.onbelay.core.entity.enums.EntityState;
 import com.onbelay.core.entity.repository.AuditEntityRepository;
 import com.onbelay.core.exception.OBValidationException;
 import com.onbelay.core.utils.DateUtils;
+import jakarta.persistence.*;
+import org.hibernate.type.YesNoConverter;
 
 
 /**
@@ -126,8 +121,8 @@ public abstract class AuditAbstractEntity extends AbstractEntity implements Vers
 		this.historyDateTimeStamp = historyDateTimeStamp;
 	}
 
-    @Column(name="EXPIRED_FLG")
-    @org.hibernate.annotations.Type(type="yes_no")
+    @Column(name = "EXPIRED_FLG")
+    @Convert(converter = YesNoConverter.class)
     public Boolean getIsDeleted() {
         return isDeleted;
     }
