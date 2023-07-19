@@ -23,21 +23,21 @@ import java.util.function.Predicate;
 /**
  * Reads a String and provides methods to peek at the next character to determine how to process the string.
  * The read pointer is advanced with a read method.
- * @author lefeu
  *
+ * @author lefeu
  */
 public class QueryAsTextTokenReader {
-	
-	private static final Character OPEN_BRACKET = new Character('(');
-	private static final Character CLOSE_BRACKET = new Character(')');
-	private static final Character PERIOD = new Character('.');
-	private static final Character EQUALS = new Character('=');
-	private static final Character BANG = new Character('!');
-	private static final Character GREATER_THAN = new Character('>');
-	private static final Character LESS_THAN = new Character('<');
-	private static final Character SINGLE_QUOTE = new Character('\'');
-	private static final Character UNDERSCORE = new Character('_');
-	
+
+	private static final Character OPEN_BRACKET = Character.valueOf('(');
+	private static final Character CLOSE_BRACKET = Character.valueOf(')');
+	private static final Character PERIOD = Character.valueOf('.');
+	private static final Character EQUALS = Character.valueOf('=');
+	private static final Character BANG = Character.valueOf('!');
+	private static final Character GREATER_THAN = Character.valueOf('>');
+	private static final Character LESS_THAN = Character.valueOf('<');
+	private static final Character SINGLE_QUOTE = Character.valueOf('\'');
+	private static final Character UNDERSCORE = Character.valueOf('_');
+
 	public static final int UNKNOWN = 0;
 	public static final int IS_WHITE_SPACE = 1;
 	public static final int IS_LETTER = 3;
@@ -122,7 +122,7 @@ public class QueryAsTextTokenReader {
 	}
 	
 	public Character peek() {
-		return new Character(expressionBuffer.charAt(currentPosition));
+		return Character.valueOf(expressionBuffer.charAt(currentPosition));
 	}
 	
 	public Integer peekNext() {
