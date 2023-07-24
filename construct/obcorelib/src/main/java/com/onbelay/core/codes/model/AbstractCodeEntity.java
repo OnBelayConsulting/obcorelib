@@ -1,8 +1,10 @@
 package com.onbelay.core.codes.model;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import org.hibernate.type.YesNoConverter;
 
 @MappedSuperclass
 public abstract
@@ -42,7 +44,7 @@ class AbstractCodeEntity {
     }
 
     @Column(name = "IS_ACTIVE")
-    @org.hibernate.annotations.Type(type="yes_no")
+    @Convert(converter = YesNoConverter.class)
     public Boolean getActive() {
         return isActive;
     }

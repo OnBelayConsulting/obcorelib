@@ -1,6 +1,6 @@
 plugins {
-	id 'org.springframework.boot' version '2.7.5'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'org.springframework.boot' version '3.1.1'
+	id 'io.spring.dependency-management' version "1.1.0"
 	id 'java'
 	id 'idea'
 	id("maven-publish")
@@ -14,7 +14,7 @@ repositories {
 dependencyManagement {
 
 	imports {
-		mavenBom 'org.springframework.boot:spring-boot-dependencies:2.7.5'
+		mavenBom 'org.springframework.boot:spring-boot-dependencies:3.1.1'
 	}
 
 	dependencies {
@@ -22,12 +22,13 @@ dependencyManagement {
 	}
 }
 
-sourceCompatibility = 11
-targetCompatibility = 11
+sourceCompatibility = 17
+targetCompatibility = 17
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+	implementation('org.springframework.boot:spring-boot-starter-data-rest')
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux' // For WebClient
@@ -41,6 +42,7 @@ dependencies {
 	implementation group: "org.apache.commons", name: "commons-text", version: "1.+"
 	implementation group: "org.apache.commons", name: "commons-collections4", version: "4.4"
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.6.0'
+	implementation group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '11.2.3.jre17'
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 	testImplementation('org.springframework.security:spring-security-test')
 	testImplementation("org.junit.vintage:junit-vintage-engine")
@@ -65,8 +67,8 @@ test {
 
 
 task srcZip (type: Zip) {
-	
-	classifier = 'src'
+
+	archiveClassifier = 'src'
 	from projectDir
 	include 'src/**/*'
 	

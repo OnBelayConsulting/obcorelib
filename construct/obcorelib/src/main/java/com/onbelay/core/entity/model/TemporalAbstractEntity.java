@@ -15,23 +15,19 @@
 */
 package com.onbelay.core.entity.model;
 
-import java.time.LocalDateTime;
-
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
-import javax.persistence.Version;
-
-import com.onbelay.core.entity.snapshot.EntityId;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.onbelay.core.entity.enums.EntityState;
-import com.onbelay.core.enums.CoreTransactionErrorCode;
 import com.onbelay.core.entity.snapshot.AbstractSnapshot;
+import com.onbelay.core.entity.snapshot.EntityId;
+import com.onbelay.core.enums.CoreTransactionErrorCode;
 import com.onbelay.core.exception.OBRuntimeException;
 import com.onbelay.core.exception.OBValidationException;
 import com.onbelay.core.utils.DateUtils;
+import jakarta.persistence.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hibernate.type.YesNoConverter;
+
+import java.time.LocalDateTime;
 
 
 /**
@@ -127,8 +123,8 @@ public abstract class TemporalAbstractEntity extends AbstractEntity implements V
 	    return EntityState.UNMODIFIED;
 	}
 
-	@Column(name="EXPIRED_FLG")
-	@org.hibernate.annotations.Type(type="yes_no")
+	@Column(name = "EXPIRED_FLG")
+	@Convert(converter = YesNoConverter.class)
     public Boolean getIsExpired() {
         return isExpired;
     }

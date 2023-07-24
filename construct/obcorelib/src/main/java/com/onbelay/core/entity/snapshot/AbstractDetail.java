@@ -17,7 +17,7 @@ package com.onbelay.core.entity.snapshot;
 
 import java.io.Serializable;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 
 import com.onbelay.core.exception.OBValidationException;
 

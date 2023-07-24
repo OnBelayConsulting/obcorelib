@@ -23,7 +23,7 @@ import com.onbelay.core.entity.snapshot.EntityId;
 import com.onbelay.core.exception.OBRuntimeException;
 import com.onbelay.core.exception.OBValidationException;
 
-import javax.persistence.Transient;
+import jakarta.persistence.Transient;
 
 /**
  * Top-level persisted class. All  subtypes are expected to have an Integer primary key.

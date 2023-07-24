@@ -1,10 +1,8 @@
 package com.onbelay.core.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.onbelay.core.exception.OBRuntimeException;
@@ -16,8 +14,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.http.codec.json.Jackson2JsonEncoder;
+import org.springframework.security.oauth2.client.*;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryReactiveClientRegistrationRepository;
@@ -25,7 +25,6 @@ import org.springframework.security.oauth2.client.registration.ReactiveClientReg
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
-import org.springframework.security.oauth2.client.web.server.UnAuthenticatedServerOAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.server.resource.web.reactive.function.client.ServletBearerExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.ClientResponse;
@@ -33,8 +32,6 @@ import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-
-import java.time.LocalDate;
 
 @Profile("!test")
 @Configuration
@@ -106,10 +103,13 @@ public class WebClientConfig {
      */
     @Bean
     public WebClient serviceWebClient(ReactiveClientRegistrationRepository clientRegistrationRepository) {
-        ServerOAuth2AuthorizedClientExchangeFilterFunction oauth2 =
-                new ServerOAuth2AuthorizedClientExchangeFilterFunction(
-                        clientRegistrationRepository,
-                        new UnAuthenticatedServerOAuth2AuthorizedClientRepository());
+        InMemoryReactiveOAuth2AuthorizedClientService clientService = new InMemoryReactiveOAuth2AuthorizedClientService(clientRegistrationRepository);
+        AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager authorizedClientManager
+                = new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(
+                clientRegistrationRepository,
+                clientService);
+        ServerOAuth2AuthorizedClientExchangeFilterFunction oauth2 = new ServerOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
+
         oauth2.setDefaultClientRegistrationId("okta");
 
         ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
@@ -129,6 +129,24 @@ public class WebClientConfig {
                 .build();
     }
 
+    @Bean
+    public ReactiveOAuth2AuthorizedClientManager authorizedClientManager(
+            ReactiveClientRegistrationRepository clientRegistrationRepository,
+            ReactiveOAuth2AuthorizedClientService authorizedClientService) {
+
+        ReactiveOAuth2AuthorizedClientProvider authorizedClientProvider =
+                ReactiveOAuth2AuthorizedClientProviderBuilder.builder()
+                        .clientCredentials()
+                        .build();
+
+        AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager authorizedClientManager =
+                new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(
+                        clientRegistrationRepository, authorizedClientService);
+        authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
+
+        return authorizedClientManager;
+    }
+
     private ExchangeFilterFunction logResponse() {
         return ExchangeFilterFunction.ofResponseProcessor(response -> {
             logStatus(response);
@@ -142,7 +160,7 @@ public class WebClientConfig {
         return ExchangeFilterFunction.ofResponseProcessor(response -> {
             if (response.statusCode() != null && (response.statusCode().is4xxClientError() || response.statusCode().is5xxServerError())) {
                 return response.bodyToMono(String.class)
-                        .defaultIfEmpty(response.statusCode().getReasonPhrase())
+                        .defaultIfEmpty(getHttpStatus(response.statusCode()).getReasonPhrase())
                         .flatMap(body -> {
                             logger.error("Error is {}", body);
                             return Mono.error(new OBRuntimeException(response.statusCode().toString()));
@@ -154,8 +172,14 @@ public class WebClientConfig {
     }
 
     private static void logStatus(ClientResponse response) {
-        HttpStatus status = response.statusCode();
+        HttpStatus status = getHttpStatus(response.statusCode());
+
         logger.debug("Returned staus code {} ({})", status.value(), status.getReasonPhrase());
+    }
+
+    private static HttpStatus getHttpStatus(HttpStatusCode statusCode) {
+        HttpStatus status = HttpStatus.valueOf(statusCode.value());
+        return status;
     }
 
 

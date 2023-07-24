@@ -15,6 +15,14 @@
 */
 package com.onbelay.core.query.model;
 
+import com.onbelay.core.enums.CoreTransactionErrorCode;
+import com.onbelay.core.exception.OBRuntimeException;
+import com.onbelay.core.query.enums.ColumnDataType;
+import com.onbelay.core.query.exception.DefinedQueryException;
+import com.onbelay.core.query.snapshot.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,20 +32,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.onbelay.core.enums.CoreTransactionErrorCode;
-import com.onbelay.core.exception.OBRuntimeException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import com.onbelay.core.query.enums.ColumnDataType;
-import com.onbelay.core.query.exception.DefinedQueryException;
-import com.onbelay.core.query.snapshot.DefinedOrderByClause;
-import com.onbelay.core.query.snapshot.DefinedOrderExpression;
-import com.onbelay.core.query.snapshot.DefinedQuery;
-import com.onbelay.core.query.snapshot.DefinedWhereClause;
-import com.onbelay.core.query.snapshot.DefinedWhereExpression;
-import com.onbelay.core.query.snapshot.ExpressionElement;
 
 /**
  * Generates a query in string form that can be consumed by the base entity.
@@ -119,8 +113,8 @@ public class DefinedQueryGenerator {
 		case BOOLEAN :
 			if (valueIn instanceof Boolean)
 				return valueIn;
-			else 
-				return new Boolean(valueIn.toString());
+			else
+				return Boolean.valueOf(valueIn.toString());
 			
 		case BIG_DECIMAL :
 			if (valueIn instanceof BigDecimal)
@@ -140,19 +134,19 @@ public class DefinedQueryGenerator {
 			if (valueIn instanceof Integer) {
 				return valueIn;
 			} else if (valueIn instanceof Number) {
-				return new Integer( ((Number)valueIn).intValue());
+				return Integer.valueOf(((Number) valueIn).intValue());
 			} else if (valueIn instanceof BigDecimal) {
-				return new Integer(valueIn.toString());
+				return Integer.valueOf(valueIn.toString());
 			} else
-				return new Integer(valueIn.toString());
+				return Integer.valueOf(valueIn.toString());
 			
 		case LONG :
 			if (valueIn instanceof Long)
 				return valueIn;
 			else if (valueIn instanceof Number)
-				return new Long( ((Number)valueIn).longValue());
-			else 
-				return new Long(valueIn.toString());
+				return ((Number) valueIn).longValue();
+			else
+				return Long.valueOf(valueIn.toString());
 		
 		case DATE :
 			if (valueIn instanceof LocalDate) {
