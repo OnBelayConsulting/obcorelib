@@ -854,7 +854,7 @@ public class BaseRepository<T> implements EntityRepository<T> {
         List items = query.getResultList();
         if ( items.isEmpty())
             return null;
-        BigInteger bg = (BigInteger) items.get(0);
+        Long bg = (Long) items.get(0);
         return bg.intValue();
     }
 
