@@ -53,7 +53,7 @@ public class WebClientConfig {
 
     @Bean
     @Lazy
-    ReactiveClientRegistrationRepository getRegistration(
+    ReactiveClientRegistrationRepository clientRegistrationRepository(
             @Value("${spring.security.oauth2.client.provider.okta.token-uri}") String tokenUri,
             @Value("${spring.security.oauth2.client.registration.okta.client-id}") String clientId,
             @Value("${spring.security.oauth2.client.registration.okta.client-secret}") String clientSecret,
@@ -70,13 +70,37 @@ public class WebClientConfig {
         return new InMemoryReactiveClientRegistrationRepository(registration);
     }
 
+
     @Bean
-    public WebClient webClient(
-            ClientRegistrationRepository clientRegistrationRepository,
-            OAuth2AuthorizedClientRepository authorizedClientRepository) {
+    public ReactiveOAuth2AuthorizedClientService authorizedClientService(
+            ReactiveClientRegistrationRepository clientRegistrationRepository) {
+        InMemoryReactiveOAuth2AuthorizedClientService clientService = new InMemoryReactiveOAuth2AuthorizedClientService(clientRegistrationRepository);
+        return clientService;
+    }
+
+    @Bean
+    public ReactiveOAuth2AuthorizedClientManager authorizedClientManager(
+            ReactiveClientRegistrationRepository clientRegistrationRepository,
+            ReactiveOAuth2AuthorizedClientService authorizedClientService) {
+
+        ReactiveOAuth2AuthorizedClientProvider authorizedClientProvider =
+                ReactiveOAuth2AuthorizedClientProviderBuilder.builder()
+                        .clientCredentials()
+                        .build();
+
+        AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager authorizedClientManager =
+                new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(
+                        clientRegistrationRepository, authorizedClientService);
+        authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
+
+        return authorizedClientManager;
+    }
+
+
+    @Bean
+    public WebClient webClient(OAuth2AuthorizedClientManager authorizedClientManager) {
         ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2 =
-                new ServletOAuth2AuthorizedClientExchangeFilterFunction(clientRegistrationRepository,
-                                                                        authorizedClientRepository);
+                new ServletOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
         oauth2.setDefaultOAuth2AuthorizedClient(true);
 
         ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
@@ -102,8 +126,10 @@ public class WebClientConfig {
         The ServletBearerExchangeFilterFunction will pass the JWT received by the resource server through to the other calls webclient makes
      */
     @Bean
-    public WebClient serviceWebClient(ReactiveClientRegistrationRepository clientRegistrationRepository) {
-        InMemoryReactiveOAuth2AuthorizedClientService clientService = new InMemoryReactiveOAuth2AuthorizedClientService(clientRegistrationRepository);
+    public WebClient serviceWebClient(
+            ReactiveClientRegistrationRepository clientRegistrationRepository,
+            ReactiveOAuth2AuthorizedClientService clientService
+            ) {
         AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager authorizedClientManager
                 = new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(
                 clientRegistrationRepository,
@@ -127,24 +153,6 @@ public class WebClientConfig {
                 .filter(handleError())
                 .exchangeStrategies(exchangeStrategies)
                 .build();
-    }
-
-    @Bean
-    public ReactiveOAuth2AuthorizedClientManager authorizedClientManager(
-            ReactiveClientRegistrationRepository clientRegistrationRepository,
-            ReactiveOAuth2AuthorizedClientService authorizedClientService) {
-
-        ReactiveOAuth2AuthorizedClientProvider authorizedClientProvider =
-                ReactiveOAuth2AuthorizedClientProviderBuilder.builder()
-                        .clientCredentials()
-                        .build();
-
-        AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager authorizedClientManager =
-                new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(
-                        clientRegistrationRepository, authorizedClientService);
-        authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
-
-        return authorizedClientManager;
     }
 
     private ExchangeFilterFunction logResponse() {
