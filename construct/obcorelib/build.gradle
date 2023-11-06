@@ -32,7 +32,6 @@ dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux' // For WebClient
-	//implementation 'org.projectreactor:reactor-spring:1.0.1.RELEASE'      // For WebClient
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	implementation "com.fasterxml.jackson.core:jackson-core"
 	implementation "com.fasterxml.jackson.core:jackson-databind"
@@ -45,7 +44,6 @@ dependencies {
 	implementation group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '11.2.3.jre17'
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 	testImplementation('org.springframework.security:spring-security-test')
-	testImplementation("org.junit.vintage:junit-vintage-engine")
 	implementation('org.springframework.boot:spring-boot-starter-log4j2')
 }
 

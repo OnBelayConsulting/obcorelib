@@ -15,11 +15,12 @@
 */
 package com.onbelay.core.query.parsing;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class QueryAsTextReaderTest extends TestCase{
+
+public class QueryAsTextReaderTest{
 
 	
 	@Test

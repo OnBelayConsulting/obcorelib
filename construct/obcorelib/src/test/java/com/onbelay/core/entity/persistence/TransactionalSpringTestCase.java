@@ -15,14 +15,16 @@
 */
 package com.onbelay.core.entity.persistence;
 
+import com.onbelay.core.entity.component.ApplicationContextFactory;
+import com.onbelay.core.entity.component.OBAuditManagerBean;
+import com.onbelay.core.entity.model.AuditManager;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 import org.springframework.orm.jpa.EntityManagerHolder;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -31,13 +33,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import com.onbelay.core.entity.component.ApplicationContextFactory;
-import com.onbelay.core.entity.component.OBAuditManagerBean;
-import com.onbelay.core.entity.model.AuditManager;
-
-import junit.framework.TestCase;
-
-public abstract class TransactionalSpringTestCase extends TestCase {
+public abstract class TransactionalSpringTestCase {
 	
 	
 	private static Logger logger = LogManager.getFormatterLogger(TransactionalSpringTestCase.class);	
@@ -54,14 +50,14 @@ public abstract class TransactionalSpringTestCase extends TestCase {
 
 	public void setUp() {};
 
-	@Before
+	@BeforeEach
 	public void beforeRun() throws Throwable {
 	    initiateSession();
 		setUpTransaction();
 		setUp();
 	}
 	
-	@After
+	@AfterEach
 	public void afterRun() throws Throwable {
 		JpaTransactionManager transMgr = (JpaTransactionManager) getBean("transactionManager");
 		if (!transactionStatus.isCompleted()) {

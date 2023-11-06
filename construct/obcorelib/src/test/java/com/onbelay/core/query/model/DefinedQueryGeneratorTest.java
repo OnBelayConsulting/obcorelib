@@ -26,7 +26,7 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.onbelay.core.query.enums.ColumnDataType;
 import com.onbelay.core.query.enums.ExpressionOperator;
@@ -34,9 +34,11 @@ import com.onbelay.core.query.snapshot.DefinedOrderExpression;
 import com.onbelay.core.query.snapshot.DefinedQuery;
 import com.onbelay.core.query.snapshot.DefinedWhereExpression;
 
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class DefinedQueryGeneratorTest extends TestCase {
+
+public class DefinedQueryGeneratorTest {
 	private static final Logger logger = LogManager.getLogger();
 	
 	

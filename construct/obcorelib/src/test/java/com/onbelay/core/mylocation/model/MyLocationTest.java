@@ -3,15 +3,9 @@ package com.onbelay.core.mylocation.model;
 import java.util.List;
 
 import com.onbelay.core.test.CoreSpringTestCase;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import com.onbelay.core.entity.persistence.TransactionalSpringTestCase;
 import com.onbelay.core.entity.snapshot.EntityId;
 import com.onbelay.core.query.enums.ExpressionOperator;
 import com.onbelay.core.query.snapshot.DefinedQuery;
@@ -20,6 +14,9 @@ import com.onbelay.core.query.snapshot.QuerySelectedPage;
 import com.onbelay.testfixture.model.MyLocation;
 import com.onbelay.testfixture.repository.MyLocationRepository;
 import com.onbelay.testfixture.shared.LocationDetail;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class MyLocationTest extends CoreSpringTestCase {
 
