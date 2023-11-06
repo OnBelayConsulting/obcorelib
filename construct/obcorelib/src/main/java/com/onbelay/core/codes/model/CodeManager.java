@@ -16,4 +16,8 @@ public interface CodeManager {
             String codeFamily,
             String code);
 
+    public void addCodeEntity(
+            String codeFamily,
+            String codeEntityName);
+
 }
