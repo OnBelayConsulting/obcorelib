@@ -4,10 +4,12 @@ import com.onbelay.core.codes.model.CodeManager;
 import com.onbelay.core.codes.snapshot.CodeLabel;
 import com.onbelay.core.test.CoreSpringTestCase;
 import com.onbelay.testfixture.codes.GeoCodeEntity;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GeoCodeTest extends CoreSpringTestCase {
 

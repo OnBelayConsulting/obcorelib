@@ -15,50 +15,32 @@
 */
 package com.onbelay.core.appsetting.serviceimpl;
 
-import java.util.List;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
-
 import com.onbelay.core.appsetting.model.ApplicationSetting;
 import com.onbelay.core.appsetting.service.ApplicationSettingService;
 import com.onbelay.core.appsetting.snapshot.ApplicationSettingSnapshot;
-import com.onbelay.core.entity.persistence.TransactionalSpringTestCase;
+import com.onbelay.core.test.CoreSpringTestCase;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Configuration
-@ComponentScan("com.onbelay.*")
-@EntityScan("com.onbelay.*")
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource( locations="classpath:application-core-integrationtest.properties")
-public class ApplicationSettingServiceBeanTest extends TransactionalSpringTestCase {
+import java.util.List;
 
-	
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class ApplicationSettingServiceBeanTest extends CoreSpringTestCase {
+
+
+	@Autowired
 	private ApplicationSettingService applicationSettingService;
 
 	@Override
 	public void setUp() {
-
-	}
-
-	@Override
-	public void beforeRun() throws Throwable {
-		super.beforeRun();
-		
 		ApplicationSetting applicationSetting = new ApplicationSetting();
 		applicationSetting.createWith(
 				new ApplicationSettingSnapshot(
 						"key",
 						"value"));
 	}
-	
+
 	@Test
 	public void testFetchAllApplicationSettings() {
 		List<ApplicationSettingSnapshot> settings = applicationSettingService.fetchApplicationSettings();
@@ -81,12 +63,4 @@ public class ApplicationSettingServiceBeanTest extends TransactionalSpringTestCa
 	}
 
 
-	@Autowired
-	public void setApplicationSettingService(ApplicationSettingService applicationSettingService) {
-		this.applicationSettingService = applicationSettingService;
-	}
-	
-	
-	
-	
 }

@@ -11,11 +11,13 @@ import com.onbelay.testfixture.model.MyLocation;
 import com.onbelay.testfixture.repository.MyAggregateRepository;
 import com.onbelay.testfixture.service.MyAggregateService;
 import com.onbelay.testfixture.snapshot.MyAggregateSnapshot;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MyAggregateServiceTest extends CoreSpringTestCase {
 

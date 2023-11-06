@@ -17,9 +17,10 @@ package com.onbelay.core.query.parsing;
 
 import java.util.List;
 
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class QueryAsTextTokenizerTest extends TestCase {
+
+public class QueryAsTextTokenizerTest  {
 
 	
 	public void testTokenizer() {

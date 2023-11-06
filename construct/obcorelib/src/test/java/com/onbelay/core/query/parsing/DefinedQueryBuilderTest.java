@@ -17,13 +17,14 @@ package com.onbelay.core.query.parsing;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.onbelay.core.query.snapshot.DefinedQuery;
 
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DefinedQueryBuilderTest extends TestCase {
+
+public class DefinedQueryBuilderTest  {
 	private static final Logger logger = LogManager.getLogger(DefinedQueryBuilderTest.class);
 	
 	@Test

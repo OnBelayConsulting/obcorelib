@@ -19,13 +19,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.onbelay.core.utils.SubLister;
 
-import junit.framework.TestCase;
 
-public class SubListerTest extends TestCase {
+public class SubListerTest  {
 
 	
 	@Test
