@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CodeManagerBean implements CodeManager {
+public  class CodeManagerBean implements CodeManager {
 
     private Map<String, String> codeEntityHashMap = new HashMap<>();
 
@@ -45,13 +45,5 @@ public class CodeManagerBean implements CodeManager {
 
     public void addCodeEntity(String codeFamily, String codeEntityName) {
         codeEntityHashMap.put(codeFamily, codeEntityName);
-    }
-
-    protected CodeRepository getCodeRepository() {
-        return codeRepository;
-    }
-
-    protected void setCodeRepository(CodeRepository codeRepository) {
-        this.codeRepository = codeRepository;
     }
 }
