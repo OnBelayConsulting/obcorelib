@@ -27,4 +27,8 @@ public interface MyAggregateRepository {
 	
 	public MyAggregate load(EntityId id);
 
+	public boolean updateName(
+			String name,
+			String previousName);
+
 }

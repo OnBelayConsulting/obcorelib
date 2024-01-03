@@ -1,4 +1,4 @@
-package com.onbelay.core.myaggregate;
+package com.onbelay.core.myaggregate.service;
 
 import com.onbelay.core.entity.enums.EntityState;
 import com.onbelay.core.entity.snapshot.TransactionResult;

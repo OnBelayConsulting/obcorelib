@@ -953,8 +953,7 @@ public class BaseRepository<T> implements EntityRepository<T> {
 	 * @return number of rows updated
 	 */
 	public int executeUpdate(String queryText) {
-	       EntityManager masterEntityMgr =ApplicationContextFactory.getCurrentEntityManagerOnThread();
-	        Query query = masterEntityMgr.createQuery(queryText);
+	        Query query = entityManager.createQuery(queryText);
 	        return query.executeUpdate();
 	}
 	
@@ -966,8 +965,7 @@ public class BaseRepository<T> implements EntityRepository<T> {
      * @return number of rows updated
      */
     public int executeUpdate(String queryText, String parmName, Object parm) {
-           EntityManager masterEntityMgr =ApplicationContextFactory.getCurrentEntityManagerOnThread();
-            Query query = masterEntityMgr.createQuery(queryText);
+            Query query = entityManager.createQuery(queryText);
             query.setParameter(parmName, parm);
             return query.executeUpdate();
     }
@@ -980,8 +978,7 @@ public class BaseRepository<T> implements EntityRepository<T> {
      * @return number of rows updated
      */
     public int executeUpdate(String queryText, String[] parmNames, Object[] parms) {
-           EntityManager masterEntityMgr =ApplicationContextFactory.getCurrentEntityManagerOnThread();
-            Query query = masterEntityMgr.createQuery(queryText);
+            Query query = entityManager.createQuery(queryText);
             for (int i=0; i < parmNames.length; i++) {
                 query.setParameter(parmNames[i], parms[i]);
             }
@@ -994,8 +991,7 @@ public class BaseRepository<T> implements EntityRepository<T> {
 	 * @return number of rows updated
 	 */
 	public int executeNativeUpdate(String queryText) {
-		EntityManager masterEntityMgr = ApplicationContextFactory.getCurrentEntityManagerOnThread();
-	    Query query = masterEntityMgr.createNativeQuery(queryText);
+	    Query query = entityManager.createNativeQuery(queryText);
 	    return query.executeUpdate();
 	}
 	

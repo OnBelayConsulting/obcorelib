@@ -35,6 +35,18 @@ import java.util.List;
 @Transactional
 public class MyAggregateRepositoryBean extends BaseRepository<MyAggregate> implements MyAggregateRepository {
 
+	private static String UPDATE_QUERY = "UPDATE MyAggregate set detail.name = :name WHERE detail.name = :previousName";
+
+	@Override
+	public boolean updateName(
+			String name,
+			String previousName) {
+
+		String[] names = {"name", "previousName"};
+		Object[] parms = {name, previousName};
+		int result = executeUpdate(UPDATE_QUERY, names, parms);
+		return result > 0;
+	}
 
 	@Override
 	public MyAggregate load(EntityId entityId) {
