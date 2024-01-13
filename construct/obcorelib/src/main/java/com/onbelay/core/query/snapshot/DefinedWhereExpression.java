@@ -15,6 +15,8 @@
 */
 package com.onbelay.core.query.snapshot;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.onbelay.core.query.enums.ExpressionOperator;
@@ -98,6 +100,14 @@ public class DefinedWhereExpression implements ExpressionElement {
 	
 	private void formatValue(StringBuilder builder, Object value) {
 		if (value instanceof String) {
+			builder.append("'");
+			builder.append(value);
+			builder.append("'");
+		} else if (value instanceof LocalDate) {
+			builder.append("'");
+			builder.append(value.toString());
+			builder.append("'");
+		} else if (value instanceof LocalDateTime) {
 			builder.append("'");
 			builder.append(value.toString());
 			builder.append("'");
