@@ -30,7 +30,7 @@ public class ApplicationAuthenticationServiceBean implements ApplicationAuthenti
             Jwt jwt = token.getToken();
             name = (String) jwt.getClaims().get("name");
             for (String claim: jwt.getClaims().keySet()) {
-                logger.error("Claim name: " + claim);
+                logger.debug("Claim name: " + claim);
             }
         }
 

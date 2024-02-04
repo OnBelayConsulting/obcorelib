@@ -16,14 +16,9 @@
 package com.onbelay.core.entity.snapshot;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.onbelay.core.utils.ErrorMessageFormatter;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.StringSubstitutor;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -33,7 +28,7 @@ public class TransactionResult extends ErrorHoldingSnapshot {
     private static final long serialVersionUID = 1L;
 
 
-    private List<EntityId> entityIds = new ArrayList<EntityId>();
+    private List<Integer> ids = new ArrayList<>();
 
 	public TransactionResult() { }
 
@@ -49,45 +44,37 @@ public class TransactionResult extends ErrorHoldingSnapshot {
 		super(errorMessage, parameters);
 	}
 
-	public TransactionResult(EntityId entityId) {
-	    this.entityIds.add(entityId);
-	}
-	
 	public TransactionResult(Integer id) {
-	    this.entityIds.add(new EntityId(id));
+	    this.ids.add(id);
 	}
 	
 	
-	public TransactionResult(List<EntityId> entityIds) {
-        this.entityIds = entityIds;
+	public TransactionResult(List<Integer> entityIds) {
+        this.ids.addAll(entityIds);
     }
+
+	public Integer getId() {
+		if (ids.size() > 0)
+			return ids.get(0);
+		return null;
+	}
+
+	public void setId(Integer id) {
+		ids.add(id);
+	}
 
 	@JsonIgnore
-    public EntityId getEntityId() {
-	    if (entityIds.size() >0)
-	        return entityIds.get(0);
-	    else
-	        return null;
-	}
-	
-	public void addEntityId(EntityId entityId) {
-		this.entityIds.add(entityId);
-	}
-	
-	public void addEntityId(Integer id) {
-		this.entityIds.add(new EntityId(id));
-	}
-	
-	public void addEntityIds(List<EntityId> entityIdsIn) {
-	    entityIds.addAll(entityIdsIn);
+	public EntityId getEntityId() {
+		if (ids.size() > 0)
+			return new EntityId(ids.get(0));
+		return null;
 	}
 
-    public List<EntityId> getEntityIds() {
-        return entityIds;
-    }
+	public List<Integer> getIds() {
+		return ids;
+	}
 
-    public void setEntityIds(List<EntityId> entityIds) {
-        this.entityIds = entityIds;
-    }
-
+	public void setIds(List<Integer> idsIn) {
+		ids.addAll(idsIn);
+	}
 }

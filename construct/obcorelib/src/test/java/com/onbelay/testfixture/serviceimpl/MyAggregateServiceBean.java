@@ -23,11 +23,11 @@ public class MyAggregateServiceBean implements MyAggregateService {
     public TransactionResult save(MyAggregateSnapshot snapshot) {
         if (snapshot.getEntityState() == EntityState.NEW) {
             MyAggregate created = MyAggregate.create(snapshot);
-            return new TransactionResult(created.generateEntityId());
+            return new TransactionResult(created.getId());
         } else if (snapshot.getEntityState() == EntityState.MODIFIED) {
             MyAggregate found = myAggregateRepository.load(snapshot.getEntityId());
             found.updateWith(snapshot);
-            return new TransactionResult(found.generateEntityId());
+            return new TransactionResult(found.getId());
         } else if (snapshot.getEntityState() == EntityState.DELETE) {
             MyAggregate found = myAggregateRepository.load(snapshot.getEntityId());
             found.delete();

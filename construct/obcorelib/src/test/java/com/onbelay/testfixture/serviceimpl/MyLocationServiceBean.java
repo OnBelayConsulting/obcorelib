@@ -179,7 +179,7 @@ public class MyLocationServiceBean extends CoreTestServiceBean implements MyLoca
 	public TransactionResult save(List<MyLocationSnapshot> snapshots) {
 		initializeSession();
 
-		ArrayList<EntityId> ids = new ArrayList<EntityId>();
+		ArrayList<Integer> ids = new ArrayList<>();
 		
 		for (MyLocationSnapshot snapshot: snapshots) {
 
@@ -196,7 +196,7 @@ public class MyLocationServiceBean extends CoreTestServiceBean implements MyLoca
 				 logger.debug( "Update myLocation # ", myLocation.getDetail().getName());
 				 myLocation.updateWith(snapshot);
 			}
-			ids.add(myLocation.generateEntityId());
+			ids.add(myLocation.getId());
 		}
 		
 		return new TransactionResult(ids);
@@ -219,7 +219,7 @@ public class MyLocationServiceBean extends CoreTestServiceBean implements MyLoca
 			 myLocation.updateWith(snapshot);
 		}
 		
-		return new TransactionResult(myLocation.generateEntityId());
+		return new TransactionResult(myLocation.getId());
 	}
 	
 	@Override

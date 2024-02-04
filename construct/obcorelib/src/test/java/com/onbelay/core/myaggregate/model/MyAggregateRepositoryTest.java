@@ -46,7 +46,7 @@ public class MyAggregateRepositoryTest extends CoreSpringTestCase {
         TransactionResult result = myAggregateService.save(snapshot);
         flush();
         clearCache();
-        myAggregateId = result.getEntityId();
+        myAggregateId = new EntityId(result.getId());
     }
 
     @Test
