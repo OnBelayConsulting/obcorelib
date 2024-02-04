@@ -53,6 +53,7 @@ public class TransactionResult extends ErrorHoldingSnapshot {
         this.ids.addAll(entityIds);
     }
 
+	@JsonIgnore
 	public Integer getId() {
 		if (ids.size() > 0)
 			return ids.get(0);
