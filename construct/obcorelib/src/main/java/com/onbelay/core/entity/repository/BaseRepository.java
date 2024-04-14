@@ -17,6 +17,7 @@ package com.onbelay.core.entity.repository;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,8 +32,14 @@ import com.onbelay.core.entity.snapshot.EntityId;
 import com.onbelay.core.query.model.ColumnDefinition;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SqlOutParameter;
+import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.onbelay.core.appsetting.model.ApplicationSetting;
@@ -61,6 +68,9 @@ public class BaseRepository<T> implements EntityRepository<T> {
     @PersistenceContext
     protected EntityManager entityManager;
 
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
 
     @Value("${isSqlServer:false}")
     private boolean isSqlServer;
@@ -76,6 +86,26 @@ public class BaseRepository<T> implements EntityRepository<T> {
         return executeNativeScalarQuery(query);
     }
 
+    @Override
+    public long reserveSequenceRange(String sequenceName, int rangeSize) {
+        SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
+                .withProcedureName("sp_sequence_get_range")
+                .declareParameters(new SqlParameter("sequence_name", Types.VARCHAR),
+                        new SqlParameter("range_size", Types.INTEGER),
+                        new SqlOutParameter("range_first_value", microsoft.sql.Types.SQL_VARIANT),
+                        new SqlOutParameter("range_last_value", microsoft.sql.Types.SQL_VARIANT),
+                        new SqlOutParameter("range_cycle_count", Types.INTEGER),
+                        new SqlOutParameter("sequence_increment", microsoft.sql.Types.SQL_VARIANT),
+                        new SqlOutParameter("sequence_min_value", microsoft.sql.Types.SQL_VARIANT),
+                        new SqlOutParameter("sequence_max_value", microsoft.sql.Types.SQL_VARIANT)
+                );
+
+        MapSqlParameterSource parmSource = new MapSqlParameterSource();
+        parmSource.addValue("sequence_name", sequenceName);
+        parmSource.addValue("range_size", rangeSize);
+        Map<String, Object> results = simpleJdbcCall.execute(parmSource);
+        return (long) results.get("range_first_value");
+    }
 
     public <E> E loadChild(Class<E> claz, Object id) {
         return  entityManager.find(claz, id);

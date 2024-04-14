@@ -32,4 +32,6 @@ public interface EntityRepository<T> {
 
 	public Integer executeNativeScalarQuery(String query);
 
+	long reserveSequenceRange(String sequenceName, int rangeSize);
+
 }
