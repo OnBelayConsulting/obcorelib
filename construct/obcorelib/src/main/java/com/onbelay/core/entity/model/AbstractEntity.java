@@ -69,7 +69,12 @@ public abstract class AbstractEntity {
             throw new OBRuntimeException(validationException);
         }
 	}
-	
+
+	public void delete() {
+		getEntityRepository().delete(this);
+	}
+
+
 	/**
 	 * Overridden by sub-classes to provide additional behavior before the save.
 	 */
