@@ -61,7 +61,8 @@ import com.onbelay.core.query.snapshot.UnknownExpressionElement;
  */
 public class DefinedQueryBuilder {
 	private static final Logger logger = LogManager.getLogger(DefinedQueryBuilder.class);
-	
+
+	private static final String FROM = "FROM";
 	private static final String WHERE = "WHERE";
 	private static final String ORDERBY = "ORDER BY";
 	
@@ -84,6 +85,41 @@ public class DefinedQueryBuilder {
 		
 		if (expressionText.contentEquals(""))
 			return new DefinedQuery(entityName);
+
+		if (expressionText.length() < 5)
+			return new DefinedQuery(entityName);
+
+		String fromText = expressionText.substring(0, FROM.length()).trim();
+		if (fromText.equalsIgnoreCase(FROM)) {
+			boolean hasWhereClause = true;
+			boolean hasOrderClause = true;
+
+			int indexOfWhereClause = expressionText.indexOf(WHERE);
+			if (indexOfWhereClause < 0)
+				indexOfWhereClause = expressionText.indexOf(WHERE.toLowerCase());
+			if (indexOfWhereClause <0)
+				hasWhereClause = false;
+
+			int indexOfOrderByClause = expressionText.indexOf(ORDERBY);
+			if (indexOfOrderByClause < 0)
+				indexOfOrderByClause = expressionText.indexOf(ORDERBY.toLowerCase());
+			if (indexOfOrderByClause <0)
+				hasOrderClause = false;
+
+			String queryName;
+			if (hasWhereClause) {
+				queryName = expressionText.substring(FROM.length(), indexOfWhereClause);
+			} else if (hasOrderClause) {
+				queryName = expressionText.substring(FROM.length(), indexOfOrderByClause);
+			} else {
+				queryName = expressionText.substring(FROM.length(), expressionText.length());
+				queryName = queryName.trim();
+				return new DefinedQuery(queryName);
+			}
+			entityName = queryName.trim();
+
+		}
+
 
 		if (expressionText.equalsIgnoreCase("WHERE"))
 			return new DefinedQuery(entityName);
