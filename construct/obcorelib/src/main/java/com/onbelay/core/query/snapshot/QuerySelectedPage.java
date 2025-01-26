@@ -21,6 +21,8 @@ import java.util.List;
 public class QuerySelectedPage {
 	
 	private List<Integer> ids = new ArrayList<>();
+
+	private String entityName;
 	
 	private DefinedOrderByClause orderByClause;
 
@@ -29,7 +31,19 @@ public class QuerySelectedPage {
 		this.ids = ids;
 		this.orderByClause = orderByClause;
 	}
-	
+
+
+	public QuerySelectedPage(
+			String entityName,
+			List<Integer> ids,
+			DefinedOrderByClause orderByClause) {
+		super();
+		this.entityName = entityName;
+		this.ids = ids;
+		this.orderByClause = orderByClause;
+	}
+
+
 
 	public QuerySelectedPage(List<Integer> ids) {
 		super();
@@ -50,7 +64,8 @@ public class QuerySelectedPage {
 	public boolean hasOrderClause() {
 		return orderByClause != null;
 	}
-	
-	
 
+	public String getEntityName() {
+		return entityName;
+	}
 }

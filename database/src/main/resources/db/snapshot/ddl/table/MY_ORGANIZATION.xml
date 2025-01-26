@@ -1,0 +1,40 @@
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	logicalFilePath="/com/onbelay/obcore/snapshot/ddl/MY_ORGANIZATION.xml">
+	
+  <changeSet author="lefeuvrem" id="location_create_1" objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+  
+    
+   <createSequence
+   		incrementBy="1"
+   		sequenceName="MY_ORGANIZATION_SEQ"
+   		startValue="1"	
+   />
+
+   <createTable tableName="MY_ORGANIZATION" tablespace="${tblspace_data}">
+      <column name="ENTITY_ID" defaultValueSequenceNext="MY_ORGANIZATION_SEQ" remarks="Surrogate key for the MY_ORGANIZATION table." type="java.sql.Types.NUMERIC(10, 0)">
+        <constraints primaryKey="true" primaryKeyName="MY_ORGANIZATION_PK" nullable="false" />
+      </column>
+      <column name="ORGANIZATION_NAME"  type="java.sql.Types.VARCHAR(20)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ORGANIZATION_DESC"  type="java.sql.Types.VARCHAR(100)">
+        <constraints nullable="true"/>
+      </column>
+   </createTable>
+
+
+  <createTable tableName="MY_CUSTOMER" tablespace="${tblspace_data}">
+      <column name="ENTITY_ID" type="java.sql.Types.NUMERIC(10, 0)">
+          <constraints primaryKey="true"  nullable="false" />
+      </column>
+      <column name="ORGANIZATION_TYPE"  type="java.sql.Types.VARCHAR(20)">
+          <constraints nullable="false"/>
+      </column>
+  </createTable>
+
+
+  </changeSet>
+</databaseChangeLog>
