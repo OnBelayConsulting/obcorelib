@@ -53,14 +53,6 @@ public class OBRuntimeException extends RuntimeException {
         this.parms.add(parm);
     }
 
-    public OBRuntimeException(OBValidationException validationException) {
-        super(validationException.getAggregatedMessage(), validationException);
-        this.errorCode = validationException.getErrorCode();
-        this.parms = validationException.getParms();
-    }
-	
-
-
     public OBRuntimeException(String errorCode, RuntimeException t) {
 		super(errorCode, t);
 		this.errorCode = errorCode;
@@ -74,9 +66,21 @@ public class OBRuntimeException extends RuntimeException {
     public boolean hasParms() {
     	return parms.isEmpty() != true ;
     }
-    
-	
-	public List<String> getParms() {
+
+
+    public String getAggregatedMessage() {
+        StringBuffer buffer = new StringBuffer(errorCode);
+
+        if (this.parms != null) {
+            buffer.append(" ");
+            buffer.append(parms);
+        }
+
+        return buffer.toString();
+    }
+
+
+    public List<String> getParms() {
         return parms;
     }
 }

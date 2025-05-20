@@ -1,6 +1,7 @@
 package com.onbelay.core.mylocation.controller;
 
 import com.onbelay.core.entity.snapshot.TransactionResult;
+import com.onbelay.core.enums.CoreTransactionErrorCode;
 import com.onbelay.core.test.CoreSpringTestCase;
 import com.onbelay.testfixture.controller.MyLocationRestController;
 import com.onbelay.testfixture.enums.GeoCode;
@@ -73,6 +74,32 @@ public class MyLocationRestControllerTest extends CoreSpringTestCase {
 
     }
 
+
+    @Test
+    public void getCollectionFailBadQuery() throws Exception {
+
+        MockMvc mvc = MockMvcBuilders.standaloneSetup(myLocationRestController)
+                .defaultRequest(MockMvcRequestBuilders.get("/api/locations")
+                        .accept(MediaType.APPLICATION_JSON))
+                .setMessageConverters(mappingJackson2HttpMessageConverter)
+                .build();
+
+        ResultActions result = mvc.perform(get("/api/locations?query=WHERE GGG XC DD"));
+
+        MvcResult mvcResult = result.andReturn();
+        assertEquals(400, mvcResult.getResponse().getStatus());
+
+        String jsonStringResponse = mvcResult.getResponse().getContentAsString();
+
+        logger.error("Json: " + jsonStringResponse);
+
+
+        MyLocationSnapshotCollection collection = objectMapper.readValue(jsonStringResponse, MyLocationSnapshotCollection.class);
+
+        assertEquals(CoreTransactionErrorCode.INVALID_QUERY.getCode(), collection.getErrorCode());
+    }
+
+
     @Test
     public void postLocation() throws Exception {
         MockMvc mvc = MockMvcBuilders.standaloneSetup(myLocationRestController)
@@ -122,5 +149,32 @@ public class MyLocationRestControllerTest extends CoreSpringTestCase {
         assertEquals("Kelowna", snapshot.getDetail().getName());
 
     }
+
+
+    @Test
+    public void getLocationFailMissingID() throws Exception {
+
+        MockMvc mvc = MockMvcBuilders.standaloneSetup(myLocationRestController)
+                .defaultRequest(MockMvcRequestBuilders.get("/api/locations")
+                        .accept(MediaType.APPLICATION_JSON))
+                .setMessageConverters(mappingJackson2HttpMessageConverter)
+                .build();
+
+
+        ResultActions result = mvc.perform(get("/api/locations/" + 99999));
+
+        MvcResult mvcResult = result.andReturn();
+
+        assertEquals(400, mvcResult.getResponse().getStatus());
+
+        String jsonStringResponse = mvcResult.getResponse().getContentAsString();
+
+        logger.error("Json: " + jsonStringResponse);
+
+        MyLocationSnapshot snapshot = objectMapper.readValue(jsonStringResponse, MyLocationSnapshot.class);
+        assertEquals(CoreTransactionErrorCode.INVALID_ENTITY_ID.getCode(), snapshot.getErrorCode());
+
+    }
+
 
 }

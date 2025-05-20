@@ -15,59 +15,30 @@
 */
 package com.onbelay.core.exception;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Thrown to indicate a business validation has failed.
  *
  */
-public class OBValidationException extends RuntimeException {
+public class OBValidationException extends OBRuntimeException {
 
 	private static final long serialVersionUID = 1L;
-	
-	private String errorCode;
-	private List<String> parms = new ArrayList<String>();;
-	
+
 	public OBValidationException(String errorCode) {
 		super(errorCode);
-		this.errorCode = errorCode;
 	}
 
     public OBValidationException(String errorCode, String parm) {
-        super(errorCode);
-        this.errorCode = errorCode;
-        this.parms.add(parm);
+        super(errorCode, parm);
     }
 
     public OBValidationException(String errorCode, List<String> parms) {
-        super(errorCode);
-        this.errorCode = errorCode;
-        this.parms = parms;
+        super(errorCode, parms);
     }
 
 
     public OBValidationException(String errorCode, RuntimeException t) {
 		super(errorCode, t);
-		this.errorCode = errorCode;
 	}
-
-    public String getAggregatedMessage() {
-        StringBuffer buffer = new StringBuffer(errorCode);
-        
-        if (this.parms != null) {
-            buffer.append(" ");
-            buffer.append(parms);
-        }
-        
-        return buffer.toString();
-    }
-
-	public String getErrorCode() {
-		return errorCode;
-	}
-
-    public List<String> getParms() {
-        return this.parms;
-    }	
 }

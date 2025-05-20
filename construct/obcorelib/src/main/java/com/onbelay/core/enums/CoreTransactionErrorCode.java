@@ -30,6 +30,7 @@ public enum CoreTransactionErrorCode {
     ENTITY_DELETE_FAIL                            ("OB-E0004", "Entity delete failed."),
     INVALID_ENTITY_ID                             ("OB-E0005", "Invalid EntityId."),
     QUERY_MORE_THAN_ONE_RESULT                    ("OB-E0100", "More than one result returned"),
+    INVALID_QUERY                                 ("OB-E0110", "Invalid Query."),
     USER_MISSING_NAME                             ("OB-E0200", "Missing user name"),
     INVALID_CODE_FAMILY                           ("OB-E1000", "Invalid code family"),
     USER_UNAUTHORIZED                             ("OB-E2000", "User not authorized for this function."),

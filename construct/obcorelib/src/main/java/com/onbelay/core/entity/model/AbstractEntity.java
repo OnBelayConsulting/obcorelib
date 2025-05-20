@@ -51,11 +51,7 @@ public abstract class AbstractEntity {
     }
 
 	public void save() {
-	    try {
-	        validate();
-	    } catch (OBValidationException validationException) {
-	        throw new OBRuntimeException(validationException);
-	    }
+        validate();
 	    getEntityRepository().save(this);
 	}
 	
@@ -63,12 +59,8 @@ public abstract class AbstractEntity {
 	 * Triggers an update by validating the object.
 	 */
 	public void update() {
-        try {
-            validate();
-        } catch (OBValidationException validationException) {
-            throw new OBRuntimeException(validationException);
-        }
-	}
+        validate();
+ 	}
 
 	public void delete() {
 		getEntityRepository().delete(this);

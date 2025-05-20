@@ -2,6 +2,7 @@ package com.onbelay.testfixture.controller;
 
 import com.onbelay.core.controller.BaseRestController;
 import com.onbelay.core.entity.snapshot.TransactionResult;
+import com.onbelay.core.enums.CoreTransactionErrorCode;
 import com.onbelay.core.exception.OBRuntimeException;
 import com.onbelay.core.query.exception.DefinedQueryException;
 import com.onbelay.testfixture.adapter.MyLocationRestAdapter;
@@ -67,7 +68,8 @@ public class MyLocationRestController extends BaseRestController {
             snapshot = new MyLocationSnapshot(r.getErrorCode());
             snapshot.setErrorMessage(errorMessageService.getErrorMessage(r.getErrorCode()));
         } catch (DefinedQueryException r) {
-            snapshot = new MyLocationSnapshot(r.getMessage());
+            snapshot = new MyLocationSnapshot(CoreTransactionErrorCode.INVALID_QUERY.getCode());
+            snapshot.setErrorMessage(r.getMessage());
         } catch (RuntimeException r) {
             snapshot = new MyLocationSnapshot(r.getMessage());
         }
@@ -93,7 +95,8 @@ public class MyLocationRestController extends BaseRestController {
             collection = new MyLocationSnapshotCollection(r.getErrorCode());
               collection.setErrorMessage(errorMessageService.getErrorMessage(r.getErrorCode()));
         } catch (DefinedQueryException r) {
-            collection = new MyLocationSnapshotCollection(r.getMessage());
+            collection = new MyLocationSnapshotCollection(CoreTransactionErrorCode.INVALID_QUERY.getCode());
+            collection.setErrorMessage(r.getMessage());
         } catch (RuntimeException r) {
             collection = new MyLocationSnapshotCollection(r.getMessage());
         }

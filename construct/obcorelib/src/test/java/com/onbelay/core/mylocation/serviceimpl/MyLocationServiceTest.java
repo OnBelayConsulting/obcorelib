@@ -1,6 +1,7 @@
 package com.onbelay.core.mylocation.serviceimpl;
 
 import com.onbelay.core.entity.snapshot.EntityListItemCollection;
+import com.onbelay.core.enums.CoreTransactionErrorCode;
 import com.onbelay.core.mylocation.model.LocationFixture;
 import com.onbelay.core.test.CoreSpringTestCase;
 import org.junit.jupiter.api.Test;
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.onbelay.core.entity.enums.EntityState;
 import com.onbelay.core.entity.snapshot.EntityId;
-import com.onbelay.core.enums.CoreErrorCode;
 import com.onbelay.core.exception.OBRuntimeException;
 import com.onbelay.testfixture.model.MyLocation;
 import com.onbelay.testfixture.repository.MyLocationRepository;
@@ -157,9 +157,9 @@ public class MyLocationServiceTest extends CoreSpringTestCase {
 			myLocationService.findByName("NotHere");
 			fail("Should have thrown exception");
 		} catch (OBRuntimeException e) {
-			assertEquals(CoreErrorCode.MISSING_MY_LOCATION.getCode(), e.getErrorCode());
+			assertEquals(CoreTransactionErrorCode.INVALID_ENTITY_ID.getCode(), e.getErrorCode());
 		} catch (RuntimeException t) {
-			fail("Should have thrown JSRuntimeException");
+			fail("Should have thrown OBRuntimeException");
 		}
 	}
 

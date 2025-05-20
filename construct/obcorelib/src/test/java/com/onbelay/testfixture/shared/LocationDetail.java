@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.onbelay.core.codes.annotations.CodeLabelSerializer;
 import com.onbelay.core.codes.annotations.InjectCodeLabel;
 import com.onbelay.core.entity.snapshot.AbstractDetail;
-import com.onbelay.core.enums.CoreErrorCode;
+import com.onbelay.core.enums.CoreTransactionErrorCode;
 import com.onbelay.core.exception.OBValidationException;
 import com.onbelay.testfixture.enums.GeoCode;
 
@@ -68,7 +68,7 @@ public class LocationDetail extends AbstractDetail {
 
 	public void validate() throws OBValidationException {
 		if (name == null)
-			throw new OBValidationException(CoreErrorCode.MISSING_MY_LOCATION_NAME.getCode());
+			throw new OBValidationException(CoreTransactionErrorCode.INVALID_ENTITY_ID.getCode());
 	}
 
 	@Column(name = "EFFECTIVE_DATE")

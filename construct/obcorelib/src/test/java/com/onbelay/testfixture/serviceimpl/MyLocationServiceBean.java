@@ -29,7 +29,7 @@ import com.onbelay.core.assemblers.MyLocationSnapshotAssembler;
 import com.onbelay.core.entity.enums.EntityState;
 import com.onbelay.core.entity.snapshot.EntityId;
 import com.onbelay.core.entity.snapshot.TransactionResult;
-import com.onbelay.core.enums.CoreErrorCode;
+import com.onbelay.core.enums.CoreTransactionErrorCode;
 import com.onbelay.core.exception.OBRuntimeException;
 import com.onbelay.core.query.parsing.DefinedQueryBuilder;
 import com.onbelay.core.query.snapshot.DefinedOrderExpression;
@@ -191,7 +191,7 @@ public class MyLocationServiceBean extends CoreTestServiceBean implements MyLoca
 				 myLocation = myLocationRepository.load(snapshot.getEntityId());
 				 if (myLocation == null) {
 					 logger.error( "MyLocation id: {} is missing", snapshot.getEntityId());
-					 throw new OBRuntimeException(CoreErrorCode.MISSING_MY_LOCATION.getCode());
+					 throw new OBRuntimeException(CoreTransactionErrorCode.INVALID_ENTITY_ID.getCode());
 				 }
 				 logger.debug( "Update myLocation # ", myLocation.getDetail().getName());
 				 myLocation.updateWith(snapshot);
@@ -215,7 +215,7 @@ public class MyLocationServiceBean extends CoreTestServiceBean implements MyLoca
 		} else {
 			 myLocation = myLocationRepository.load(snapshot.getEntityId());
 			 if (myLocation == null) 
-				 throw new OBRuntimeException(CoreErrorCode.MISSING_MY_LOCATION.getCode());
+				 throw new OBRuntimeException(CoreTransactionErrorCode.INVALID_ENTITY_ID.getCode());
 			 myLocation.updateWith(snapshot);
 		}
 		
@@ -228,7 +228,7 @@ public class MyLocationServiceBean extends CoreTestServiceBean implements MyLoca
 
 		MyLocation myLocation = myLocationRepository.load(entityId);
 		if (myLocation == null)
-			throw new OBRuntimeException(CoreErrorCode.MISSING_MY_LOCATION.getCode(), "" + entityId.getId());
+			throw new OBRuntimeException(CoreTransactionErrorCode.INVALID_ENTITY_ID.getCode(), "" + entityId.getId());
 		
 		MyLocationSnapshotAssembler assembler = new MyLocationSnapshotAssembler();
 		
@@ -242,7 +242,7 @@ public class MyLocationServiceBean extends CoreTestServiceBean implements MyLoca
 
 		MyLocation myLocation = myLocationRepository.findByName(name);
 		if (myLocation == null)
-			throw new OBRuntimeException(CoreErrorCode.MISSING_MY_LOCATION.getCode(), name);
+			throw new OBRuntimeException(CoreTransactionErrorCode.INVALID_ENTITY_ID.getCode(), name);
 		
 		MyLocationSnapshotAssembler assembler = new MyLocationSnapshotAssembler();
 		

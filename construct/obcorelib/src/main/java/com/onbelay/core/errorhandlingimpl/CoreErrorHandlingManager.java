@@ -3,6 +3,7 @@ package com.onbelay.core.errorhandlingimpl;
 import com.onbelay.core.enums.CoreTransactionErrorCode;
 import com.onbelay.core.errorhandling.ErrorHandlingManager;
 
+import java.util.EnumSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CoreErrorHandlingManager implements ErrorHandlingManager {
@@ -14,7 +15,8 @@ public class CoreErrorHandlingManager implements ErrorHandlingManager {
     }
 
     protected void initialize() {
-        errorMap.put(CoreTransactionErrorCode.SUCCESS.getCode(), "Success");
+        for (CoreTransactionErrorCode c : EnumSet.allOf(CoreTransactionErrorCode.class))
+            addErrorMessage(c.getCode(), c.getDescription());
     }
 
     public void addErrorMessage(String errorCode, String errorMessage) {

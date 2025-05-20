@@ -19,7 +19,7 @@ import com.onbelay.core.assemblers.MyOrganizationSnapshotAssembler;
 import com.onbelay.core.entity.enums.EntityState;
 import com.onbelay.core.entity.snapshot.EntityId;
 import com.onbelay.core.entity.snapshot.TransactionResult;
-import com.onbelay.core.enums.CoreErrorCode;
+import com.onbelay.core.enums.CoreTransactionErrorCode;
 import com.onbelay.core.exception.OBRuntimeException;
 import com.onbelay.core.query.parsing.DefinedQueryBuilder;
 import com.onbelay.core.query.snapshot.DefinedOrderExpression;
@@ -132,7 +132,7 @@ public class MyOrganizationServiceBean extends CoreTestServiceBean implements My
 		} else {
 			 myOrganization = myOrganizationRepository.load(snapshot.getEntityId());
 			 if (myOrganization == null) 
-				 throw new OBRuntimeException(CoreErrorCode.MISSING_MY_LOCATION.getCode());
+				 throw new OBRuntimeException(CoreTransactionErrorCode.INVALID_ENTITY_ID.getCode());
 			 myOrganization.updateWith(snapshot);
 		}
 		
@@ -145,7 +145,7 @@ public class MyOrganizationServiceBean extends CoreTestServiceBean implements My
 
 		MyOrganization myOrganization = myOrganizationRepository.load(entityId);
 		if (myOrganization == null)
-			throw new OBRuntimeException(CoreErrorCode.MISSING_MY_LOCATION.getCode(), "" + entityId.getId());
+			throw new OBRuntimeException(CoreTransactionErrorCode.INVALID_ENTITY_ID.getCode(), "" + entityId.getId());
 		
 		MyOrganizationSnapshotAssembler assembler = new MyOrganizationSnapshotAssembler();
 		
