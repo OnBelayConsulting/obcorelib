@@ -1,5 +1,6 @@
 package com.onbelay.core.myorganization;
 
+import com.onbelay.core.entity.enums.EntityState;
 import com.onbelay.core.test.CoreSpringTestCase;
 import com.onbelay.testfixture.model.MyCustomer;
 import com.onbelay.testfixture.model.MyOrganization;

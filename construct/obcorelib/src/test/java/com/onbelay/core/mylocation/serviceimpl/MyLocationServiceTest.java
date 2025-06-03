@@ -4,6 +4,7 @@ import com.onbelay.core.entity.snapshot.EntityListItemCollection;
 import com.onbelay.core.enums.CoreTransactionErrorCode;
 import com.onbelay.core.mylocation.model.LocationFixture;
 import com.onbelay.core.test.CoreSpringTestCase;
+import com.onbelay.testfixture.model.MyLocationAudit;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -80,10 +81,13 @@ public class MyLocationServiceTest extends CoreSpringTestCase {
 		
 		myLocationService.save(savedLocation);
 		flush();
+		clearCache();
 		
 		MyLocation location = myLocationRepository.load(savedLocation.getEntityId());
 		assertEquals("changed", location.getDetail().getDescription());
 		assertNotNull(savedLocation);
+		MyLocationAudit audit = MyLocationAudit.findRecentHistory(location);
+		assertNotNull(audit);
 	}
 
 	@Test
