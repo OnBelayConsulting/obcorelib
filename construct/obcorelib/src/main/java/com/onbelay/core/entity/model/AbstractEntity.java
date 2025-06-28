@@ -20,9 +20,7 @@ import com.onbelay.core.entity.component.ApplicationContextFactory;
 import com.onbelay.core.entity.enums.EntityState;
 import com.onbelay.core.entity.repository.EntityRepository;
 import com.onbelay.core.entity.snapshot.EntityId;
-import com.onbelay.core.exception.OBRuntimeException;
 import com.onbelay.core.exception.OBValidationException;
-
 import jakarta.persistence.Transient;
 
 /**

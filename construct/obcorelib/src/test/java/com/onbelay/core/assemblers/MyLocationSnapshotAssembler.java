@@ -15,12 +15,12 @@
  */
 package com.onbelay.core.assemblers;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.onbelay.core.entity.assembler.EntityAssembler;
 import com.onbelay.testfixture.model.MyLocation;
 import com.onbelay.testfixture.snapshot.MyLocationSnapshot;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MyLocationSnapshotAssembler extends EntityAssembler {
 

@@ -15,11 +15,10 @@
 */
 package com.onbelay.core.entity.model;
 
-import java.time.LocalDateTime;
-
+import com.onbelay.core.utils.DateUtils;
 import jakarta.persistence.Column;
 
-import com.onbelay.core.utils.DateUtils;
+import java.time.LocalDateTime;
 
 /**
  *

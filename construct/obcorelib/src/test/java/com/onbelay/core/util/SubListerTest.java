@@ -15,13 +15,12 @@
 */
 package com.onbelay.core.util;
 
+import com.onbelay.core.utils.SubLister;
+import org.junit.jupiter.api.Test;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.junit.jupiter.api.Test;
-
-import com.onbelay.core.utils.SubLister;
 
 
 public class SubListerTest  {

@@ -15,19 +15,10 @@
  */
 package com.onbelay.testfixture.serviceimpl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.onbelay.core.entity.snapshot.EntityListItemCollection;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.onbelay.core.assemblers.MyLocationSnapshotAssembler;
 import com.onbelay.core.entity.enums.EntityState;
 import com.onbelay.core.entity.snapshot.EntityId;
+import com.onbelay.core.entity.snapshot.EntityListItemCollection;
 import com.onbelay.core.entity.snapshot.TransactionResult;
 import com.onbelay.core.enums.CoreTransactionErrorCode;
 import com.onbelay.core.exception.OBRuntimeException;
@@ -40,6 +31,14 @@ import com.onbelay.testfixture.repository.MyLocationRepository;
 import com.onbelay.testfixture.service.MyLocationService;
 import com.onbelay.testfixture.snapshot.MyLocationSnapshot;
 import com.onbelay.testfixture.snapshot.MyLocationSnapshotCollection;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service(value="myLocationService")

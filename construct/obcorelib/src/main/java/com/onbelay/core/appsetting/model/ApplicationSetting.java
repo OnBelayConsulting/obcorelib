@@ -15,21 +15,14 @@
 */
 package com.onbelay.core.appsetting.model;
 
-import java.math.BigDecimal;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-
 import com.onbelay.core.appsetting.repository.ApplicationSettingRepository;
 import com.onbelay.core.appsetting.snapshot.ApplicationSettingSnapshot;
 import com.onbelay.core.entity.component.ApplicationContextFactory;
 import com.onbelay.core.enums.CoreTransactionErrorCode;
 import com.onbelay.core.exception.OBValidationException;
+import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 
 /**
  * @author CANMXF

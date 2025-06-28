@@ -15,14 +15,14 @@
 */
 package com.onbelay.core.query.parsing;
 
+import com.onbelay.core.query.enums.ExpressionConnector;
+import com.onbelay.core.query.enums.ExpressionOperator;
+import com.onbelay.core.query.enums.TextExpressionOperator;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Supplier;
-
-import com.onbelay.core.query.enums.ExpressionConnector;
-import com.onbelay.core.query.enums.ExpressionOperator;
-import com.onbelay.core.query.enums.TextExpressionOperator;
 
 /**
  * Tokenizes a string into tokens based on basic matches and a stringTokenMap to map reserved words.

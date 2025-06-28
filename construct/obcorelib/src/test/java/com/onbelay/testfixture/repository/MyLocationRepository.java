@@ -15,12 +15,12 @@
  */
 package com.onbelay.testfixture.repository;
 
-import java.util.List;
-
 import com.onbelay.core.entity.snapshot.EntityId;
 import com.onbelay.core.query.snapshot.DefinedQuery;
 import com.onbelay.core.query.snapshot.QuerySelectedPage;
 import com.onbelay.testfixture.model.MyLocation;
+
+import java.util.List;
 
 public interface MyLocationRepository {
 	public static final String BEAN_NAME = "myLocationRepository";

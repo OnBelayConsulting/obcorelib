@@ -17,7 +17,6 @@ package com.onbelay.testfixture.snapshot;
 
 import com.onbelay.core.entity.snapshot.AbstractSnapshot;
 import com.onbelay.core.entity.snapshot.EntityId;
-import com.onbelay.testfixture.shared.LocationDetail;
 
 import java.util.List;
 

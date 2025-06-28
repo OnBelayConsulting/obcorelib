@@ -15,10 +15,10 @@
 */
 package com.onbelay.core.entity.snapshot;
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.onbelay.core.entity.enums.EntityIdStatus;
+
+import java.io.Serializable;
 
 /**
  * Encapsulates an EntityId that may be:

@@ -1,8 +1,8 @@
 package com.onbelay.testfixture.snapshot;
 
-import java.util.List;
-
 import com.onbelay.core.entity.snapshot.AbstractSnapshotCollection;
+
+import java.util.List;
 
 public class MyLocationSnapshotCollection extends AbstractSnapshotCollection<MyLocationSnapshot> {
 	

@@ -15,11 +15,10 @@
 */
 package com.onbelay.core.query.parsing;
 
+import com.onbelay.core.query.snapshot.DefinedQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
-
-import com.onbelay.core.query.snapshot.DefinedQuery;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

@@ -15,21 +15,14 @@
  */
 package com.onbelay.testfixture.shared;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.onbelay.core.codes.annotations.CodeLabelSerializer;
-import com.onbelay.core.codes.annotations.InjectCodeLabel;
 import com.onbelay.core.entity.snapshot.AbstractDetail;
 import com.onbelay.core.enums.CoreTransactionErrorCode;
 import com.onbelay.core.exception.OBValidationException;
-import com.onbelay.testfixture.enums.GeoCode;
-
 import jakarta.persistence.Column;
-import jakarta.persistence.Transient;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MyAggregateDetail extends AbstractDetail {

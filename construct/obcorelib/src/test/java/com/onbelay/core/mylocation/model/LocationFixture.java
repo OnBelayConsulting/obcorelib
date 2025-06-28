@@ -1,11 +1,11 @@
 package com.onbelay.core.mylocation.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.onbelay.testfixture.enums.GeoCode;
 import com.onbelay.testfixture.model.MyLocation;
 import com.onbelay.testfixture.shared.LocationDetail;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LocationFixture {
 

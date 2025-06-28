@@ -15,21 +15,24 @@
 */
 package com.onbelay.core.entity.repository;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
+import com.onbelay.core.appsetting.model.ApplicationSetting;
+import com.onbelay.core.entity.model.AbstractEntity;
+import com.onbelay.core.entity.model.AuditAbstractEntity;
+import com.onbelay.core.entity.model.TemporalAbstractEntity;
+import com.onbelay.core.entity.snapshot.EntityId;
+import com.onbelay.core.enums.CoreTransactionErrorCode;
+import com.onbelay.core.exception.OBRuntimeException;
+import com.onbelay.core.query.enums.ExpressionOperator;
+import com.onbelay.core.query.model.ColumnDefinition;
+import com.onbelay.core.query.model.ColumnDefinitions;
+import com.onbelay.core.query.model.DefinedQueryGenerator;
+import com.onbelay.core.query.snapshot.DefinedQuery;
+import com.onbelay.core.query.snapshot.DefinedWhereExpression;
+import com.onbelay.core.query.snapshot.QuerySelectedPage;
+import com.onbelay.core.utils.SubLister;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
-
-import com.onbelay.core.entity.snapshot.EntityId;
-import com.onbelay.core.query.model.ColumnDefinition;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,20 +45,9 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.onbelay.core.appsetting.model.ApplicationSetting;
-import com.onbelay.core.entity.component.ApplicationContextFactory;
-import com.onbelay.core.enums.CoreTransactionErrorCode;
-import com.onbelay.core.entity.model.AbstractEntity;
-import com.onbelay.core.entity.model.AuditAbstractEntity;
-import com.onbelay.core.entity.model.TemporalAbstractEntity;
-import com.onbelay.core.exception.OBRuntimeException;
-import com.onbelay.core.query.enums.ExpressionOperator;
-import com.onbelay.core.query.model.ColumnDefinitions;
-import com.onbelay.core.query.model.DefinedQueryGenerator;
-import com.onbelay.core.query.snapshot.DefinedQuery;
-import com.onbelay.core.query.snapshot.DefinedWhereExpression;
-import com.onbelay.core.query.snapshot.QuerySelectedPage;
-import com.onbelay.core.utils.SubLister;
+import java.math.BigDecimal;
+import java.sql.Types;
+import java.util.*;
 
 /**
  * Base class for all repositories.

@@ -2,7 +2,6 @@ package com.onbelay.testfixture.model;
 
 import com.onbelay.core.entity.model.AbstractEntity;
 import com.onbelay.core.exception.OBValidationException;
-import com.onbelay.testfixture.snapshot.MyCustomerSnapshot;
 import com.onbelay.testfixture.snapshot.MyOrganizationSnapshot;
 import jakarta.persistence.*;
 

@@ -1,19 +1,18 @@
 package com.onbelay.core.mylocation.model;
 
-import java.util.List;
-
-import com.onbelay.core.test.CoreSpringTestCase;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.onbelay.core.entity.snapshot.EntityId;
 import com.onbelay.core.query.enums.ExpressionOperator;
 import com.onbelay.core.query.snapshot.DefinedQuery;
 import com.onbelay.core.query.snapshot.DefinedWhereExpression;
 import com.onbelay.core.query.snapshot.QuerySelectedPage;
+import com.onbelay.core.test.CoreSpringTestCase;
 import com.onbelay.testfixture.model.MyLocation;
 import com.onbelay.testfixture.repository.MyLocationRepository;
 import com.onbelay.testfixture.shared.LocationDetail;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

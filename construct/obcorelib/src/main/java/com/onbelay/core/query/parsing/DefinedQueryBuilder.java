@@ -15,23 +15,16 @@
 */
 package com.onbelay.core.query.parsing;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.onbelay.core.query.enums.ExpressionOperator;
 import com.onbelay.core.query.enums.ExpressionOrder;
 import com.onbelay.core.query.exception.DefinedQueryException;
-import com.onbelay.core.query.snapshot.DefinedOrderByClause;
-import com.onbelay.core.query.snapshot.DefinedOrderExpression;
-import com.onbelay.core.query.snapshot.DefinedQuery;
-import com.onbelay.core.query.snapshot.DefinedWhereClause;
-import com.onbelay.core.query.snapshot.DefinedWhereExpression;
-import com.onbelay.core.query.snapshot.ExpressionElement;
-import com.onbelay.core.query.snapshot.UnknownExpressionElement;
+import com.onbelay.core.query.snapshot.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Builds a DefinedQuery from a query expressed in text in the form of:

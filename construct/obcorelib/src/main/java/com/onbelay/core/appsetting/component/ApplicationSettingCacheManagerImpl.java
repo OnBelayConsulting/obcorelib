@@ -20,7 +20,6 @@ import com.onbelay.core.appsetting.repository.ApplicationSettingRepository;
 import com.onbelay.core.entity.component.ApplicationContextFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component

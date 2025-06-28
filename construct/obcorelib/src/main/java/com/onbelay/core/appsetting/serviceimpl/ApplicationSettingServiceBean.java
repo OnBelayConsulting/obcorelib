@@ -15,19 +15,18 @@
 */
 package com.onbelay.core.appsetting.serviceimpl;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.onbelay.core.appsetting.model.ApplicationSetting;
+import com.onbelay.core.appsetting.repository.ApplicationSettingRepository;
+import com.onbelay.core.appsetting.service.ApplicationSettingService;
+import com.onbelay.core.appsetting.snapshot.ApplicationSettingSnapshot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.onbelay.core.appsetting.model.ApplicationSetting;
-import com.onbelay.core.appsetting.repository.ApplicationSettingRepository;
-import com.onbelay.core.appsetting.service.ApplicationSettingService;
-import com.onbelay.core.appsetting.snapshot.ApplicationSettingSnapshot;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service(value="applicationSettingService")
 @Transactional

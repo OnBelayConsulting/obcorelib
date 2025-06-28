@@ -15,11 +15,10 @@
 */
 package com.onbelay.core.entity.component;
 
-import java.time.LocalDateTime;
-
+import com.onbelay.core.entity.model.AuditManager;
 import org.springframework.stereotype.Component;
 
-import com.onbelay.core.entity.model.AuditManager;
+import java.time.LocalDateTime;
 
 /**
  * 

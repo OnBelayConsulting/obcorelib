@@ -15,10 +15,10 @@
 */
 package com.onbelay.core.appsetting.repository;
 
-import java.util.List;
-
 import com.onbelay.core.appsetting.model.ApplicationSetting;
 import com.onbelay.core.entity.repository.EntityRepository;
+
+import java.util.List;
 
 public interface ApplicationSettingRepository extends EntityRepository<ApplicationSetting> {
 	

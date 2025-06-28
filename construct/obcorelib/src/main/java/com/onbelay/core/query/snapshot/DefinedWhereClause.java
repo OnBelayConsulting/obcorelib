@@ -15,11 +15,11 @@
 */
 package com.onbelay.core.query.snapshot;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.onbelay.core.query.enums.ExpressionBracket;
 import com.onbelay.core.query.enums.ExpressionConnector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DefinedWhereClause {
 	private static final String PARM_PREFIX = "p";
