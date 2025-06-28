@@ -1,22 +1,21 @@
 package com.onbelay.core.mylocation.serviceimpl;
 
-import com.onbelay.core.entity.snapshot.EntityListItemCollection;
-import com.onbelay.core.enums.CoreTransactionErrorCode;
-import com.onbelay.core.mylocation.model.LocationFixture;
-import com.onbelay.core.test.CoreSpringTestCase;
-import com.onbelay.testfixture.model.MyLocationAudit;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.onbelay.core.entity.enums.EntityState;
 import com.onbelay.core.entity.snapshot.EntityId;
+import com.onbelay.core.entity.snapshot.EntityListItemCollection;
+import com.onbelay.core.enums.CoreTransactionErrorCode;
 import com.onbelay.core.exception.OBRuntimeException;
+import com.onbelay.core.mylocation.model.LocationFixture;
+import com.onbelay.core.test.CoreSpringTestCase;
 import com.onbelay.testfixture.model.MyLocation;
+import com.onbelay.testfixture.model.MyLocationAudit;
 import com.onbelay.testfixture.repository.MyLocationRepository;
 import com.onbelay.testfixture.service.MyLocationService;
 import com.onbelay.testfixture.shared.LocationDetail;
 import com.onbelay.testfixture.snapshot.MyLocationSnapshot;
 import com.onbelay.testfixture.snapshot.MyLocationSnapshotCollection;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.*;
 

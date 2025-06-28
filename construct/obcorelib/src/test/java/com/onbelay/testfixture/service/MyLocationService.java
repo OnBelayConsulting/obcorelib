@@ -1,12 +1,12 @@
 package com.onbelay.testfixture.service;
 
-import java.util.List;
-
 import com.onbelay.core.entity.snapshot.EntityId;
 import com.onbelay.core.entity.snapshot.EntityListItemCollection;
 import com.onbelay.core.entity.snapshot.TransactionResult;
 import com.onbelay.testfixture.snapshot.MyLocationSnapshot;
 import com.onbelay.testfixture.snapshot.MyLocationSnapshotCollection;
+
+import java.util.List;
 
 public interface MyLocationService {
 

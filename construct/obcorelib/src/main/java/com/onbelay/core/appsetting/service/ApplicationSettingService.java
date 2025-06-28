@@ -15,9 +15,9 @@
 */
 package com.onbelay.core.appsetting.service;
 
-import java.util.List;
-
 import com.onbelay.core.appsetting.snapshot.ApplicationSettingSnapshot;
+
+import java.util.List;
 
 public interface ApplicationSettingService {
 	public static final String BEAN_NAME = "applicationSettingService";

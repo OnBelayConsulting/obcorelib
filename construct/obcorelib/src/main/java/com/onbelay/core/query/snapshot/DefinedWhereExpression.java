@@ -15,11 +15,11 @@
 */
 package com.onbelay.core.query.snapshot;
 
+import com.onbelay.core.query.enums.ExpressionOperator;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import com.onbelay.core.query.enums.ExpressionOperator;
 
 public class DefinedWhereExpression implements ExpressionElement {
 

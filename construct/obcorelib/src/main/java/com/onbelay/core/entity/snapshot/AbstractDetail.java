@@ -15,11 +15,10 @@
 */
 package com.onbelay.core.entity.snapshot;
 
-import java.io.Serializable;
-
+import com.onbelay.core.exception.OBValidationException;
 import jakarta.persistence.Embeddable;
 
-import com.onbelay.core.exception.OBValidationException;
+import java.io.Serializable;
 
 @Embeddable
 public abstract class AbstractDetail implements Serializable {

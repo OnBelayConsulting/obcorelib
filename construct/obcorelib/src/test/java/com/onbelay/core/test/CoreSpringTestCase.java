@@ -2,7 +2,6 @@ package com.onbelay.core.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onbelay.core.entity.persistence.TransactionalSpringTestCase;
-import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -15,14 +15,12 @@
 */
 package com.onbelay.core.appsetting.model;
 
-import java.util.List;
-
-
+import com.onbelay.core.appsetting.repository.ApplicationSettingRepository;
+import com.onbelay.core.entity.repository.BaseRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
-import com.onbelay.core.appsetting.repository.ApplicationSettingRepository;
-import com.onbelay.core.entity.repository.BaseRepository;
+import java.util.List;
 
 @Repository (value="applicationSettingRepository")
 @Transactional

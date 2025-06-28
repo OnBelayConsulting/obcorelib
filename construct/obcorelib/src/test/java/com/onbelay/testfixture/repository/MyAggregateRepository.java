@@ -16,11 +16,7 @@
 package com.onbelay.testfixture.repository;
 
 import com.onbelay.core.entity.snapshot.EntityId;
-import com.onbelay.core.query.snapshot.DefinedQuery;
-import com.onbelay.core.query.snapshot.QuerySelectedPage;
 import com.onbelay.testfixture.model.MyAggregate;
-
-import java.util.List;
 
 public interface MyAggregateRepository {
 	public static final String BEAN_NAME = "myAggregateRepository";

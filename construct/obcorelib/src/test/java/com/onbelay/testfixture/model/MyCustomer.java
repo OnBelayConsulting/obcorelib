@@ -1,10 +1,11 @@
 package com.onbelay.testfixture.model;
 
-import com.onbelay.core.entity.model.AbstractEntity;
 import com.onbelay.core.exception.OBValidationException;
 import com.onbelay.testfixture.snapshot.MyCustomerSnapshot;
 import com.onbelay.testfixture.snapshot.MyOrganizationSnapshot;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "MY_CUSTOMER")

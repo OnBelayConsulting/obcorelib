@@ -15,11 +15,11 @@
 */
 package com.onbelay.core.query.enums;
 
+import com.onbelay.core.query.snapshot.ExpressionElement;
+
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.onbelay.core.query.snapshot.ExpressionElement;
 
 public enum ExpressionBracket implements ExpressionElement{
 	OPEN  ("("),

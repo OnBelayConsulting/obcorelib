@@ -15,7 +15,6 @@
 */
 package com.onbelay.core.changes.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.onbelay.core.changes.enums.EventStatus;
 
 import java.util.ArrayList;

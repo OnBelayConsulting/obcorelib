@@ -23,8 +23,8 @@ import com.onbelay.core.exception.OBValidationException;
 import com.onbelay.testfixture.repository.MyLocationRepository;
 import com.onbelay.testfixture.shared.MyAggregateDetail;
 import com.onbelay.testfixture.snapshot.MyAggregateSnapshot;
-
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
 @Entity

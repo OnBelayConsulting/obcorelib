@@ -16,7 +16,6 @@
 package com.onbelay.testfixture.model;
 
 import com.onbelay.core.query.enums.ColumnDataType;
-import com.onbelay.core.query.model.BaseColumnDefinitions;
 import com.onbelay.core.query.model.ColumnDefinition;
 import com.onbelay.core.query.model.ColumnDefinitions;
 import org.springframework.stereotype.Component;

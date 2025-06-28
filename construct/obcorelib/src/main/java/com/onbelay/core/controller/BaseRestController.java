@@ -1,8 +1,5 @@
 package com.onbelay.core.controller;
 
-import com.onbelay.core.auth.model.OBUser;
-import com.onbelay.core.auth.service.ApplicationAuthenticationService;
-import com.onbelay.core.entity.model.AuditManager;
 import com.onbelay.core.entity.snapshot.AbstractSnapshot;
 import com.onbelay.core.entity.snapshot.AbstractSnapshotCollection;
 import com.onbelay.core.entity.snapshot.TransactionResult;
