@@ -31,8 +31,10 @@ public class KeycloakJwtConverter implements Converter<Jwt, Collection<GrantedAu
         }
 
         Map<String, Object> resourceAccess  = jwt.getClaimAsMap("resource_access");
-        Map<String, Object> dealCaptureMap = (Map<String, Object>) resourceAccess.get(applicationName);
-        roleNames.addAll((List<String>) dealCaptureMap.get("roles"));
+        Map<String, Object> rolesMap = (Map<String, Object>) resourceAccess.get(applicationName);
+        if (rolesMap != null) {
+            roleNames.addAll((List<String>) rolesMap.get("roles"));
+        }
 
         List<GrantedAuthority> authorities =  roleNames
                 .stream()
