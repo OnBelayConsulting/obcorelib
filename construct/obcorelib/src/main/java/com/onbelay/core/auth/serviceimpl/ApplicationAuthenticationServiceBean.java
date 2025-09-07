@@ -25,8 +25,7 @@ public class ApplicationAuthenticationServiceBean implements ApplicationAuthenti
         Authentication authentication = securityContext.getAuthentication();
         String name = authentication.getName();
 
-        if (authentication instanceof JwtAuthenticationToken) {
-            JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        if (authentication instanceof JwtAuthenticationToken token) {
             Jwt jwt = token.getToken();
             name = (String) jwt.getClaims().get("name");
             for (String claim: jwt.getClaims().keySet()) {
